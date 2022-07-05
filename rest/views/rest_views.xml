@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="rest_endpoint_action" model="ir.actions.act_window">
+        <field name="name">REST</field>
+        <field name="res_model">rest.endpoint</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="rest_endpoint_view_tree" model="ir.ui.view">
+        <field name="name">rest.endpoint.tree</field>
+        <field name="model">rest.endpoint</field>
+        <field name="arch" type="xml">
+            <tree string="APIs">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rest_endpoint_view_form" model="ir.ui.view">
+        <field name="name">rest.endpoint.form</field>
+        <field name="model">rest.endpoint</field>
+        <field name="arch" type="xml">
+            <form string="APIs">
+                <h1><field name="name"/></h1>
+                <group>
+                    <field name="base_url"/>
+                    <field name="specified_model_id"/>
+                    <field name="specified_model_model"/>
+                    <field name="field_ids"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+</odoo> 

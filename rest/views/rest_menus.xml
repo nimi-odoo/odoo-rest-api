@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="rest_menu_root" name="Rest API">
+        <menuitem id="rest_first_level_menu_endpoints" name="Endpoints">
+            <!-- Name for third menu is the name of the action by default (Properties)-->
+            <menuitem id="rest_endpoint_menu_action" action="rest_endpoint_action"/>
+        </menuitem>
+
+    </menuitem>
+</odoo>
