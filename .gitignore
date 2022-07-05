@@ -1,0 +1,16 @@
+# OSX
+.DS_Store
+
+# Local environment
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs
+.vscode/
+.idea/
+
+# Python interpreter
+*.pyc
+__pycache__/
