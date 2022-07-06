@@ -22,13 +22,23 @@
         <field name="model">rest.endpoint</field>
         <field name="arch" type="xml">
             <form string="APIs">
-                <h1><field name="name"/></h1>
-                <group>
-                    <field name="base_url"/>
-                    <field name="specified_model_id"/>
-                    <field name="specified_model_model"/>
-                    <field name="field_ids"/>
-                </group>
+                <sheet>
+                    <h1><field name="name"/></h1>
+                    <group>
+                        <field name="base_url"/>
+                    </group>
+                    <group>
+                        <field name="specified_model_id"/>
+                        <field name="model_path_url"/>
+                        <field name="specified_model_technical_name"/>
+                    </group>
+                    <group>
+                        <field name="final_url"/>
+                    </group>
+                    <group>
+                        <field name="field_ids"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
