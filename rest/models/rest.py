@@ -13,8 +13,19 @@ class Rest(models.Model):
     specified_model_model = fields.Char(related="specified_model_id.model")
     field_ids = fields.Many2many(comodel_name="ir.model.fields", domain="[('model', '=', specified_model_model)]")
 
-
-    @api.onchange("specified_model_id")
-    def field_filter(self):
-        for record in self:
-            print(f"Model: {record.specified_model_id.model}");print(f'\n\n\n{record.specified_model_id.name}\n\n=== Fields ===');for f in record.field_ids: print(f.name, f.model);print("==============")
+    @api.model
+    def create(self, vals):
+        # When user confirms creating the api endpoint,
+        # we will make the api endpoint.
+        template = 'website_studio.default_form_page'
+        model_id = vals["specified_model_id"]
+        fields = vals["field_ids"]
+        new_page = self.env['website'].new_page(
+            name = "api/Test",
+            add_menu = False,
+            ispage = True,
+            namespace = "website",
+        )
+        print(new_page)
+        # new_page['url'] = xml_id of the website
+        return super().create(vals)
