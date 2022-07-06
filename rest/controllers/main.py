@@ -6,7 +6,7 @@ from odoo.http import request
 import json
 
 class RestController(http.Controller):
-    @http.route('/api/<string:str>', auth="public")
+    @http.route('/api/<string:str>/', auth="user")
     def index(self, **kw):
         headers = [("Content-Type", "application/json")]
         print("Headers\n", headers)
@@ -25,3 +25,20 @@ class RestController(http.Controller):
 
         data = json.dumps(model_ids.read([field.name for field in api_fields]))
         return request.make_response(data, headers)
+
+    @http.route('/api/<string:str>/<int:id>', auth="user")
+    def get_one(self, **kw):
+        headers = [("Content-Type", "application/json")]
+        print("Headers\n", headers)
+
+        url_path = kw["str"]
+        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+        api_model = api.specified_model_id
+        api_fields = api.field_ids
+        model_id = http.request.env[api_model.model].search([("id", "=", kw["id"])])
+
+
+
+        data = json.dumps(model_id.read([field.name for field in api_fields]))
+        return request.make_response(data, headers)
+        
