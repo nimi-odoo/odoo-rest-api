@@ -17,4 +17,5 @@ class Rest(models.Model):
     @api.onchange("specified_model_id")
     def field_filter(self):
         for record in self:
-            print(f"Model: {record.specified_model_id.model}");print(f'\n\n\n{record.specified_model_id.name}\n\n=== Fields ===');for f in record.field_ids: print(f.name, f.model);print("==============")
+            print(f"Model: {record.specified_model_id.model}");print(f'\n\n\n{record.specified_model_id.name}\n\n=== Fields ===');
+            for f in record.field_ids: print(f.name, f.model);print("==============")
