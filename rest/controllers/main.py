@@ -2,7 +2,6 @@
 
 from odoo import http
 from odoo.http import request
-from odoo.exceptions import ValidationError
 
 import json
 
@@ -14,9 +13,9 @@ class RestController(http.Controller):
         res = json.dumps(jsons)
         return request.make_response(res, headers)
 
-    @http.route('/api/<string:str>/', auth="user")
+    @http.route('/api/<string:str>/', auth="user", csrf= False)
     def index(self, **kw):
-
+        request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         headers = [("Content-Type", "application/json")]
         print("Headers\n", headers)
 
@@ -39,7 +38,7 @@ class RestController(http.Controller):
         data = json.dumps(model_ids.read([field.name for field in api_fields]))
         return request.make_response(data, headers)
 
-    @http.route('/api/<string:str>/<int:id>', auth="user")
+    @http.route('/api/<string:str>/<int:id>', auth="user", csrf= False)
     def get_one(self, **kw):
         headers = [("Content-Type", "application/json")]
         print("Headers\n", headers)
