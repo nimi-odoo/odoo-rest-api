@@ -6,13 +6,6 @@ from odoo.http import request
 import json
 
 class RestController(http.Controller):
-
-    def return_404_json(self):
-        headers = [("Content-Type", "application/json")]
-        jsons = {'status' : 404, "message" : "Invalid endpoint"}
-        res = json.dumps(jsons)
-        return request.make_response(res, headers)
-
     @http.route('/api/<string:str>/', auth="user", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
@@ -23,7 +16,7 @@ class RestController(http.Controller):
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
         if not api.ids:
-            return self.return_404_json()
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
 
         api_model = api.specified_model_id
         api_fields = api.field_ids
@@ -47,14 +40,14 @@ class RestController(http.Controller):
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
         if not api.ids:
-            return self.return_404_json()
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")return self.return_404_json()
 
         api_model = api.specified_model_id
         api_fields = api.field_ids
         model_id = http.request.env[api_model.model].search([("id", "=", kw["id"])])
 
         if not model_id.id:
-            return self.return_404_json()
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
 
 
         data = json.dumps(model_id.read([field.name for field in api_fields]))
