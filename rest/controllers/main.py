@@ -2,7 +2,6 @@
 
 from odoo import http
 from odoo.http import request
-
 import json
 
 class RestController(http.Controller):
@@ -59,8 +58,6 @@ class RestController(http.Controller):
         return request.make_response(data, headers)
 
 
-    # @data : http.request.httprequest.data
-    # Just a stream of bytes
     def post(self, kw):
         headers = [("Content-Type", "application/json")]
         data = json.loads(http.request.httprequest.data)["data"]
@@ -72,7 +69,7 @@ class RestController(http.Controller):
         try:
             request.env[api_model.model].create(data)
         except ValueError:
-            return request.make_response(json.dumps({"message" : ValueError.args[0]}), headers)
+            return request.make_response(json.dumps({"message" : ValueError}), headers)
 
         return request.make_response(json.dumps({"message" : "Succesfully created a record."}), headers)
 
