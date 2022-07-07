@@ -40,7 +40,7 @@ class RestController(http.Controller):
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
         if not api.ids:
-            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")return self.return_404_json()
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
 
         api_model = api.specified_model_id
         api_fields = api.field_ids
