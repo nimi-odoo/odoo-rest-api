@@ -35,9 +35,21 @@
                     <group>
                         <field name="final_url"/>
                     </group>
-                    <group>
-                        <field name="field_ids"/>
-                    </group>
+                    <notebook>
+                        <page string="Optional Fields">
+                            <field name="field_ids"/>
+                        </page>
+                        <page string="Required Fields">
+                            <field name="required_field_ids"/>
+                        </page>
+                        <page string="Schema">
+                            <!-- <div> -->
+                            <code>
+                                <field name="schema"/>
+                            </code>
+                            <!-- </div> -->
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>

@@ -13,19 +13,19 @@ class Rest(models.Model):
     model_path_url = fields.Char(string="Model Path", help="The models id in the URL")
     specified_model_technical_name = fields.Char(related="specified_model_id.model", help="Technical name of the model")
     field_ids = fields.Many2many(comodel_name="ir.model.fields", domain="[('model', '=', specified_model_technical_name)]", help="Fields to be returned in the response")
+    required_field_ids = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_required_fields", help="Fields required for creation of this model")
     final_url = fields.Char(string="Final URL", compute="_compute_final_url", help="Computed final URL using the base URL and model path")
+    schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema", ondelete="set null")
 
 
     @api.onchange("specified_model_id")
     def field_filter(self):
         for record in self:
             record.field_ids = [(5,0,0)] # Empty the field_ids Many2many field
+            record.required_field_ids = [(5,0,0)]
             if record.specified_model_id and not record.model_path_url: # Set the Model Path to the model's name if none is already specified
                 record.model_path_url = record.specified_model_id.name
                 record.model_path_url = "".join(s.lower() for s in record.model_path_url.split(" ")) # Remove whitespace and make lowercase
-                
-            print(f"Model: {record.specified_model_id.model}");print(f'\n\n\n{record.specified_model_id.name}\n\n=== Fields ===');
-            for f in record.field_ids: print(f.name, f.model);print("==============")
 
 
     @api.onchange("base_url")
@@ -36,6 +36,7 @@ class Rest(models.Model):
                 if record.base_url[-1] != "/":
                     record.base_url += "/"
 
+
     @api.depends("base_url", "model_path_url")
     def _compute_final_url(self):
         for record in self:
@@ -45,3 +46,29 @@ class Rest(models.Model):
             else:
                 record.final_url = ""
 
+
+    @api.depends("specified_model_id")
+    def _compute_required_fields(self):
+        for record in self:
+            all_field_ids = self.env["ir.model.fields"].search([('model', '=', record.specified_model_technical_name)])
+            record.required_field_ids = all_field_ids.filtered(lambda f: f["required"])
+    
+
+    @api.depends("required_field_ids", "field_ids")
+    def _compute_schema(self):
+        for record in self:
+            build = "{\n"
+            for required in record.required_field_ids:
+                build += f'\t"{required.name}" : "Your_{required.ttype}_Data",\n'
+            for field in record.field_ids:
+                build +=f'\t"{field.name}" : "Your_{field.ttype}_Data",\n'
+            build = build[:-2:] # Remove the last comma and newline
+            build += "\n}"
+            record.schema = build
+
+
+    @api.model
+    def default_get(self, fields=[]):
+        print("getting, fields:")
+        vars = super(Rest, self).default_get(fields)
+        for v in vars: print(v)
