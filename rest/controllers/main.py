@@ -64,7 +64,7 @@ class RestController(http.Controller):
 
     def post(self, kw):
         headers = [("Content-Type", "application/json")]
-        data = json.loads(http.request.httprequest.data)["data"]
+        data = json.loads(http.request.httprequest.data)
 
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
