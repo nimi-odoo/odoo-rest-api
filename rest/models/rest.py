@@ -66,9 +66,3 @@ class Rest(models.Model):
             build += "\n}"
             record.schema = build
 
-
-    @api.model
-    def default_get(self, fields=[]):
-        print("getting, fields:")
-        vars = super(Rest, self).default_get(fields)
-        for v in vars: print(v)
