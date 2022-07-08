@@ -82,12 +82,6 @@ class RestController(http.Controller):
         if unfulfilled_needed_fields:
             return self.response_400(f"The following fields are required: {[f.name for f in unfulfilled_needed_fields]}")
 
-        # all_field_ids = api_model.fields_get()
-        # test = http.request.env["ir.model.fields"].search([('model', '=', api_model.model)])
-        # required_fields = [f for f in test if all_field_ids[f.name]["required"]]
-        # print("Required Fields\n", required_fields)
-        # default_fields = http.request.env[api_model.model].default_get(all_field_ids)
-
         try:
             request.env[api_model.model].create(data)
         except ValueError:
