@@ -21,6 +21,8 @@ class RestController(http.Controller):
             return self.post(kw)
         elif request_method == "DELETE" or request_method == "UNLINK":
             return self.remove(kw)
+        elif request_method == "PUT" or request_method == "PATCH":
+            return self.update(kw)
         else:
             print("WHY")
         return self.get(kw)
@@ -95,14 +97,27 @@ class RestController(http.Controller):
 
         api_model = api.specified_model_id
 
-        record_id = data["id"]
-
         try:
-            request.env[api_model.model].search([('id','=',record_id)]).unlink()
+            if not "id" in data:
+                raise UserError(f'We need id')
+
+            record_id_to_delete = data["id"]
+
+            if isinstance(record_id_to_delete, str):
+                if record_id_to_delete.isnumeric():
+                    record_id_to_delete = int(record_id_to_delete)
+            if not isinstance(record_id_to_delete, int):
+                raise UserError(f'The id must be an integer.')
+
+            record = request.env[api_model.model].search([('id','=',record_id_to_delete)])
+            if not record:
+                raise UserError(f'The id you entered does not exist in the model: {api_model.model}')
+            else:
+                record.unlink()
         except (UserError, ValidationError, AccessError) as e:
             return self.make_response_with_status_code(data = json.dumps({"message":str(e)}), status_code=400, headers=headers)
-
-        return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
+        else:
+            return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
 
 
 
@@ -115,3 +130,34 @@ class RestController(http.Controller):
                 response.set_cookie(k, v)
         return response
 
+
+
+    # Still working on
+    def update(self, kw):
+        headers = [("Content-Type", "application/json")]
+        data = json.loads(http.request.httprequest.data)
+
+        url_path = kw["str"]
+        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+
+        if not api.ids:
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
+
+        api_model = api.specified_model_id
+
+        try:
+            if not "id" in data:
+                raise UserError(f'We need id')
+            record_id_to_update = data["id"]
+            record = request.env[api_model.model].search([('id','=',record_id_to_update)])
+
+            if not record:
+                raise UserError(f'The id you entered does not exist in the model: {api_model.model}')
+            else:
+                for key, value in data.items():
+                    current_field = http.request.env['ir.model.fields'].search([('model', '=', 'res.partner'), ('name', '=', key)])
+
+        except (UserError, ValidationError, AccessError) as e:
+            return self.make_response_with_status_code(data = json.dumps({"message":str(e)}), status_code=400, headers=headers)
+        else:
+            return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
