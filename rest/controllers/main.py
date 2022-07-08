@@ -2,9 +2,13 @@
 
 from odoo import http
 from odoo.http import request
+from odoo.http import Response
 import json
+from odoo.exceptions import ValidationError, UserError, AccessError
+
 
 class RestController(http.Controller):
+
     @http.route('/api/<string:str>/', auth="user", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
@@ -15,6 +19,8 @@ class RestController(http.Controller):
             return self.get(kw)
         elif request_method == "POST":
             return self.post(kw)
+        elif request_method == "DELETE" or request_method == "UNLINK":
+            return self.remove(kw)
         else:
             print("WHY")
         return self.get(kw)
@@ -64,6 +70,10 @@ class RestController(http.Controller):
 
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+
+        if not api.ids:
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
+
         api_model = api.specified_model_id
 
         try:
@@ -73,5 +83,35 @@ class RestController(http.Controller):
 
         return request.make_response(json.dumps({"message" : "Succesfully created a record."}), headers)
 
+    def remove(self, kw):
+        headers = [("Content-Type", "application/json")]
+        data = json.loads(http.request.httprequest.data)
 
+        url_path = kw["str"]
+        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+
+        if not api.ids:
+            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
+
+        api_model = api.specified_model_id
+
+        record_id = data["id"]
+
+        try:
+            request.env[api_model.model].search([('id','=',record_id)]).unlink()
+        except (UserError, ValidationError, AccessError) as e:
+            return self.make_response_with_status_code(data = json.dumps({"message":str(e)}), status_code=400, headers=headers)
+
+        return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
+
+
+
+    # @data : a type of json.dumps( dictionary_object )
+    def make_response_with_status_code(self, data, status_code = 400, headers=None, cookies=None):
+        response = Response(data, headers=headers)
+        response.status_code = status_code
+        if cookies:
+            for k, v in cookies.items():
+                response.set_cookie(k, v)
+        return response
 
