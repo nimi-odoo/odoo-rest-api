@@ -173,11 +173,9 @@ class RestController(http.Controller):
                         else:
                             record.write({current_field.name : value})
                             print("This attribute of the field will be updated field: ", current_field.name)
-
-        except (UserError, ValidationError, AccessError) as e:
-            return self.make_response_with_status_code(data = json.dumps({"message":str(e)}, default=str), status_code=400, headers=headers)
-        else:
-            return request.make_response(json.dumps({"message": "Succesfully updated a record."}), headers)
+        except (UserError, ValidationError, AccessError, json.decoder.JSONDecodeError) as e:
+            return self.response_400(str(e))
+        return request.make_response(json.dumps({"message": "Succesfully updated a record."}, default=str), headers)
 
 
     def response_400(self, message="400 Bad Request", mimetype="text/plain"):
