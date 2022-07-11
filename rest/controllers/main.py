@@ -10,11 +10,19 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 class RestController(http.Controller):
 
-    @http.route('/api/<string:str>/', auth="user", csrf= False)
+    @http.route('/api/<string:str>/', auth="public", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         headers = [("Content-Type", "application/json")]
         print("Headers\n", headers)
+
+        # TODO:
+        # Before we execute methods,
+        # we need to check if current user(res.user or res.partner) has access
+        # to the model he wants to access.
+
+        # For GET method, we might want it to be available for everyone
+        # For other methods, we can follow record rules or access rights.
 
         if request_method == "GET":
             return self.get(kw)
@@ -29,7 +37,7 @@ class RestController(http.Controller):
         return self.get(kw)
 
 
-    @http.route('/api/<string:str>/<int:id>', auth="user", csrf= False)
+    @http.route('/api/<string:str>/<int:id>', auth="public", csrf= False)
     def get_one(self, **kw):
         headers = [("Content-Type", "application/json")]
         print("Headers\n", headers)
@@ -63,8 +71,9 @@ class RestController(http.Controller):
         api_model = api.specified_model_id
         api_fields = api.field_ids
         model_ids = http.request.env[api_model.model].search([])
-
-        data = json.dumps(model_ids.read([field.name for field in api_fields]))
+        # Added default = str
+        # because json.dumps does not support for datetime type
+        data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
         return request.make_response(data, headers)
 
 
@@ -100,19 +109,20 @@ class RestController(http.Controller):
 
     def remove(self, kw):
         headers = [("Content-Type", "application/json")]
-        data = json.loads(http.request.httprequest.data)
-
-        url_path = kw["str"]
-        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
-
-        if not api.ids:
-            return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
-
-        api_model = api.specified_model_id
-
         try:
+
+            data = json.loads(http.request.httprequest.data)
+
+            url_path = kw["str"]
+            api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+
+            if not api.ids:
+                return request.not_found("Page not found.\n Check your url path or the id you entered exists.")
+
+            api_model = api.specified_model_id
+
             if not "id" in data:
-                raise UserError(f'We need id')
+                raise UserError(f"We need id")
 
             record_id_to_delete = data["id"]
 
@@ -120,27 +130,17 @@ class RestController(http.Controller):
                 if record_id_to_delete.isnumeric():
                     record_id_to_delete = int(record_id_to_delete)
             if not isinstance(record_id_to_delete, int):
-                raise UserError(f'The id must be an integer.')
+                raise UserError(f"The id must be an integer.")
 
             record = request.env[api_model.model].search([('id','=',record_id_to_delete)])
             if not record:
-                raise UserError(f'The id you entered does not exist in the model: {api_model.model}')
+                raise UserError(f"The id you entered does not exist in the model: {api_model.model}")
             else:
                 record.unlink()
-        except (UserError, ValidationError, AccessError) as e:
-            return self.response_400(self, str(e))
+        except (UserError, ValidationError, AccessError, json.decoder.JSONDecodeError) as e:
+            return self.response_400(str(e))
 
         return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
-
-
-    def response_400(self, message="400 Bad Request", mimetype="text/plain"):
-        return Response(response=message, status=400, mimetype=mimetype)
-
-    def response_404(self, message="404 Not Found", mimetype="text/plain"):
-        return Response(response=message, status=404, mimetype=mimetype)
-
-
-
 
     # Still working on
     def update(self, kw):
@@ -157,7 +157,7 @@ class RestController(http.Controller):
 
         try:
             if not "id" in data:
-                raise UserError(f'We need id')
+                raise UserError(f'You did not input id')
             record_id_to_update = data["id"]
             record = request.env[api_model.model].search([('id','=',record_id_to_update)])
 
@@ -165,9 +165,23 @@ class RestController(http.Controller):
                 raise UserError(f'The id you entered does not exist in the model: {api_model.model}')
             else:
                 for key, value in data.items():
-                    current_field = http.request.env['ir.model.fields'].search([('model', '=', 'res.partner'), ('name', '=', key)])
+                    current_field = http.request.env['ir.model.fields'].search([('model', '=', api_model.model), ('name', '=', key)])
+                    if current_field.name:
+                        # Following RESTful API convention
+                        if (current_field.readonly or current_field.compute or current_field.name == "create_date") :
+                            print("This attribute of the field will NOT be updated: ", current_field.name)
+                        else:
+                            record.write({current_field.name : value})
+                            print("This attribute of the field will be updated field: ", current_field.name)
 
         except (UserError, ValidationError, AccessError) as e:
-            return self.make_response_with_status_code(data = json.dumps({"message":str(e)}), status_code=400, headers=headers)
+            return self.make_response_with_status_code(data = json.dumps({"message":str(e)}, default=str), status_code=400, headers=headers)
         else:
-            return request.make_response(json.dumps({"message": "Succesfully delete a record."}), headers)
+            return request.make_response(json.dumps({"message": "Succesfully updated a record."}), headers)
+
+
+    def response_400(self, message="400 Bad Request", mimetype="text/plain"):
+        return Response(response=message, status=400, mimetype=mimetype)
+
+    def response_404(self, message="404 Not Found", mimetype="text/plain"):
+        return Response(response=message, status=404, mimetype=mimetype)

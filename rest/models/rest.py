@@ -15,7 +15,8 @@ class Rest(models.Model):
     field_ids = fields.Many2many(comodel_name="ir.model.fields", domain="[('model', '=', specified_model_technical_name)]", help="Fields to be returned in the response")
     required_field_ids = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_required_fields", help="Fields required for creation of this model")
     final_url = fields.Char(string="Final URL", compute="_compute_final_url", help="Computed final URL using the base URL and model path")
-    schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema", ondelete="set null")
+    schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
+    #removed ondelete param from schema
 
 
     @api.onchange("specified_model_id")
@@ -67,8 +68,8 @@ class Rest(models.Model):
             record.schema = build
 
 
-    @api.model
-    def default_get(self, fields=[]):
-        print("getting, fields:")
-        vars = super(Rest, self).default_get(fields)
-        for v in vars: print(v)
+    # @api.model
+    # def default_get(self, fields=[]):
+    #     print("getting, fields:")
+    #     vars = super(Rest, self).default_get(fields)
+    #     for v in vars: print(v)
