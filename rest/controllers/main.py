@@ -30,7 +30,7 @@ class RestController(http.Controller):
             return self.response_403(str(e))
 
 
-    @http.route('/api/<string:str>/<int:id>', auth="public", csrf= False)
+    @http.route('/api/<string:str>/<int:id>', auth="check_api_key", csrf= False)
     def index_id(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         try:
