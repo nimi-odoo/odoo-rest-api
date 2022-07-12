@@ -19,4 +19,5 @@
         "views/rest_views.xml",
         "views/rest_menus.xml",
     ],
+    'post_init_hook' : 'post_init_hook'
 }
