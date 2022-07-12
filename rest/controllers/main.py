@@ -14,15 +14,18 @@ class RestController(http.Controller):
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
 
-        try :
+        try:
             if request_method == "GET":
                 return self.get(**kw)
             elif request_method == "POST":
                 return self.post(**kw)
             else:
                 return self.response_404("Invalid request method")
-        except (UserError, ValidationError, json.decoder.JSONDecodeError) as e:
+
+        except (UserError, ValidationError) as e:
             return self.response_400(str(e))
+        except JSONDecodeError as e:
+            return self.response_400(f"Invalid JSON formatting\n{e}")
         except (AccessError) as e:
             return self.response_403(str(e))
 
@@ -30,15 +33,22 @@ class RestController(http.Controller):
     @http.route('/api/<string:str>/<int:id>', auth="public", csrf= False)
     def index_id(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
+        try:
+            if request_method == "GET":
+                return self.get_one(**kw)
+            elif request_method == "DELETE" or request_method == "UNLINK":
+                return self.delete_one(**kw)
+            elif request_method == "PUT" or request_method == "PATCH":
+                return self.update_one(**kw)
+            else: 
+                return self.response_404("Invalid request method")
 
-        if request_method == "GET":
-            return self.get_one(**kw)
-        elif request_method == "DELETE" or request_method == "UNLINK":
-            return self.delete_one(**kw)
-        elif request_method == "PUT" or request_method == "PATCH":
-            return self.update_one(**kw)
-        else: 
-            return self.response_404("Invalid request method")
+        except (UserError, ValidationError) as e:
+            return self.response_400(str(e))
+        except JSONDecodeError as e:
+            return self.response_400(f"Invalid JSON formatting\n{e}")
+        except (AccessError) as e:
+            return self.response_403(str(e))
 
 
     def get_one(self, **kw):
@@ -62,10 +72,7 @@ class RestController(http.Controller):
 
     def update_one(self, **kw):
         headers = [("Content-Type", "application/json")]
-        try:
-            update_data = json.loads(http.request.httprequest.data)
-        except JSONDecodeError as e:
-            return self.response_400(f"Invalid JSON formatting\n{e}")
+        update_data = json.loads(http.request.httprequest.data)
 
         record_id = self.retrieve_record_id(**kw)
         if not record_id:
@@ -73,7 +80,6 @@ class RestController(http.Controller):
         model_id = http.request.env["rest.endpoint"].search([("model_path_url", "=", kw["str"])]).specified_model_id
         
         for key, value in update_data.items():
-            print(key, value,'\n')
             current_field = http.request.env['ir.model.fields'].search([('model', '=', model_id.model), ('name', '=', key)])
             if current_field.name:
                 if (current_field.readonly or current_field.compute or current_field.name == "create_date"):
@@ -101,10 +107,7 @@ class RestController(http.Controller):
 
     def post(self, **kw):
         headers = [("Content-Type", "application/json")]
-        try:
-            data = json.loads(http.request.httprequest.data)
-        except JSONDecodeError as e:
-            return self.response_400(f"Invalid JSON formatting\n{e}")
+        data = json.loads(http.request.httprequest.data)
 
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
@@ -136,19 +139,6 @@ class RestController(http.Controller):
         return request.make_response(json.dumps(data, default=str), headers)
 
 
-
-    def response_400(self, body="400 Bad Request", mimetype="text/plain"):
-        return Response(response=body, status=400, mimetype=mimetype)
-
-
-    def response_404(self, body="404 Not Found", mimetype="text/plain"):
-        return Response(response=body, status=404, mimetype=mimetype)
-
-
-    def response_200(self, body="200 OK", mimetype="application/json"):
-        return Response(response=body, status=200, mimetype=mimetype)
-
-
     def retrieve_record_id(self, **kw):
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
@@ -170,3 +160,15 @@ class RestController(http.Controller):
         api_fields = api.field_ids
 
         return (json.dumps(record_id.read([field.name for field in api_fields])[0], default=str))
+
+
+    def response_400(self, body="400 Bad Request", mimetype="text/plain"):
+        return Response(response=body, status=400, mimetype=mimetype)
+
+
+    def response_403(self, message="403 Forbidden", mimetype="text/plain"):
+        return Response(response=message, status=403, mimetype=mimetype)
+
+
+    def response_404(self, body="404 Not Found", mimetype="text/plain"):
+        return Response(response=body, status=404, mimetype=mimetype)
