@@ -19,10 +19,6 @@ class RestController(http.Controller):
                 return self.get(**kw)
             elif request_method == "POST":
                 return self.post(**kw)
-            elif request_method == "DELETE" or request_method == "UNLINK":
-                return self.remove(**kw)
-            elif request_method == "PUT" or request_method == "PATCH":
-                return self.update(**kw)
             else:
                 return self.response_404("Invalid request method")
         except (UserError, ValidationError, json.decoder.JSONDecodeError) as e:
@@ -174,67 +170,3 @@ class RestController(http.Controller):
         api_fields = api.field_ids
 
         return (json.dumps(record_id.read([field.name for field in api_fields])[0], default=str))
-
-
-    def remove(self, kw):
-        headers = [("Content-Type", "application/json")]
-
-        data = json.loads(http.request.httprequest.data)
-
-        url_path = kw["str"]
-        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
-
-        if not api.ids:
-            return self.response_404("Record not found. The path or id may not exist.")
-
-        api_model = api.specified_model_id
-
-        if not "id" in data:
-            raise UserError(f"The id of the record to be deleted must be provided")
-
-        record_id_to_delete = data["id"]
-
-        if isinstance(record_id_to_delete, str):
-            if record_id_to_delete.isnumeric():
-                record_id_to_delete = int(record_id_to_delete)
-        if not isinstance(record_id_to_delete, int):
-            raise UserError(f"The id must be an integer.")
-
-        record = request.env[api_model.model].search([('id','=',record_id_to_delete)])
-        if not record:
-            raise UserError(f"The id you entered does not exist in the model: {api_model.model}")
-        else:
-            record.unlink()
-
-
-    def update(self, **kw):
-        headers = [("Content-Type", "application/json")]
-        data = json.loads(http.request.httprequest.data)
-
-        url_path = kw["str"]
-        api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
-
-        if not api.ids:
-            return self.response_404("Record not found. The path or id may not exist.")
-
-        api_model = api.specified_model_id
-
-        if not "id" in data:
-            raise UserError(f'400 Bad Request\nNo id attribute found from your request')
-        record_id_to_update = data["id"]
-        record = request.env[api_model.model].search([('id','=',record_id_to_update)])
-
-        if not record:
-            raise UserError(f'The id you entered does not exist in the model: {api_model.model}')
-        else:
-            for key, value in data.items():
-                current_field = http.request.env['ir.model.fields'].search([('model', '=', api_model.model), ('name', '=', key)])
-                if current_field.name:
-                    if (current_field.readonly or current_field.compute or current_field.name == "create_date") :
-                        print("This attribute of the field will NOT be updated: ", current_field.name)
-                        pass
-                    else:
-                        record.write({current_field.name : value})
-                        print("This attribute of the field will be updated field: ", current_field.name)
-        return request.make_response(json.dumps({"message": "Successfully updated a record."}, default=str), headers)
-
