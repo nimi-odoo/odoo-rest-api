@@ -42,6 +42,8 @@ class RestController(http.Controller):
             return self.get_one(**kw)
         elif request_method == "DELETE" or request_method == "UNLINK":
             return self.delete_one(**kw)
+        elif request_method == "PUT" or request_method == "PATCH":
+            return self.update_one(**kw)
         else: 
             return self.response_404("Invalid request method")
 
@@ -65,6 +67,30 @@ class RestController(http.Controller):
         return request.make_response(data, headers)
 
 
+    def update_one(self, **kw):
+        headers = [("Content-Type", "application/json")]
+        try:
+            update_data = json.loads(http.request.httprequest.data)
+        except JSONDecodeError as e:
+            return self.response_400(f"Invalid JSON formatting\n{e}")
+
+        record_id = self.retrieve_record_id(**kw)
+        if not record_id:
+            return self.response_404("Record not found. The path or id may not exist.")
+        model_id = http.request.env["rest.endpoint"].search([("model_path_url", "=", kw["str"])]).specified_model_id
+        
+        for key, value in update_data.items():
+            print(key, value,'\n')
+            current_field = http.request.env['ir.model.fields'].search([('model', '=', model_id.model), ('name', '=', key)])
+            if current_field.name:
+                if (current_field.readonly or current_field.compute or current_field.name == "create_date"):
+                    return self.response_400(f"The field {current_field.name} can't be updated. It is either a readonly, computed or create_date field.")
+                else:
+                    record_id.write({current_field.name : value})
+        record_data = self.retrieve_record_data(record_id, **kw)
+        return request.make_response(record_data, headers)
+
+
     def get(self, **kw):
         headers = [("Content-Type", "application/json")]
         url_path = kw["str"]
@@ -85,7 +111,7 @@ class RestController(http.Controller):
         try:
             data = json.loads(http.request.httprequest.data)
         except JSONDecodeError as e:
-            return self.response_404(f"Invalid JSON formatting\n{e}")
+            return self.response_400(f"Invalid JSON formatting\n{e}")
 
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
@@ -234,9 +260,3 @@ class RestController(http.Controller):
             return self.response_400(str(e))
         return request.make_response(json.dumps({"message": "Succesfully updated a record."}, default=str), headers)
 
-
-    def response_400(self, message="400 Bad Request", mimetype="text/plain"):
-        return Response(response=message, status=400, mimetype=mimetype)
-
-    def response_404(self, message="404 Not Found", mimetype="text/plain"):
-        return Response(response=message, status=404, mimetype=mimetype)
