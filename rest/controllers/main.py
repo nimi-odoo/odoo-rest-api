@@ -64,7 +64,7 @@ class RestController(http.Controller):
         headers = [("Content-Type", "application/json")]
         record_id = self.retrieve_record_id(**kw)
         if not record_id:
-            return self.response_404("Record not found. The path or id may not exist.")
+            return self.response_204("Record not found. The record may have already been deleted or the path and id may not exist.")
         data = self.retrieve_record_data(record_id, **kw)
         record_id.unlink()
         return request.make_response(data, headers)
@@ -162,12 +162,16 @@ class RestController(http.Controller):
         return (json.dumps(record_id.read([field.name for field in api_fields])[0], default=str))
 
 
+    def response_204(self, body="204 No Content", mimetype="text/plain"):
+        return Response(response=body, status=404, mimetype=mimetype)
+
+
     def response_400(self, body="400 Bad Request", mimetype="text/plain"):
         return Response(response=body, status=400, mimetype=mimetype)
 
 
-    def response_403(self, message="403 Forbidden", mimetype="text/plain"):
-        return Response(response=message, status=403, mimetype=mimetype)
+    def response_403(self, body="403 Forbidden", mimetype="text/plain"):
+        return Response(response=body, status=403, mimetype=mimetype)
 
 
     def response_404(self, body="404 Not Found", mimetype="text/plain"):
