@@ -30,7 +30,7 @@ class RestController(http.Controller):
             return self.response_403(str(e))
 
 
-    @http.route('/api/<string:str>/<int:id>', auth="public", csrf= False)
+    @http.route('/api/<string:str>/<int:id>', auth="check_api_key", csrf= False)
     def index_id(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         try:
@@ -93,6 +93,7 @@ class RestController(http.Controller):
     def get(self, **kw):
         headers = [("Content-Type", "application/json")]
         url_path = kw["str"]
+        # api = http.request.env["rest.endpoint"].sudo().search([("model_path_url", "=", url_path)])
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
         if not api.ids:
