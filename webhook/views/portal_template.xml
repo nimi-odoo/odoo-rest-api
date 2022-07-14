@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id = "portal_layout_inherit"
+              inherit_id = "portal.portal_layout">
+        <xpath expr="//div[@class='o_portal_my_security mt-3']" position="after">
+            <div class = "o_portal_my_webhooks mt-3">
+                <h4>Webhooks</h4>
+                <hr class="mt-1 mb-1"/>
+                <a href="/my/webhook/"><i class="fa fa-pencil mx-1"/>Manage Webhooks</a>
+            </div>
+        </xpath>
+    </template>
+
+    <template id = "portal_my_webhook">
+        <t t-call = "portal.portal_layout">
+            <div class="o_portal_security_body">
+                <t t-set="additional_title">Webhook</t>
+                <t t-set="no_breadcrumbs" t-value="1"/>
+                <h2>Webhook
+                    <a href="https://en.wikipedia.org/wiki/Webhook" target ="_blank">
+                        <i title="Documentation" class="fa fa-fw o_button_icon fa-info-circle"/>
+                    </a>
+                </h2>
+                <hr class="mt-1 mb-1"/>
+                <section>
+                    <h3>Create a new webhook</h3>
+                    <form>
+                        <input type = "hidden" name = "webhook_url"/>
+                        <div class = "form-group">
+                            <label for="webhook_url">Webhook URL:</label>
+                            <input id ="webhook_url" name = "WECK" t-attf-class="form-control form-control-sm" placeholder = "Enter your URL" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </section>
+            </div>
+        </t>
+    </template>
+</odoo>

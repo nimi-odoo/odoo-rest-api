@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="webhook_form_view" model="ir.ui.view">
+            <field name="name">webhook.form</field>
+            <field name="model">webhook</field>
+            <field name="arch" type="xml">
+                <form string="Webhook">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Title"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="url" placeholder="https://www.odoo.com" />
+                                <field name="condition"/>
+                                <field name="request_method"/>
+                                <field name="request_body"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="webhook_tree_view" model="ir.ui.view">
+            <field name="name">webhook.tree</field>
+            <field name="model">webhook</field>
+            <field name="arch" type="xml">
+                <tree string="Webhook">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="webhook_search_view" model="ir.ui.view">
+            <field name="name">webhook.search</field>
+            <field name="model">webhook</field>
+            <field name="arch" type="xml">
+                <search string="ModelTitle">
+                    <group expand="1" string="Group By">
+                        <filter string="Name" name="name" domain="[]"
+                                context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="webhook_endpoint_action" model="ir.actions.act_window">
+            <field name="name">Webhook</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">webhook</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+    <menuitem id="webhook_menu_root" name="Webhook">
+        <menuitem id="webhook_page" name="Page">
+            <!-- Name for third menu is the name of the action by default (Properties)-->
+            <menuitem id="webhook_menu_action" action="webhook_endpoint_action"/>
+        </menuitem>
+    </menuitem>
+    </data>
+</odoo>
