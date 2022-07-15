@@ -98,8 +98,6 @@ class RestController(http.Controller):
 
         for p in params:
             search_domain.append(p)
-            print("\n\n",search_domain,"\n")
-        # Error handling for non-stored computed fields, they can't be searched. return response_400
 
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
@@ -110,72 +108,8 @@ class RestController(http.Controller):
         api_fields = api.field_ids
         model_ids = http.request.env[api_model.model].search(search_domain)
         
-
         data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
         return request.make_response(data, headers)
-
-
-    def convert_dict_to_domain(self, params, **kw):
-        domain = []
-        for k,v in params.items():
-            if not k or not v:
-                if not k: raise UserError("Parameter must have a key")
-                if not v: raise UserError("Parameter must have a value")
-
-            param_type = self.retrieve_param_type(k, **kw)
-            # if param_type in ("monetary", "integer", "Many2one", "One2many", "Many2many"):
-            if param_type in ("integer", "many2one"):
-                domain.append((k, "=", int(v)))
-            elif param_type == "boolean":
-                if v == "False" or "0":
-                    v = False
-                domain.append((k, "=", bool(v)))
-            elif param_type in ("float", "monetary"):
-                domain.append((k, "=", float(v)))
-            elif param_type == "one2many":
-                record_ids = v.replace("[","").replace("]", "").strip().split(",")
-                one2many_array = [int(record_id) for record_id in record_ids if record_id]
-                domain.append((k, "=", one2many_array))
-            elif param_type == "many2many":
-                # record_ids = v.replace("[","").replace("]", "").strip().split(",")
-                # many2many_array = [int(record_id) for record_id in record_ids if record_id]
-                # for i in range(0, len(many2many_array)):
-                #     if i % 2 == 0 and i < len(many2many_array)-1:
-                #         domain.append("&")
-                #         domain.append((k, "in", many2many_array[i]))
-                #         domain.append((k, "in", many2many_array[i+1]))
-                #     else:
-                #         domain.append((k, "in", many2many_array[i]))
-                domain = self.field_to_domain_many2many(domain, k, v)
-
-            else:
-                domain.append((k, "=", v))
-        return domain
-
-
-    def retrieve_param_type(self, param, **kw):
-        api_fields = http.request.env["rest.endpoint"].search([("model_path_url", "=", kw["str"])]).field_ids
-        param_type = "char"
-        for f in api_fields:
-            if f.name == param:
-                param_type = f.ttype
-                print(f"\nParam type:{param_type}")
-        return param_type
-
-
-
-    def field_to_domain_many2many(self, domain, key, value):
-        record_ids = value.replace("[","").replace("]", "").strip().split(",")
-        many2many_array = [int(record_id) for record_id in record_ids if record_id]
-        for i in range(0, len(many2many_array)):
-            if i % 2 == 0 and i < len(many2many_array)-1:
-                domain.append("&")
-            domain.append((key, "in", many2many_array[i]))
-        return domain
-
-
-    def is_field_computed_and_nonstored(self, field):
-        pass
 
 
     def post(self, **kw):
@@ -233,6 +167,77 @@ class RestController(http.Controller):
         api_fields = api.field_ids
 
         return (json.dumps(record_id.read([field.name for field in api_fields])[0], default=str))
+
+    
+    def convert_dict_to_domain(self, params, **kw):
+        domain = []
+        for k,v in params.items():
+            if not k or not v:
+                if not k: raise UserError("Parameter must have a key")
+                if not v: raise UserError("Parameter must have a value")
+            if self.is_field_computed_and_nonstored(k, **kw):
+                raise UserError(f"Non-stored field {k} can't be searched")
+
+            param_type = self.retrieve_param_type(k, **kw)
+            if param_type in ("integer", "many2one"):
+                domain.append((k, "=", int(v)))
+
+            elif param_type == "boolean":
+                if v in ("False", "0"):
+                    v = False
+                domain.append((k, "=", bool(v)))
+
+            elif param_type in ("float", "monetary"):
+                domain.append((k, "=", float(v)))
+
+            elif param_type == "one2many":
+                domain = self.field_to_domain_many2many(domain, k, v)
+
+            elif param_type == "many2many":
+                domain = self.field_to_domain_many2many(domain, k, v)
+
+            else:
+                domain.append((k, "=", v))
+
+        return domain
+
+
+    def retrieve_param_type(self, param, **kw):
+        api_fields = http.request.env["rest.endpoint"].search([("model_path_url", "=", kw["str"])]).field_ids
+        param_type = "char"
+        for f in api_fields:
+            if f.name == param:
+                param_type = f.ttype
+                print(f"\nParam type:{param_type}")
+        return param_type
+
+
+    def field_to_domain_one2many(self, domain, key, value):
+        record_ids = value.replace("[","").replace("]", "").strip().split(",")
+        one2many_array = [int(record_id) for record_id in record_ids if record_id]
+        domain.append((key, "=", one2many_array))
+        return domain
+
+
+    def field_to_domain_many2many(self, domain, key, value):
+        record_ids = value.replace("[","").replace("]", "").strip().split(",")
+        many2many_array = [int(record_id) for record_id in record_ids if record_id]
+        for i in range(0, len(many2many_array)):
+            if i % 2 == 0 and i < len(many2many_array) - 1:
+                domain.append("&")
+            domain.append((key, "in", many2many_array[i]))
+        return domain
+
+
+    def is_field_computed_and_nonstored(self, field_name, **kw):
+        api_fields = http.request.env["rest.endpoint"].search([("model_path_url", "=", kw["str"])]).field_ids
+        for f in api_fields:
+            if f.name == field_name:
+                model = http.request.env[f.model]
+                field = model._fields.get(f.name)
+                if not field.store and not field.search:
+                    return True  
+        return False
 
 
     def response_204(self, body="204 No Content", mimetype="text/plain"):
