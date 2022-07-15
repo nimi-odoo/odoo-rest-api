@@ -1,2 +1,7 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
 access_rest_endpoint,access_rest_endpoint,model_rest_endpoint,base.group_user,1,1,1,1
+access_rest_endpoint_portal,access_rest_endpoint,model_rest_endpoint,base.group_portal,1,1,1,1
+access_ir_model_user,access_ir_model,base.model_ir_model,base.group_user,1,0,0,0
+access_ir_model_fields_user,access_ir_model_fields,base.model_ir_model_fields,base.group_user,1,0,0,0
+access_ir_model_portal,access_ir_model,base.model_ir_model,base.group_portal,1,0,0,0
+access_ir_model_fields_portal,access_ir_model_fields,base.model_ir_model_fields,base.group_portal,1,0,0,0
