@@ -5,7 +5,6 @@ from . import models
 from odoo.api import Environment, SUPERUSER_ID
 
 def post_init_hook(cr, registry):
-    print("being called")
     env = Environment(cr, SUPERUSER_ID, {})
     # get access to the configuration model
     ResConfig = env["res.config.settings"].create({})

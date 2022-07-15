@@ -172,3 +172,6 @@ class RestController(http.Controller):
 
     def response_404(self, body="404 Not Found", mimetype="text/plain"):
         return Response(response=body, status=404, mimetype=mimetype)
+
+
+

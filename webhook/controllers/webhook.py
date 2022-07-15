@@ -11,4 +11,6 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 class Webhook(http.Controller):
     @http.route('/my/webhook/', type='http', auth="user", website=True)
     def index(self):
-        return request.render("webhook.portal_my_webhook", {})
+        base_automations = request.env['base.automation'].sudo().search([])
+        values = {"base_automations" : base_automations}
+        return request.render("webhook.portal_my_webhook", values)
