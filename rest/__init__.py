@@ -2,6 +2,7 @@
 
 from . import controllers
 from . import models
+from . import wizard
 from odoo.api import Environment, SUPERUSER_ID
 
 def post_init_hook(cr, registry):

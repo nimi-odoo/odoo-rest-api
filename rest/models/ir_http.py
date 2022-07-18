@@ -15,7 +15,7 @@ class IrHttp(models.AbstractModel):
             uid = request.httprequest.session.uid
             request.uid = uid # Move login information from odoo to our http.request
 
-            # "res.users"._is_superuser() or "res.users".has_group('base.group_erp_manager')
+            # _is_adimn() = "res.users"._is_superuser() or "res.users".has_group('base.group_erp_manager')
             # This is for later reference, it is not in use currently.
             is_admin = request.env['res.users'].search([('id', '=', uid)])._is_admin()
         else:

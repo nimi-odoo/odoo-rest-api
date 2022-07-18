@@ -18,6 +18,7 @@
         "security/ir.model.access.csv",
         "views/rest_views.xml",
         "views/rest_menus.xml",
+        "wizard/wizard.xml"
     ],
     'post_init_hook' : 'post_init_hook'
 }

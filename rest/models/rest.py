@@ -17,6 +17,9 @@ class Rest(models.Model):
     final_url = fields.Char(string="Final URL", compute="_compute_final_url", help="Computed final URL using the base URL and model path")
     schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
 
+    ##
+    children = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_children", help="Children fields")
+
 
 
     @api.onchange("specified_model_id")
@@ -53,7 +56,7 @@ class Rest(models.Model):
         for record in self:
             all_field_ids = self.env["ir.model.fields"].search([('model', '=', record.specified_model_technical_name)])
             record.required_field_ids = all_field_ids.filtered(lambda f: f["required"])
-    
+
 
     @api.depends("required_field_ids", "field_ids")
     def _compute_schema(self):
@@ -67,3 +70,8 @@ class Rest(models.Model):
             build += "\n}"
             record.schema = build
 
+    # Added by Sam 
+    @api.depends("field_ids")
+    def _compute_children(self):
+        for record in self:
+            record.children = record.field_ids.filtered(lambda f: f["ttype"] in ["many2one","many2many","one2many"])
