@@ -51,7 +51,8 @@
                             <!-- </div> -->
                         </page>
                         <page string = "Children">
-                            <field name = "children">
+                            <field name = "id" invisible = "1"/>
+                            <field name = "children" context = "{'default_endpoint_id' : id}">
                                 <tree>
                                     <field name = "name"/>
                                     <field name = "model" string = "Parent Model"/>

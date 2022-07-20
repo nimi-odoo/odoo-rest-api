@@ -19,6 +19,7 @@ class Rest(models.Model):
 
     ##
     children = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_children", help="Children fields")
+    dictionary = fields.Char(string = "dictionary")
 
 
 

@@ -10,6 +10,7 @@
                     <field name = "name"/>
                     <field name = "ttype"/>
                     <field name = "relation"/>
+                    <field name = "id" invisible = "1"/>
                     <field name = "button_domain" invisible = "1"/>
                     <field name = "path"/>
                     <button name = "children_show" type = "object" string ="Manage Children" class = "oe_highlight"
@@ -19,5 +20,17 @@
                 </tree>
             </field>
         </record>
+
+        <record model = "ir.actions.server" id = "action_manage_children" >
+            <field name="name">Save Selected Fields</field>
+           <field name="model_id" ref="base.model_ir_model_fields"/>
+           <field name="binding_model_id" ref="base.model_ir_model_fields"/>
+            <field name="binding_view_types">list</field>
+           <field name="state">code</field>
+           <field name="code">
+               action = records.save_fields()
+           </field>
+        </record>
+
     </data>
 </odoo>

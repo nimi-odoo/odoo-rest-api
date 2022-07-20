@@ -2,10 +2,12 @@
 
 from odoo import http
 from odoo.http import request, Response
+from odoo.exceptions import ValidationError, UserError, AccessError
 
 import json
 from json.decoder import JSONDecodeError
-from odoo.exceptions import ValidationError, UserError, AccessError
+import ast
+
 
 
 class RestController(http.Controller):
@@ -89,12 +91,29 @@ class RestController(http.Controller):
         record_data = self.retrieve_record_data(record_id, **kw)
         return request.make_response(record_data, headers)
 
+    def nested_json(self, api):
+        api_model = api.specified_model_id
+        api_fields = api.field_ids
+        data = http.request.env[api_model.model].search([]).read([field.name for field in api_fields])
+        if api.dictionary :
+            relationship_dictionary = ast.literal_eval(api.dictionary)
+            for datum in data:
+                for key, value in datum.items():
+                    print(key, " : ", value)
+
+
+
+
+            print("ASD")
 
     def get(self, **kw):
         headers = [("Content-Type", "application/json")]
         url_path = kw["str"]
         # api = http.request.env["rest.endpoint"].sudo().search([("model_path_url", "=", url_path)])
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
+
+        # handle nested json.
+        self.nested_json(api)
 
         if not api.ids:
             return self.response_404("Record not found. The path or id may not exist.")
