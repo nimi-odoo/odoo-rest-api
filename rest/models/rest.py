@@ -52,7 +52,9 @@ class Rest(models.Model):
     def _compute_required_fields(self):
         for record in self:
             all_field_ids = self.env["ir.model.fields"].search([('model', '=', record.specified_model_technical_name)])
-            record.required_field_ids = all_field_ids.filtered(lambda f: f["required"])
+            default_fields_handeled = self.env[record.specified_model_technical_name]._add_missing_default_values([])
+            record.required_field_ids = all_field_ids.filtered(lambda f: f["required"] and f.name not in default_fields_handeled)
+
     
 
     @api.depends("required_field_ids", "field_ids")
