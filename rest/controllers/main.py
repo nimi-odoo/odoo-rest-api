@@ -111,7 +111,6 @@ class RestController(http.Controller):
         data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
         return request.make_response(data, headers)
 
-
     def post(self, **kw):
         headers = [("Content-Type", "application/json")]
         data = json.loads(http.request.httprequest.data)
@@ -125,6 +124,13 @@ class RestController(http.Controller):
         api_model = api.specified_model_id
         api_fields = api.field_ids
         post_fields = data.keys()
+
+        # Edge case.
+        # Field 'name' is not marked as 'required,' but it is actually required field during sql execution for res.partner model.
+        # On the other hand, field 'name' is not required for 'sales.order,' in which the name is auto created by the class.
+        # Need more research.
+        if 'name' not in data and api.specified_model_technical_name == "res.partner":
+            data["name"] = "Unknown"
 
         all_field_ids = http.request.env["ir.model.fields"].search([('model', '=', api_model.model)])
         required_fields = [f for f in all_field_ids if f["required"]]
