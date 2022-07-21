@@ -9,8 +9,8 @@ class IrModelFieldsInherit(models.Model):
 
     button_domain = fields.Boolean(compute = "_compute_button_domain")
     path = fields.Char(string="Path to get to current field", required=False, default = "", compute = "_compute_path", readonly=True)
-    # parent = fields.One2many(comodel_name="ir.model.fields", inverse_name="children", string="Parent", required=False,readonly = False )
-    # children = fields.Many2one(comodel_name="ir.model.fields", string="Children", required=False, readonly = False )
+    field_wrapper = fields.One2many(comodel_name="rest.field_wrapper", inverse_name="field", string="Filed Wrappers", required=False,)
+
 
     def _compute_path(self):
         self.path = self._context.get('path', "")
@@ -35,10 +35,7 @@ class IrModelFieldsInherit(models.Model):
         #     raise ValidationError("The same model can only be added once")
         # else:
             # self.env['ir.config_parameter'].sudo().set_param('current_field', self.id)
-        if "params" in self._context:
-            rest_current_endpoint_id = self._context['params']['id']
-        else:
-            rest_current_endpoint_id = self._context['default_endpoint_id']
+        rest_current_endpoint_id = self._context['default_endpoint_id']
         self.env['ir.config_parameter'].sudo().set_param('rest_context', {'endpoint_id' : rest_current_endpoint_id, 'current_field' : self.id})
         if not self.env['ir.config_parameter'].sudo().get_param(f'rest_{rest_current_endpoint_id}_relationship'):
             self.env['ir.config_parameter'].sudo().set_param(f'rest_{rest_current_endpoint_id}_relationship', {})

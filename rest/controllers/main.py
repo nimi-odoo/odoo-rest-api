@@ -94,13 +94,15 @@ class RestController(http.Controller):
     def nested_json(self, api):
         api_model = api.specified_model_id
         api_fields = api.field_ids
-        data = http.request.env[api_model.model].search([]).read([field.name for field in api_fields])
+        data = http.request.env[api_model.model].search([]) # as an object
         if api.dictionary :
             relationship_dictionary = ast.literal_eval(api.dictionary)
             for datum in data:
-                for key, value in datum.items():
-                    print(key, " : ", value)
-
+                for field in api_fields:
+                    print(field)
+                # for key, value in datum.items():
+                #     if (api_model.field_id.search([('name','=',key)]).id in api.dictionary):
+                #         children = []
 
 
 
