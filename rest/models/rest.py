@@ -18,7 +18,7 @@ class Rest(models.Model):
     schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
 
     ##
-    children = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_children", help="Children fields")
+    children = fields.Many2many(comodel_name="ir.model.fields", compute = "_compute_children", help="Children fields")
     dictionary = fields.Char(string = "dictionary")
 
 

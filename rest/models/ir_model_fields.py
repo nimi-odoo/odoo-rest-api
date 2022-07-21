@@ -40,10 +40,10 @@ class IrModelFieldsInherit(models.Model):
         if not self.env['ir.config_parameter'].sudo().get_param(f'rest_{rest_current_endpoint_id}_relationship'):
             self.env['ir.config_parameter'].sudo().set_param(f'rest_{rest_current_endpoint_id}_relationship', {})
         return {'type': 'ir.actions.act_window',
-                'res_model' : 'ir.model.fields',
+                'res_model' : 'rest.field_wrapper',
                 'target' : 'current',
                 'view_id' : self.env.ref('rest.children_tree').id,
-                'view_mode' : 'tree',
+                'view_mode' : 'form',
                 'context' : {'button_domain' : self.button_domain,
                              'path' : self._context.get('path') + '>' + self.relation,
                              'default_endpoint_id' : rest_current_endpoint_id

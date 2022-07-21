@@ -3,23 +3,23 @@
     <data>
         <record id ="children_tree" model = "ir.ui.view">
             <field name = "name">children.tree</field>
-            <field name = "model">ir.model.fields</field>
+            <field name = "model">rest.field_wrapper</field>
             <field name = "priority">100</field>
             <field name = "arch" type = "xml">
-                <tree name = "WKAKAKK">
-                    <field name = "name"/>
-                    <field name = "ttype"/>
-                    <field name = "relation"/>
-                    <field name = "id" invisible = "1"/>
-                    <field name = "button_domain" invisible = "1"/>
-                    <field name = "path"/>
-                    <button name = "children_show" type = "object" string ="Manage Children" class = "oe_highlight"
-                    attrs="{'invisible':[('button_domain','=',False)]}"
-                            context = "{'path' : path}"
-                    />
+                <tree>
+                    <field name = "wrapper_children"/>
                 </tree>
             </field>
         </record>
+        <!--                    <field name = "ttype"/>-->
+<!--                    <field name = "relation"/>-->
+<!--                    <field name = "id" invisible = "1"/>-->
+<!--                    <field name = "button_domain" invisible = "1"/>-->
+<!--                    <field name = "path"/>-->
+<!--                    <button name = "children_show" type = "object" string ="Manage Children" class = "oe_highlight"-->
+<!--                    attrs="{'invisible':[('button_domain','=',False)]}"-->
+<!--                            context = "{'path' : path}"-->
+<!--                    />-->
 
         <record model = "ir.actions.server" id = "action_manage_children" >
             <field name="name">Save Selected Fields</field>

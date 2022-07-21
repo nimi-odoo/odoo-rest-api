@@ -6,3 +6,4 @@ access_ir_model_fields_user,access_ir_model_fields,base.model_ir_model_fields,ba
 access_ir_model_portal,access_ir_model,base.model_ir_model,base.group_portal,1,0,0,0
 access_ir_model_fields_portal,access_ir_model_fields,base.model_ir_model_fields,base.group_portal,1,0,0,0
 rest.access_children_wizard,access_children_wizard,rest.model_children_wizard,base.group_user,1,0,0,0
+rest.access_rest_field_wrapper,access_rest_field_wrapper,rest.model_rest_field_wrapper,base.group_user,1,0,0,0
