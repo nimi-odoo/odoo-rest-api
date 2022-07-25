@@ -13,10 +13,11 @@
     'application': True,
     'category': 'Custom Development',
     'version': '0.1',
-    'depends': ['base','website'],
+    'depends': ['base','website','base_automation'],
     'data': [
         "security/ir.model.access.csv",
         "views/webhook_menus.xml",
-        "views/portal_template.xml"
-    ]
+        "views/portal_template.xml",
+        "views/base_automation_view.xml"
+    ],
 }

@@ -24,25 +24,76 @@
                 <hr class="mt-1 mb-1"/>
                 <section>
                     <h3>Subscribe to a new webhook</h3>
-                    <form>
+                    <form action = "" method ="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type = "hidden" name="uid" t-att-value="request.uid"/>
+                        <input type = "hidden" name="previous_selected_webhooks" t-att-value = "selected_webhooks"/>
                         <div class = "form-group">
                             <label for="webhook_url">Webhook URL:</label>
                             <input id ="webhook_url" name = "webhook_url" t-attf-class="form-control form-control-sm" placeholder = "Enter your URL" />
                         </div>
-                        <select class ="form-control" name = "test">
-                        <option t-attf-value="none">Choose automated actions</option>
-                        <t t-foreach = "base_automations" t-as="base_automation">
-                            <option t-attf-value="base_automation.name">
-                            <tr>
-                                <td><span t-field="base_automation.name"/></td>
-                            </tr>
-                            </option>
-                        </t>
-                        </select>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                   </form>
-                    <p><t t-out="base_automations"/> </p>
+                        <label>Choose webhooks to subscribe:</label>
+                        <table class = "table o_main_table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach = "selected_webhooks" t-as = "selected_webhook">
+                                    <tr>
+                                        <td><t t-esc = "request.env['base.automation'].sudo().search([('id','=',int(selected_webhook))]).name"></t></td>
+                                        <td>
+                                        <button name = "deleteRow" class="fa fa-trash text-danger" type="submit" />
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td>
+                                        <select class ="form-control" name = "webhook_id" >
+                                            <t t-foreach = "webhooks" t-as="webhook">
+                                                <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
+                                            </t>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button name = "addRow" class="fa fa-plus-circle text-primary" type="submit"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
 
+                        <button name = "submit" type="submit" class="btn btn-primary">Submit</button>
+                   </form>
+<!--                    <p><t t-out="base_automations"/> </p>-->
+                </section>
+                <section>
+                    <h3>Webhook Subscriptions</h3>
+                     <div>
+                    <table class="table o_main_table">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th>Subscribed Actions</th>
+<!--                                <th>Added On</th>-->
+                                <th/>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="request.env.user.webhook_subscriptions" t-as="webhook_subscription">
+                                <tr>
+                                    <td><span t-field="webhook_subscription.webhook_url"/></td>
+                                    <td><span t-field="webhook_subscription.automated_actions"/></td>
+<!--                                    <td><span t-field="key.create_date"/></td>-->
+                                    <td>
+<!--                                        <i class="fa fa-trash text-danger o_portal_remove_api_key" type="button" t-att-id="key.id"/>-->
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
                 </section>
             </div>
         </t>

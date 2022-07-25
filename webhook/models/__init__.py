@@ -2,5 +2,7 @@
 
 from . import webhook
 from . import webhook_subscription
-from . import res_user
+from . import res_users
+from . import ir_actions
+from . import base_automation
 
