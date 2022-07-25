@@ -9,16 +9,17 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 
 class RestController(http.Controller):
-    @http.route('/api/<string:str>/', auth="check_api_key", csrf=False)
+    @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")
     # @http.route('/api/<string:str>/', auth="public", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
-
         try:
             if request_method == "GET":
                 return self.get(**kw)
             elif request_method == "POST":
                 return self.post(**kw)
+            elif request_method =="OPTIONS":
+                pass
             else:
                 return self.response_404("Invalid request method")
 
@@ -30,7 +31,7 @@ class RestController(http.Controller):
             return self.response_403(str(e))
 
 
-    @http.route('/api/<string:str>/<int:id>', auth="check_api_key", csrf= False)
+    @http.route('/api/<string:str>/<int:id>', auth="check_api_key",csrf= False, cors="*",methods=["GET", "POST", "DELETE", "UNLINK", "PUT", "PATCH", "OPTIONS"])
     def index_id(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         try:
@@ -40,6 +41,8 @@ class RestController(http.Controller):
                 return self.delete_one(**kw)
             elif request_method == "PUT" or request_method == "PATCH":
                 return self.update_one(**kw)
+            elif request_method =="OPTIONS":
+                pass
             else: 
                 return self.response_404("Invalid request method")
 
@@ -52,7 +55,7 @@ class RestController(http.Controller):
 
 
     def get_one(self, **kw):
-        headers = [("Content-Type", "application/json")]
+        headers = [("Content-Type", "application/json"), ("Access-Control-Allow-Methods", "GET,POST,DELETE")]
         record_id = self.retrieve_record_id(**kw)
         if not record_id:
             return self.response_404("Record not found. The path or id may not exist.")
@@ -91,13 +94,17 @@ class RestController(http.Controller):
 
 
     def get(self, **kw):
-        headers = [("Content-Type", "application/json")]
+        headers = [("Content-Type", "application/json"), ("Access-Control-Allow-Methods", "GET,POST,DELETE")]
         url_path = kw["str"]
         search_domain = []
         params = self.convert_dict_to_domain(http.request.params, **kw)
+        search_type = "="
 
         for p in params:
-            search_domain.append(p)
+            if p[0] == "search_type":
+                search_type = p[2]
+            else:
+                search_domain.append(p)
 
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
@@ -171,14 +178,21 @@ class RestController(http.Controller):
     
     def convert_dict_to_domain(self, params, **kw):
         domain = []
+        search_type = "=ilike"
+        if (params.get("search_type")):
+            search_type = params.get("search_type")
+
         for k,v in params.items():
             if not k or not v:
                 if not k: raise UserError("Parameter must have a key")
                 if not v: raise UserError("Parameter must have a value")
             if self.is_field_computed_and_nonstored(k, **kw):
                 raise UserError(f"Non-stored field {k} can't be searched")
-
+            if k == "search_type":
+                continue
+            
             param_type = self.retrieve_param_type(k, **kw)
+            
             if param_type in ("integer", "many2one"):
                 domain.append((k, "=", int(v)))
 
@@ -197,7 +211,7 @@ class RestController(http.Controller):
                 domain = self.field_to_domain_many2many(domain, k, v)
 
             else:
-                domain.append((k, "=", v))
+                domain.append((k, search_type, v))
 
         return domain
 
@@ -208,7 +222,6 @@ class RestController(http.Controller):
         for f in api_fields:
             if f.name == param:
                 param_type = f.ttype
-                print(f"\nParam type:{param_type}")
         return param_type
 
 
