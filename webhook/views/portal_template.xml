@@ -33,7 +33,7 @@
                             <input id ="webhook_url" name = "webhook_url" t-attf-class="form-control form-control-sm" placeholder = "Enter your URL" />
                         </div>
                         <label>Choose webhooks to subscribe:</label>
-                        <table class = "table o_main_table">
+                        <table class = "mb16 table table-sm">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -42,24 +42,44 @@
                             </thead>
                             <tbody>
                                 <t t-foreach = "selected_webhooks" t-as = "selected_webhook">
-                                    <tr>
-                                        <td><t t-esc = "request.env['base.automation'].sudo().search([('id','=',int(selected_webhook))]).name"></t></td>
-                                        <td>
-                                        <button name = "deleteRow" class="fa fa-trash text-danger" type="submit" />
-                                        </td>
+                                    <form action = "" method ="post" name = "ASDASDASD">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type = "hidden" name="uid" t-att-value="request.uid"/>
+                                        <input type = "hidden" name="previous_selected_webhooks" t-att-value = "selected_webhooks"/>
+                                        <tr>
+                                            <td><t class = "text-center" t-esc = "request.env['base.automation'].sudo().search([('id','=',int(selected_webhook))]).name"></t></td>
+                                            <td>
+                                                <button name = "deleteRow" class = "btn btn-outline-danger btn-sm pull-xs-right" type="action" string ="selected_webhook" t-att-id = "selected_webhook" >
+                                                    <i class = "fa fa-trash"/>
+                                                </button>
+                                            </td>
+                                        <input type = "hidden" name = "selected_webhook_row_index" t-att-value = "selected_webhook"/>
                                     </tr>
+                                    </form>
+
                                 </t>
                                 <tr>
                                     <td>
-                                        <select class ="form-control" name = "webhook_id" >
-                                            <t t-foreach = "webhooks" t-as="webhook">
-                                                <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
-                                            </t>
-                                        </select>
+                                        <t t-if = "len(webhooks) == 0">
+                                            <label>Nothing to choose</label>
+                                        </t>
+                                        <t t-if = "len(webhooks) != 0">
+                                            <select class ="form-control md" name = "webhook_id" >
+                                                <t t-foreach = "webhooks" t-as="webhook">
+                                                    <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
+                                                </t>
+                                            </select>
+                                        </t>
                                     </td>
-                                    <td>
-                                        <button name = "addRow" class="fa fa-plus-circle text-primary" type="submit"/>
-                                    </td>
+                                    <t t-if = "len(webhooks) !=0">
+                                        <td>
+
+                                            <button name = "addRow" class = "btn btn-outline-primary btn-sm pull-xs-right" type="submit">
+                                                <i class = "fa fa-plus-circle "/>
+                                            </button>
+                                        </td>
+                                    </t>
+
                                 </tr>
                             </tbody>
                         </table>

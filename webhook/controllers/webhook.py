@@ -48,6 +48,12 @@ class Webhook(http.Controller):
                     values['webhooks'] = updated_webhooks
                     values["selected_webhooks"] = previous_selected_webhooks
                 elif "deleteRow" in post:
+                    if 'previous_selected_webhooks' in post and post.get('previous_selected_webhooks') != "":
+                        previous_selected_webhooks = ast.literal_eval(post.get('previous_selected_webhooks'))
+                    previous_selected_webhooks.remove(post['selected_webhook_row_index'])
+                    updated_webhooks = webhooks.search([('is_webhook','=','True'),('id','not in', previous_selected_webhooks)])
+                    values['webhooks'] = updated_webhooks
+                    values["selected_webhooks"] = previous_selected_webhooks
                     print(post)
 
 
@@ -62,3 +68,6 @@ class Webhook(http.Controller):
             'automated_actions' : webhook_ids
         }
         request.env['webhook_subscription'].sudo().create(vals)
+
+    def deleteRow(self):
+        print("ASD")
