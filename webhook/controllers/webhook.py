@@ -17,9 +17,9 @@ class Webhook(http.Controller):
     @http.route('/my/webhook/', type='http', auth="user", website=True, methods=['GET', 'POST'])
     def index(self, **post):
         webhooks = request.env['base.automation'].sudo().search([('is_webhook','=','True')])
-        webhook_subscriptions = request.env.user.webhook_subscriptions
+        webhook_subscriptions = request.env.user.webhook_subscriptions.search([],order = "create_date desc")
         selected_webhooks = []
-        values = {"webhooks" : webhooks, "webhook_subscriptions" : webhook_subscriptions, "selected_webhooks" : []}
+        values = {"webhooks" : webhooks, "webhook_subscriptions" : [a for a in webhook_subscriptions], "selected_webhooks" : []}
 
         if request.httprequest.method == "POST":
             if "submit" in post:
@@ -36,8 +36,6 @@ class Webhook(http.Controller):
                 else:
                     self.subscribe(uid, webhook_url, previous_selected_webhooks)
             else:
-                # selected_webhooks = post.get(selected_webhooks)
-                # update subscriptions... with current id...
                 if "addRow" in post:
                     if 'previous_selected_webhooks' in post and post.get('previous_selected_webhooks') != "":
                         previous_selected_webhooks = ast.literal_eval(post.get('previous_selected_webhooks'))
@@ -71,3 +69,5 @@ class Webhook(http.Controller):
 
     def deleteRow(self):
         print("ASD")
+
+

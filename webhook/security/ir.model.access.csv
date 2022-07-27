@@ -1,2 +1,5 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_webhook,access_webhook,model_webhook,base.group_user,1,1,1,1
+webhook.access_webhook_subscription_admin,access_webhook_subscription_admin,webhook.model_webhook_subscription,base.group_erp_manager,1,1,1,1
+webhook.access_webhook_subscription,access_webhook_subscription,webhook.model_webhook_subscription,base.group_user,1,0,0,0
+webhook.access_webhook_admin,access_webhook_admin,webhook.model_webhook,base.group_erp_manager,1,1,1,1
+webhook.access_webhook,access_webhook,webhook.model_webhook,base.group_user,1,0,0,0

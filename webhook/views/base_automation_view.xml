@@ -14,7 +14,7 @@
                             <tree>
                                 <field name = "subscriber"/>
                                 <field name = "webhook_url"/>
-                                <field name = "automated_actions"/>
+                                <field name = "webhook"/>
                             </tree>
                         </field>
                     </page>

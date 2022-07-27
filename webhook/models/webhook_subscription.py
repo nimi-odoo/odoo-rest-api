@@ -8,10 +8,11 @@ class WebhookSubscription(models.Model):
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", required = False)
     subscriber_name = fields.Char(string = "Subscriber's name", compute = "_compute_subscriber_name", readonly = True, store = True)
     webhook_url = fields.Char( string="Webhook URL", required = True)
-    automated_actions = fields.Many2many(comodel_name="base.automation", relation="webhook_rel", column1 = 'base_automation_id', column2 = "webhook_subscription_id", string = "Subscribed Actions")
+    webhook = fields.Many2one(comodel_name="base.automation", string="Webhook", required=False)
 
     @api.model
     def create(self, vals):
+        vals.update({'subscriber':self.env.uid})
         rec = super(WebhookSubscription,self).create(vals)
         return rec
 
@@ -27,6 +28,15 @@ class WebhookSubscription(models.Model):
         for rec in self:
             if rec.subscriber.name:
                 rec.subscriber_name = rec.subscriber.name
+
+    def edit_subscription_wizard(self):
+        print("Wizard method")
+        return ("ASDASDAS")
+
+    def edit_subscription(self, new_webhook_id, new_webhook_url):
+        self.webhook_url = new_webhook_url
+        self.webhook = int(new_webhook_id)
+        return
 
 
     # @api.model

@@ -20,4 +20,9 @@
         "views/portal_template.xml",
         "views/base_automation_view.xml"
     ],
+    'assets' : {
+        'web.assets_frontend' : [
+            'webhook/static/src/js/webhook.js'
+        ]
+    }
 }
