@@ -13,11 +13,11 @@ class Rest(models.Model):
     model_path_url = fields.Char(string="Model Path", help="The models id in the URL")
     specified_model_technical_name = fields.Char(related="specified_model_id.model", help="Technical name of the model")
     field_ids = fields.Many2many(comodel_name="ir.model.fields", domain="[('model', '=', specified_model_technical_name)]", help="Fields to be returned in the response")
+    rest_field_ids = fields.Many2many(comodel_name="rest.field", compute="_compute_rest_fields", store=True)
     required_field_ids = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_required_fields", help="Fields required for creation of this model")
     final_url = fields.Char(string="Final URL", compute="_compute_final_url", help="Computed final URL using the base URL and model path")
     schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
     search_type = fields.Char(string="Search Type", default="=ilike", help="Criteria for which records are returned on a search")
-
 
 
     @api.onchange("specified_model_id")
@@ -67,4 +67,28 @@ class Rest(models.Model):
             build = build[:-2:] # Remove the last comma and newline
             build += "\n}"
             record.schema = build
+
+
+    @api.depends("field_ids")
+    def _compute_rest_fields(self):
+        for record in self:
+            record.rest_field_ids = False
+            for f in record.field_ids:
+                print(f.ttype)
+                if f.ttype in ("many2one", "many2many"):
+                    print("\nInitial Compute\n")
+                    print("id:", f)
+                    print(f"Relation: {f.relation}")
+                    model = self.env["ir.model"].search([('model', '=', f.relation)])
+                    print(f"Model: {model}")
+                    print("\n")
+
+                    vals = {
+                        "ir_field_id": f.id,
+                        "name": f.name,
+                        # "parent_model_id": f.model_id.id
+                        "model_id": model.id,
+                        "model_technical_name": f.relation
+                    }
+                    record.rest_field_ids = [(0,0,vals)]
 
