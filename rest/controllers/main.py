@@ -112,11 +112,70 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        api_fields = api.field_ids
+        # api_fields = api.field_ids
+        api_fields = api.rest_field_ids
         model_ids = http.request.env[api_model.model].search(search_domain)
+
+        # data = self.process_children(model_ids, api_fields)
+        data = self.first_process(model_ids, api.field_ids, api.rest_field_ids)
         
-        data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
-        return request.make_response(data, headers)
+        # data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
+        return request.make_response(json.dumps(data, default=str), headers)
+
+
+    def first_process(self, records, normal_fields, m2x_fields):
+        print("\n\nStarting processing on first level\n\n")
+        output = []
+        for record in records:
+            data = record.read([f.name for f in normal_fields if f.ttype not in ("many2one", "many2many")])[0] # Read non-m2x fields from a single record
+            print(f"Data: {data}")
+
+            print(f'\n********************{record.name}********************')
+            print(f"\nProcessing First Level m2x for {record.name}")
+            print(f"Fields: {[f.name for f in m2x_fields]}")
+
+            for field in m2x_fields:
+                print(f"Searching {field.model_id.model} for record id: {record[field.name]}")
+                record_id = http.request.env[field.model_id.model].search([("id", "=", record[field.name].id)])
+                print(f"\tField: {field.name}\t\tRecord ID: {record_id.id}\t{record_id.name}")
+                data[field.name]=(self.process_children(record_id, field.children_field_ids, field.nested_fields, field.name))
+
+            # print("**********************************************")
+            print(f"*** Done processing first level for {record.name} ***\n")
+            if data:
+                output.append(data)
+            # break
+
+        return output
+
+    def process_children(self, records, children_field_ids, nested_fields, parent_name=""):
+        if not records: return {}
+
+        normal_fields = [f for f in children_field_ids if f.ttype not in ("many2one", "many2many")]
+        m2x_fields = [f for f in nested_fields]
+        self.print_stuff(parent_name, records, nested_fields, normal_fields, m2x_fields)
+
+        data = {}
+        if normal_fields:
+            for record in records:
+                data = record.read([f.name for f in normal_fields])[0]
+                print(f"normal data:{data}\n\n")
+
+        if m2x_fields:
+            for f in m2x_fields:
+                data[f.name] = self.process_children(f.model_id, f.children_field_ids, f.nested_fields, f.name)
+
+        # print(f"\nPROCESSED DATA\n{data}\n\n")
+        return data
+
+
+    def print_stuff(self, parent_name, records, nested_fields, normal_fields, m2x_fields):
+        print(f"\n=============================\nRecursive call on {parent_name}, record name: {records.name}")
+        print(f"Nested Fields: {nested_fields}")
+        print(f"Normal: {[n.name for n in normal_fields]}")
+        print(f"m2x: {[m for m in m2x_fields]}")
+        print("=============================\n")
+
 
 
     def post(self, **kw):
