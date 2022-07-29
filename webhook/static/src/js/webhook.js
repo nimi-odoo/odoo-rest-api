@@ -8,6 +8,42 @@ const ajax = require('web.ajax');
 const session = require('web.session');
 
 
+publicWidget.registry.selectAll = publicWidget.Widget.extend({
+    selector: '.o_portal_webhook_select_all',
+    events: {
+        'click': '_onClick',
+    },
+    _onClick: function () {
+        var $checkboxes = this.$el.closest('table').find('tbody input[type="checkbox"]');
+        $checkboxes.prop('checked', this.el.checked);
+        // console.log($checkboxes.prop('checked'));
+    }
+});
+
+publicWidget.registry.deleteSubscription = publicWidget.Widget.extend({
+    selector: '.o_portal_webhook_delete_subscription',
+    events: {
+        'click': '_onClick',
+    },
+    _onClick: function () {
+        var $checkboxes = $(".checkbox");
+        const subscriptions_to_be_deleted = [];
+        for (var i = 0; i < $checkboxes.length; i++) {
+            if ($checkboxes[i].checked) {
+                subscriptions_to_be_deleted.push(parseInt($checkboxes[i].id));
+                
+            }
+        }
+        this._rpc({
+            model: 'webhook_subscription',
+            method: 'unlink',
+            args: [subscriptions_to_be_deleted],
+        }).then( () => {
+            window.location = window.location;
+        });
+    }
+});
+
 publicWidget.registry.newSubscription = publicWidget.Widget.extend({
     selector: '.o_portal_new_subscription',
     events: {
@@ -24,6 +60,7 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
                 ['is_webhook','=','True'],
             ]
         }).then( (webhooks) => {
+            console.log(webhooks);
             var dialog = new Dialog(self, {
                 title : _t('Edit Subscription'),
                 $content: qweb.render('webhook.new_subscription',
@@ -110,7 +147,7 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
                             this._rpc({
                                 model: 'webhook_subscription',
                                 method: 'edit_subscription',
-                                args: [this.target.id, new_webhook_id, new_webhook_url],
+                                args: [parseInt(this.target.id), new_webhook_id, new_webhook_url],
                             }).then( () => {
                                 window.location = window.location;
                             });

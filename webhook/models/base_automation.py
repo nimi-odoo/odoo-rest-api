@@ -6,6 +6,7 @@ class BaseAutomationInherit(models.Model):
     _description = 'Automated Action'
     is_webhook = fields.Boolean(default=False, compute="_compute_is_webhook", store = True)
     webhook_subscriptions = fields.One2many(comodel_name="webhook_subscription", inverse_name="webhook", string="", required=False, )
+    endpoint = fields.Many2one(comodel_name="rest.endpoint", string="Endpoint to fetch data from", required=False)
 
     @api.depends("state")
     def _compute_is_webhook(self):
@@ -17,4 +18,6 @@ class BaseAutomationInherit(models.Model):
         for action in self:
             action.is_webhook = (action.state == "webhook")
 
+    def _process(self, records, domain_post=None):
+        super(BaseAutomationInherit, self)._process(records, domain_post)
 

@@ -19,6 +19,9 @@
                         </field>
                     </page>
                 </xpath>
+                <xpath expr="//field[@name='state']" position="after">
+                    <field name = "endpoint" string = "Endpoint" attrs="{'invisible': [('state', '!=', 'webhook')]}"/>
+                </xpath>
             </field>
         </record>
     </data>

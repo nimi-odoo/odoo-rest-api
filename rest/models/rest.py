@@ -19,6 +19,7 @@ class Rest(models.Model):
 
 
 
+
     @api.onchange("specified_model_id")
     def field_filter(self):
         for record in self:

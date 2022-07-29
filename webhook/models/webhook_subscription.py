@@ -7,8 +7,10 @@ class WebhookSubscription(models.Model):
     _description = "webhook_subscription"
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", required = False)
     subscriber_name = fields.Char(string = "Subscriber's name", compute = "_compute_subscriber_name", readonly = True, store = True)
-    webhook_url = fields.Char( string="Webhook URL", required = True)
     webhook = fields.Many2one(comodel_name="base.automation", string="Webhook", required=False)
+    webhook_url = fields.Char( string="Webhook URL", required = True)
+    description = fields.Char( string="Subscription Description", required = False)
+    
 
     @api.model
     def create(self, vals):
@@ -34,9 +36,10 @@ class WebhookSubscription(models.Model):
         return ("ASDASDAS")
 
     def edit_subscription(self, new_webhook_id, new_webhook_url):
-        self.webhook_url = new_webhook_url
-        self.webhook = int(new_webhook_id)
-        return
+        for rec in self:
+            rec.webhook_url = new_webhook_url
+            rec.webhook = new_webhook_id
+            return
 
 
     # @api.model

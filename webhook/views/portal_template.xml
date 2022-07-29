@@ -12,42 +12,45 @@
     </template>
 
     <template id = "portal_my_webhook">
-        <t t-call = "website.layout">
-            <div class="oe_structure oe_empty oe_structure_not_nearest" id="oe_structure_portal_my_webhook"/>
-            <div class="container pt-2">
-                <h5>Webhooks</h5>
-                <div class="d-flex justify-content-center">
-                     <div id = "webhook_table" >
-                    <table id = "sortingTable" class = "mb16 table w-auto">
-                        <thead>
-                            <tr class = 'table-primary'>
-                                <th>Event</th>
-                                <th>Method</th>
-                                <th class = "th-lg">URL</th>
-                                <th class = "w-1000">Auth</th>
-                                <th>Status</th>
-                                <th>Description</th>
-                                <th>Created<button class = "fa fa-plus text-primary o_portal_new_subscription"/></th>
-                                <th/>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr t-foreach = "request.env.user.webhook_subscriptions" t-as = "webhook_subscription">
-                                <td><button class = "no-decoration o_portal_edit_subscription" t-att-id="webhook_subscription.id"><span t-field="webhook_subscription.webhook"/></button></td>
-                                <td>POST</td>
-                                <td><span t-field="webhook_subscription.webhook_url"/></td>
-                                <td>Basic</td>
-                                <td>Active</td>
-                                <td></td>
-                                <td><span t-field="webhook_subscription.create_date"/></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                </div>
+        <t t-call = "portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Webhooks</t>
+                <ul class="nav">
+              <a class="nav-item ">
+                <a class="nav-link active o_portal_new_subscription" href="#">Add</a>
+              </a>
+              <a class="nav-item">
+                <a class="nav-link o_portal_webhook_delete_subscription" href="#">Delete</a>
+              </a>
+            </ul>
+            </t>
 
-            </div>
-
+            <t t-call="portal.portal_table" >
+                <thead>
+                    <tr class="active">
+                        <th><input type="checkbox" id="checkAll" class = "o_portal_webhook_select_all" aria-label="Check webhooks"/></th>
+                        <th class="text-left">Event</th>
+                        <th class = "col-6">URL</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th class = "col-6">Created</th>
+                        <th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach = "request.env.user.webhook_subscriptions" t-as = "webhook_subscription">
+                        <td><input type="checkbox" class="checkbox" aria-label="Check webhooks" t-att-id="webhook_subscription.id"/></td>
+                        <td class="text-left">
+                                <a href = "#" t-att-id="webhook_subscription.id" role = "button" class = "btn-link o_portal_edit_subscription" t-esc="webhook_subscription.webhook.name"/>
+                        </td>
+                        <td><span t-field="webhook_subscription.webhook_url"/></td>
+                        <td>Active</td>
+                        <td></td>
+                        <td><span t-field="webhook_subscription.create_date"/></td>
+                    </tr>
+                </tbody>
+            </t>
         </t>
     </template>
 </odoo>
