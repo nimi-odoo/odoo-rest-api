@@ -10,7 +10,6 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 class RestController(http.Controller):
     @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")
-    # @http.route('/api/<string:str>/', auth="public", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         try:
@@ -112,14 +111,10 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        # api_fields = api.field_ids
-        api_fields = api.rest_field_ids
         model_ids = http.request.env[api_model.model].search(search_domain)
 
-        # data = self.process_children(model_ids, api_fields)
         data = self.compute_response_data(model_ids, api.field_ids, api.rest_field_ids)
-        
-        # data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
+
         return request.make_response(json.dumps(data, default=str), headers)
 
 
@@ -160,15 +155,6 @@ class RestController(http.Controller):
         return data
 
 
-    def print_stuff(self, parent_name, records, nested_fields, normal_fields, m2x_fields):
-        print(f"\n=============================\nRecursive call on {parent_name}, record name: {records.name}")
-        print(f"Nested Fields: {nested_fields}")
-        print(f"Normal: {[n.name for n in normal_fields]}")
-        print(f"m2x: {[m for m in m2x_fields]}")
-        print("=============================\n")
-
-
-
     def post(self, **kw):
         headers = [("Content-Type", "application/json")]
         data = json.loads(http.request.httprequest.data)
@@ -188,7 +174,6 @@ class RestController(http.Controller):
         unfulfilled_required_fields = [f for f in required_fields if f.name not in post_fields]
         required_field_names = [f.name for f in required_fields]
         default_fields = http.request.env[api_model.model].default_get(required_field_names)
-
 
         unfulfilled_needed_fields = [f for f in unfulfilled_required_fields if f.name not in default_fields]
         if unfulfilled_needed_fields:

@@ -19,7 +19,6 @@ class RestField(models.Model):
 
     @api.depends("children_field_ids")
     def _compute_nested_fields(self):
-        print("\n\nCOMPUTING NESTED FIELDS\n")
         for record in self:
             record.nested_fields = False
             for f in record.children_field_ids:
@@ -32,11 +31,11 @@ class RestField(models.Model):
                         "model_technical_name": model.model
                     }
                     record.nested_fields = [(0,0,vals)]
+                    
 
-
+    s
 
     def action_save(self):
-        print("\nSAVING\n")
         for record in self: 
             for f in record.nested_fields:
                 print("saved", f.name, "\t", f.model_technical_name, f"\tModel: {f.model_id.model}")
