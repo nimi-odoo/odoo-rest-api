@@ -74,19 +74,11 @@ class Rest(models.Model):
         for record in self:
             record.rest_field_ids = False
             for f in record.field_ids:
-                print(f.ttype)
                 if f.ttype in ("many2one", "many2many"):
-                    print("\nInitial Compute\n")
-                    print("id:", f)
-                    print(f"Relation: {f.relation}")
                     model = self.env["ir.model"].search([('model', '=', f.relation)])
-                    print(f"Model: {model}")
-                    print("\n")
-
                     vals = {
                         "ir_field_id": f.id,
                         "name": f.name,
-                        # "parent_model_id": f.model_id.id
                         "model_id": model.id,
                         "model_technical_name": f.relation
                     }
