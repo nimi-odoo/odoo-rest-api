@@ -4,5 +4,3 @@ webhook.access_webhook_subscription,access_webhook_subscription,webhook.model_we
 webhook.access_base_automation,access_base_automation,model_base_automation,base.group_user,1,0,0,0
 webhook.access_actions_server,access_base_automation,model_ir_actions_server,base.group_user,1,0,0,0
 webhook.access_actions_server_object_lines,access_base_automation_object_lines,base.model_ir_server_object_lines,base.group_user,1,0,0,0
-webhook.access_webhook_admin,access_webhook_admin,webhook.model_webhook,base.group_erp_manager,1,1,1,1
-webhook.access_webhook,access_webhook,webhook.model_webhook,base.group_user,1,0,0,0

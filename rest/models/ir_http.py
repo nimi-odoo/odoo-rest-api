@@ -7,19 +7,20 @@ from odoo import SUPERUSER_ID
 
 class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
-    # TODO : change function name into authenticate
+
     @classmethod
     def _auth_method_check_api_key(cls):
         is_admin = False
+        # check if user was logged in
         if request.httprequest.session.uid:
             uid = request.httprequest.session.uid
-            request.uid = uid # Move login information from odoo to our http.request
+            request.uid = uid
 
             # "res.users"._is_superuser() or "res.users".has_group('base.group_erp_manager')
             # This is for later reference, it is not in use currently.
-            is_admin = request.env['res.users'].search([('id', '=', uid)])._is_admin()
+            # is_admin = request.env['res.users'].search([('id', '=', uid)])._is_admin()
         else:
-            api_key = request.httprequest.headers.get("Authorization")
+            api_key = request.httprequest.headers.get("Authorization") or request.params['Authorization']
             if not api_key:
                 raise AccessError("Authorization header with API key missing")
             else:

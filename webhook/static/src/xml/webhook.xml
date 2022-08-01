@@ -58,4 +58,26 @@
             </table>
         </form>
     </t>
+
+
+    <t t-name="webhook.webhook_settings">
+        <form string = "Webhook Settings">
+            <table class = "table o_main_table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>API KEY::</td>
+                        <td>
+                            <input type="text" class="form-control col-10 col-md-6" name="webhook_url" id = "webhook_url" placeholder = "Enter your URL" required="required"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </t>
 </templates>

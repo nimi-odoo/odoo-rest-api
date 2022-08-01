@@ -51,7 +51,7 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
     },
     async _onClick(e){
         e.preventDefault();
-        console.log("ASDASD");
+        
         await ajax.loadXML('/webhook/static/src/xml/webhook.xml', qweb);
         this._rpc({
             model: 'base.automation',
@@ -60,9 +60,8 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
                 ['is_webhook','=','True'],
             ]
         }).then( (webhooks) => {
-            console.log(webhooks);
             var dialog = new Dialog(self, {
-                title : _t('Edit Subscription'),
+                title : _t('New Subscription'),
                 $content: qweb.render('webhook.new_subscription',
                 {
                     webhooks : webhooks
@@ -103,8 +102,13 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
     },
     async _onClick(e){
         e.preventDefault();
-        console.log("Clicked!");
-        console.log(this.target.id);
+        
+        // const user_api_keys = await this._rpc({
+        //     model: 'res.users.apikeys',
+        //     method: 'search_read',
+        //     args: [[['user_id', '=', session.user_id]]],
+        // });
+
         await ajax.loadXML('/webhook/static/src/xml/webhook.xml', qweb);
         this._rpc({
             model: 'webhook_subscription',
@@ -138,7 +142,7 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
                         {
                             webhooks : webhooks,
                             originally_subscribed_webhook : originally_subscribed_webhook,
-                            originally_subscribed_url : originally_subscribed_url
+                            originally_subscribed_url : originally_subscribed_url,
                         }
                         ), 
                         buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
@@ -171,4 +175,31 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
         
     }
 });
+
+publicWidget.registry.webhookSettings = publicWidget.Widget.extend({
+    selector: '.o_portal_webhook_settings',
+    events: {
+        'click': '_onClick',
+    },
+    async _onClick(e){
+        e.preventDefault();
+        await ajax.loadXML('/webhook/static/src/xml/webhook.xml', qweb);
+        
+        const dialog = new Dialog(self, {
+            title : _t('Webhook Settings'),
+            $content: qweb.render('webhook.webhook_settings',
+            {
+                webhooks : "ASD"
+            }
+            )
+        });
+        // dialog.opened(() => {
+            
+        // })
+        dialog.open();    
+
+    }
+});
+
+// end of webhook.js
 });

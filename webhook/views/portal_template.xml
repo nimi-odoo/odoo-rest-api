@@ -23,6 +23,9 @@
               <a class="nav-item">
                 <a class="nav-link o_portal_webhook_delete_subscription" href="#">Delete</a>
               </a>
+              <a class="nav-item">
+                <a class="nav-link o_portal_webhook_settings" href="#">Settings</a>
+              </a>
             </ul>
             </t>
 
@@ -32,7 +35,6 @@
                         <th><input type="checkbox" id="checkAll" class = "o_portal_webhook_select_all" aria-label="Check webhooks"/></th>
                         <th class="text-left">Event</th>
                         <th class = "col-6">URL</th>
-                        <th>Status</th>
                         <th>Description</th>
                         <th class = "col-6">Created</th>
                         <th/>
@@ -45,7 +47,6 @@
                                 <a href = "#" t-att-id="webhook_subscription.id" role = "button" class = "btn-link o_portal_edit_subscription" t-esc="webhook_subscription.webhook.name"/>
                         </td>
                         <td><span t-field="webhook_subscription.webhook_url"/></td>
-                        <td>Active</td>
                         <td></td>
                         <td><span t-field="webhook_subscription.create_date"/></td>
                     </tr>

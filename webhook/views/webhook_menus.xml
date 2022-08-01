@@ -3,22 +3,22 @@
     <data>
 
         <record id="webhook_form_view" model="ir.ui.view">
-            <field name="name">webhook.form</field>
-            <field name="model">webhook</field>
+            <field name="name">webhook_subscription.form</field>
+            <field name="model">webhook_subscription</field>
             <field name="arch" type="xml">
                 <form string="Webhook">
                     <sheet>
                         <div class="oe_title">
-                            <h1>
-                                <field name="name" placeholder="Title"/>
-                            </h1>
+                            <h3>
+                                Create New Subscription
+                            </h3>
                         </div>
                         <group>
                             <group>
-                                <field name="url" placeholder="https://www.odoo.com" />
-                                <field name="condition"/>
-                                <field name="request_method"/>
-                                <field name="request_body"/>
+                                <field name = "webhook"/>
+                                <field name = "subscriber"/>
+                                <field name = "webhook_url"/>
+                                <field name = "description"/>
                             </group>
                         </group>
                     </sheet>
@@ -27,18 +27,22 @@
         </record>
 
         <record id="webhook_tree_view" model="ir.ui.view">
-            <field name="name">webhook.tree</field>
-            <field name="model">webhook</field>
+            <field name="name">webhook_subscription.tree</field>
+            <field name="model">webhook_subscription</field>
             <field name="arch" type="xml">
-                <tree string="Webhook">
-                    <field name="name"/>
+                <tree string="Webhook Subscriptions">
+                    <field name = "webhook"/>
+                    <field name = "subscriber"/>
+                    <field name = "webhook_url"/>
+                    <field name = "description"/>
+                    <field name = "create_date"/>
                 </tree>
             </field>
         </record>
 
         <record id="webhook_search_view" model="ir.ui.view">
-            <field name="name">webhook.search</field>
-            <field name="model">webhook</field>
+            <field name="name">webhook_subscription.search</field>
+            <field name="model">webhook_subscription</field>
             <field name="arch" type="xml">
                 <search string="ModelTitle">
                     <group expand="1" string="Group By">
@@ -49,10 +53,9 @@
             </field>
         </record>
 
-        <record id="webhook_endpoint_action" model="ir.actions.act_window">
-            <field name="name">Webhook</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">webhook</field>
+        <record id="webhook_subscription_action" model="ir.actions.act_window">
+            <field name="name">Webhook Subscriptions</field>
+            <field name="res_model">webhook_subscription</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
@@ -60,11 +63,23 @@
                 </p>
             </field>
         </record>
-    <menuitem id="webhook_menu_root" name="Webhook">
-        <menuitem id="webhook_page" name="Page">
+
+        <record id="webhook_action" model="ir.actions.act_window">
+            <field name="name">Webhooks</field>
+            <field name="res_model">base.automation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_webhook', '=', True)]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+
+    <menuitem id="webhook_subscription_menu_root" name="Webhook">
             <!-- Name for third menu is the name of the action by default (Properties)-->
-            <menuitem id="webhook_menu_action" action="webhook_endpoint_action"/>
-        </menuitem>
+        <menuitem id="webhook_menu_action" action="webhook_action"/>
+        <menuitem id="webhook_subscription_menu_action" action="webhook_subscription_action"/>
     </menuitem>
     </data>
 </odoo>

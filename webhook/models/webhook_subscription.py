@@ -5,11 +5,12 @@ from odoo import api, fields, models
 class WebhookSubscription(models.Model):
     _name = "webhook_subscription"
     _description = "webhook_subscription"
+    name = fields.Char(string="Subscription name", required=False, )
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", required = False)
     subscriber_name = fields.Char(string = "Subscriber's name", compute = "_compute_subscriber_name", readonly = True, store = True)
-    webhook = fields.Many2one(comodel_name="base.automation", string="Webhook", required=False)
+    webhook = fields.Many2one(comodel_name="base.automation", string="Event", required=False)
     webhook_url = fields.Char( string="Webhook URL", required = True)
-    description = fields.Char( string="Subscription Description", required = False)
+    description = fields.Char( string="Description", required = False)
     
 
     @api.model
@@ -40,18 +41,5 @@ class WebhookSubscription(models.Model):
             rec.webhook_url = new_webhook_url
             rec.webhook = new_webhook_id
             return
-
-
-    # @api.model
-    # def create(self):
-    #     print("create")
-    #
-    # @api.model
-    # def edit(self):
-    #     print("edit")
-    #
-    # @api.model
-    # def delete(self):
-    #     print("delete")
 
 
