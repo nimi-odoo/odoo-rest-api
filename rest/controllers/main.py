@@ -140,7 +140,7 @@ class RestController(http.Controller):
     def process_child(self, record, children_field_ids, nested_fields):
         """
         Recursive function for reading data from nested fields.
-        Each m2x field has its name as a key and all its value is all its nested fields in a dict.
+        Each m2x field has its name as a key and its value is all its nested fields in a dict.
         Base cases: 
             Record doesn't exist or no nested fields are specified -> return empty dict
             Only non-m2x fields are in nested fields -> return dict in format {field_name: value,}
@@ -155,7 +155,7 @@ class RestController(http.Controller):
             data = record.read([f.name for f in normal_fields])[0]
         if m2x_fields:
             for f in m2x_fields:
-                data[f.name] = self.process_child(f.model_id, f.children_field_ids, f.nested_fields, f.name)
+                data[f.name] = self.process_child(f.model_id, f.children_field_ids, f.nested_fields)
 
         return data
 
