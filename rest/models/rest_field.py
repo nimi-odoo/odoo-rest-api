@@ -33,8 +33,6 @@ class RestField(models.Model):
                     record.nested_fields = [(0,0,vals)]
                     
 
-    s
-
     def action_save(self):
         for record in self: 
             for f in record.nested_fields:
