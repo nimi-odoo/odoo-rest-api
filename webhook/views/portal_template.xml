@@ -26,15 +26,16 @@
                 </ul>
             </t>
 
-            <t t-call="portal.portal_table" >
+        <div t-attf-class="table-responsive border rounded border-top-0 #{classes if classes else ''}">
+            <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+                <t t-out="0"/>
                 <thead>
                     <tr class="active">
                         <th><input type="checkbox" id="checkAll" class = "o_portal_webhook_select_all" aria-label="Check webhooks"/></th>
                         <th class="text-left">Event</th>
-                        <th class = "col-6">URL</th>
+                        <th class="col-6">URL</th>
                         <th>Description</th>
-                        <th class = "col-6">Created</th>
-                        <th/>
+                        <th class = "text-right">Created</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,10 +46,11 @@
                         </td>
                         <td><span t-field="webhook_subscription.webhook_url"/></td>
                         <td></td>
-                        <td><span t-field="webhook_subscription.create_date"/></td>
+                        <td class = "text-left w-200"><a t-field="webhook_subscription.create_date"/></td>
                     </tr>
                 </tbody>
-            </t>
+            </table>
+        </div>
         </t>
     </template>
 </odoo>

@@ -1,7 +1,10 @@
 from odoo import fields, models, api
+
 import requests
 import json
 import logging
+
+from odoo.addons.rest.controllers.main import RestController
 
 _logger = logging.getLogger(__name__)
 
@@ -22,17 +25,20 @@ class IrActionsServerInherit(models.Model):
 
         for webhook_subscription in webhook_subscriptions:
             try :
+
                 api = self.env["rest.endpoint"].search([("model_path_url", "=", webhook_endpoint_path_url)])
 
                 if not api.ids:
                     return self.response_404("Record not found. The path or id may not exist.")
 
                 api_model = api.specified_model_id
-                api_fields = api.field_ids
                 model_ids = self.env[api_model.model].search([])
-                data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
+                data = RestController.compute_response_data(RestController, model_ids, api.field_ids, api.rest_field_ids)
 
-                webhook_post = requests.post(webhook_subscription.webhook_url, data=data,
+                requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
                                   headers={'Content-Type': 'application/json'})
-            except:
-                _logger.warning("Warning!!!!")
+            except Exception as e:
+                data = e
+                _logger.warning(e)
+                requests.post(webhook_subscription.webhook_url, data=json.dumps(e, default=str),
+                                             headers={'Content-Type': 'application/json'})
