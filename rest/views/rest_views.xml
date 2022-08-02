@@ -49,6 +49,9 @@
                             </code>
                             <!-- </div> -->
                         </page>
+                        <page string="Rest Fields">
+                            <field name="rest_field_ids"/>
+                        </page>
                     </notebook>
                 </sheet>
             </form>

@@ -9,16 +9,17 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 
 class RestController(http.Controller):
-    @http.route('/api/<string:str>/', auth="check_api_key", csrf=False)
+    @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")
     # @http.route('/api/<string:str>/', auth="public", csrf= False)
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
-
         try:
             if request_method == "GET":
                 return self.get(**kw)
             elif request_method == "POST":
                 return self.post(**kw)
+            elif request_method =="OPTIONS":
+                pass
             else:
                 return self.response_404("Invalid request method")
 
@@ -30,7 +31,7 @@ class RestController(http.Controller):
             return self.response_403(str(e))
 
 
-    @http.route('/api/<string:str>/<int:id>', auth="check_api_key", csrf= False)
+    @http.route('/api/<string:str>/<int:id>', auth="check_api_key",csrf= False, cors="*",methods=["GET", "POST", "DELETE", "UNLINK", "PUT", "PATCH", "OPTIONS"])
     def index_id(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
         try:
@@ -40,6 +41,8 @@ class RestController(http.Controller):
                 return self.delete_one(**kw)
             elif request_method == "PUT" or request_method == "PATCH":
                 return self.update_one(**kw)
+            elif request_method =="OPTIONS":
+                pass
             else: 
                 return self.response_404("Invalid request method")
 
@@ -52,7 +55,7 @@ class RestController(http.Controller):
 
 
     def get_one(self, **kw):
-        headers = [("Content-Type", "application/json")]
+        headers = [("Content-Type", "application/json"), ("Access-Control-Allow-Methods", "GET,POST,DELETE")]
         record_id = self.retrieve_record_id(**kw)
         if not record_id:
             return self.response_404("Record not found. The path or id may not exist.")
@@ -91,13 +94,17 @@ class RestController(http.Controller):
 
 
     def get(self, **kw):
-        headers = [("Content-Type", "application/json")]
+        headers = [("Content-Type", "application/json"), ("Access-Control-Allow-Methods", "GET,POST,DELETE")]
         url_path = kw["str"]
         search_domain = []
         params = self.convert_dict_to_domain(http.request.params, **kw)
+        search_type = "="
 
         for p in params:
-            search_domain.append(p)
+            if p[0] == "search_type":
+                search_type = p[2]
+            else:
+                search_domain.append(p)
 
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
@@ -105,11 +112,61 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        api_fields = api.field_ids
+        # api_fields = api.field_ids
+        api_fields = api.rest_field_ids
         model_ids = http.request.env[api_model.model].search(search_domain)
+
+        # data = self.process_children(model_ids, api_fields)
+        data = self.compute_response_data(model_ids, api.field_ids, api.rest_field_ids)
         
-        data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
-        return request.make_response(data, headers)
+        # data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
+        return request.make_response(json.dumps(data, default=str), headers)
+
+
+    def compute_response_data(self, records, normal_fields, m2x_fields):
+        output = []
+        for record in records:
+            data = record.read([f.name for f in normal_fields if f.ttype not in ("many2one", "many2many")])[0] # Read non-m2x fields from a single record
+
+            for field in m2x_fields:
+                record_id = http.request.env[field.model_id.model].search([("id", "=", record[field.name].id)]) # Get the record that the relation is pointing to
+                data[field.name] = self.process_child(record_id, field.children_field_ids, field.nested_fields) # Begin obtaining data recursively
+
+            if data:
+                output.append(data)
+
+        return output
+
+    def process_child(self, record, children_field_ids, nested_fields):
+        """
+        Recursive function for reading data from nested fields.
+        Each m2x field has its name as a key and its value is all its nested fields in a dict.
+        Base cases: 
+            Record doesn't exist or no nested fields are specified -> return empty dict
+            Only non-m2x fields are in nested fields -> return dict in format {field_name: value,}
+        """
+        if not record: return {}
+
+        normal_fields = [f for f in children_field_ids if f.ttype not in ("many2one", "many2many")]
+        m2x_fields = [f for f in nested_fields]
+
+        data = {}
+        if normal_fields:
+            data = record.read([f.name for f in normal_fields])[0]
+        if m2x_fields:
+            for f in m2x_fields:
+                data[f.name] = self.process_child(f.model_id, f.children_field_ids, f.nested_fields)
+
+        return data
+
+
+    def print_stuff(self, parent_name, records, nested_fields, normal_fields, m2x_fields):
+        print(f"\n=============================\nRecursive call on {parent_name}, record name: {records.name}")
+        print(f"Nested Fields: {nested_fields}")
+        print(f"Normal: {[n.name for n in normal_fields]}")
+        print(f"m2x: {[m for m in m2x_fields]}")
+        print("=============================\n")
+
 
 
     def post(self, **kw):
@@ -171,14 +228,21 @@ class RestController(http.Controller):
     
     def convert_dict_to_domain(self, params, **kw):
         domain = []
+        search_type = "=ilike"
+        if (params.get("search_type")):
+            search_type = params.get("search_type")
+
         for k,v in params.items():
             if not k or not v:
                 if not k: raise UserError("Parameter must have a key")
                 if not v: raise UserError("Parameter must have a value")
             if self.is_field_computed_and_nonstored(k, **kw):
                 raise UserError(f"Non-stored field {k} can't be searched")
-
+            if k == "search_type":
+                continue
+            
             param_type = self.retrieve_param_type(k, **kw)
+            
             if param_type in ("integer", "many2one"):
                 domain.append((k, "=", int(v)))
 
@@ -197,7 +261,7 @@ class RestController(http.Controller):
                 domain = self.field_to_domain_many2many(domain, k, v)
 
             else:
-                domain.append((k, "=", v))
+                domain.append((k, search_type, v))
 
         return domain
 
@@ -208,7 +272,6 @@ class RestController(http.Controller):
         for f in api_fields:
             if f.name == param:
                 param_type = f.ttype
-                print(f"\nParam type:{param_type}")
         return param_type
 
 

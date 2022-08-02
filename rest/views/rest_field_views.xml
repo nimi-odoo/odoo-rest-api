@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="rest_field_action" model="ir.actions.act_window">
+        <field name="name">REST field</field>
+        <field name="res_model">rest.field</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="rest_field_view_tree" model="ir.ui.view">
+        <field name="name">rest.field.tree</field>
+        <field name="model">rest.field</field>
+        <field name="arch" type="xml">
+            <tree string="Fields">
+                <field name="name"/>
+                <field name="ir_field_id"/>
+                <field name="model_technical_name"/>
+                <!-- <field name="children_field_ids"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="rest_field_view_form" model="ir.ui.view">
+        <field name="name">rest.field.form</field>
+        <field name="model">rest.field</field>
+        <field name="arch" type="xml">
+            <form string="Nested Fields">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="ir_field_id"/>
+                        <field name="model_id"/>
+                        <field name="model_technical_name"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Nested Fields">
+                            <field name="children_field_ids"/>
+                        </page>
+                        <page string="Computed">
+                            <field name="nested_fields"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_save" type="object" string="Save"/><button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo> 
