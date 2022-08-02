@@ -1,33 +1,4 @@
 <templates xml:space="preserve">
-    <t t-name="webhook.new_subscription">
-        <form string = "New Subscription">
-            <table class = "table o_main_table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Webhook:</td>
-                        <td>
-                            <select class ="form-control md" name = "webhook_id" >
-                                <t t-foreach = "webhooks" t-as="webhook">
-                                    <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
-                                </t>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>URL:</td>
-                        <td>
-                            <input type="text" class="form-control col-10 col-md-6" name="webhook_url" id = "webhook_url" placeholder = "Enter your URL" required="required"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </t>
     <t t-name="webhook.edit_subscription">
         <form string = "Edit Subscription">
             <table class = "table o_main_table">
@@ -41,7 +12,9 @@
                     <tr><td>Webhook:</td>
                         <td>
                             <select class ="form-control md" name = "webhook_id" >
-                                <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
+                                <t t-if = "originally_subscribed_webhook">
+                                    <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
+                                </t>
                                 <t t-foreach = "webhooks" t-as="webhook">
                                     <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
                                 </t>
@@ -60,24 +33,5 @@
     </t>
 
 
-    <t t-name="webhook.webhook_settings">
-        <form string = "Webhook Settings">
-            <table class = "table o_main_table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>API KEY::</td>
-                        <td>
-                            <input type="text" class="form-control col-10 col-md-6" name="webhook_url" id = "webhook_url" placeholder = "Enter your URL" required="required"/>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </form>
-    </t>
+    
 </templates>

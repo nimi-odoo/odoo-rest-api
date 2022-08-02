@@ -17,16 +17,13 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Webhooks</t>
                 <ul class="nav">
-              <a class="nav-item ">
-                <a class="nav-link active o_portal_new_subscription" href="#">Add</a>
-              </a>
-              <a class="nav-item">
-                <a class="nav-link o_portal_webhook_delete_subscription" href="#">Delete</a>
-              </a>
-              <a class="nav-item">
-                <a class="nav-link o_portal_webhook_settings" href="#">Settings</a>
-              </a>
-            </ul>
+                  <a class="nav-item ">
+                    <a class="nav-link active o_portal_new_subscription" href="#">Add</a>
+                  </a>
+                  <a class="nav-item">
+                    <a class="nav-link o_portal_webhook_delete_subscription" href="#">Delete</a>
+                  </a>
+                </ul>
             </t>
 
             <t t-call="portal.portal_table" >

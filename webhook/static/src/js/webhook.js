@@ -16,7 +16,6 @@ publicWidget.registry.selectAll = publicWidget.Widget.extend({
     _onClick: function () {
         var $checkboxes = this.$el.closest('table').find('tbody input[type="checkbox"]');
         $checkboxes.prop('checked', this.el.checked);
-        // console.log($checkboxes.prop('checked'));
     }
 });
 
@@ -62,9 +61,10 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
         }).then( (webhooks) => {
             var dialog = new Dialog(self, {
                 title : _t('New Subscription'),
-                $content: qweb.render('webhook.new_subscription',
+                $content: qweb.render('webhook.edit_subscription',
                 {
-                    webhooks : webhooks
+                    webhooks : webhooks,
+                    originally_subscribed_url : ""
                 }
                 ), 
                 buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
@@ -79,16 +79,6 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
                     });
                 }}, {text: _t('Discard'), close: true}]
             });
-            dialog.opened(() => {
-                const new_webhook_id = dialog.el.querySelector('[name="webhook_id"]');
-                const new_webhook_url = dialog.el.querySelector('[name="webhook_url"]');
-                new_webhook_id.addEventListener('input', (e) => { 
-                    console.log(e.target.value);
-                });
-                new_webhook_url.addEventListener('input', (e) => { 
-                    console.log(e.target.value);
-                });
-            })
             dialog.open();    
         });
     }
@@ -157,16 +147,6 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
                             });
                         }}, {text: _t('Discard'), close: true}]
                     });
-                    dialog.opened(() => {
-                        const new_webhook_id = dialog.el.querySelector('[name="webhook_id"]');
-                        const new_webhook_url = dialog.el.querySelector('[name="webhook_url"]');
-                        new_webhook_id.addEventListener('input', (e) => { 
-                            console.log(e.target.value);
-                        });
-                        new_webhook_url.addEventListener('input', (e) => { 
-                            console.log(e.target.value);
-                        });
-                    })
                     dialog.open();    
                 });
             })
@@ -184,7 +164,9 @@ publicWidget.registry.webhookSettings = publicWidget.Widget.extend({
     async _onClick(e){
         e.preventDefault();
         await ajax.loadXML('/webhook/static/src/xml/webhook.xml', qweb);
-        
+        //TODO
+        // API KEY Select
+        // one2one?????
         const dialog = new Dialog(self, {
             title : _t('Webhook Settings'),
             $content: qweb.render('webhook.webhook_settings',

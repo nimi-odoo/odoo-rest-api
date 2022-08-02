@@ -5,6 +5,8 @@ from odoo.http import request
 from odoo.exceptions import AccessError
 from odoo import SUPERUSER_ID
 
+import socket
+
 class IrHttp(models.AbstractModel):
     _inherit = "ir.http"
 
@@ -15,10 +17,6 @@ class IrHttp(models.AbstractModel):
         if request.httprequest.session.uid:
             uid = request.httprequest.session.uid
             request.uid = uid
-
-            # "res.users"._is_superuser() or "res.users".has_group('base.group_erp_manager')
-            # This is for later reference, it is not in use currently.
-            # is_admin = request.env['res.users'].search([('id', '=', uid)])._is_admin()
         else:
             api_key = request.httprequest.headers.get("Authorization") or request.params['Authorization']
             if not api_key:
@@ -29,3 +27,9 @@ class IrHttp(models.AbstractModel):
                     raise AccessError("Invalid API Key")
                 else:
                     request.uid = user_id
+
+    def is_request_sent_from_server(self):
+        hostName = request.httprequest.environ['HTTP_HOST'].split(":")[0] # host name requested by the client.
+        if hostName == "localhost":
+            return True
+        return False

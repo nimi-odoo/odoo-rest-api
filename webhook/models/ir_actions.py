@@ -1,5 +1,4 @@
 from odoo import fields, models, api
-
 import requests
 import json
 import logging
@@ -20,16 +19,20 @@ class IrActionsServerInherit(models.Model):
         webhook_subscriptions = webhook.webhook_subscriptions
         webhook_endpoint_path_url = webhook.endpoint.model_path_url
         webhook_endpoint_url = f'{self.env["ir.config_parameter"].sudo().get_param("web.base.url")}/api/{webhook_endpoint_path_url}'
+
         for webhook_subscription in webhook_subscriptions:
-            headers = {"Authorization": "8b0138967140c765469a3d12a5c30a8bf77f46cb"}
-            #TODO:
-            #Get Real api key
             try :
-                endpoint_response = requests.get( webhook_endpoint_url, headers )
-                webhook_post = requests.post(webhook_subscription.webhook_url, data=json.dumps(json.loads(endpoint_response.text)),
+                api = self.env["rest.endpoint"].search([("model_path_url", "=", webhook_endpoint_path_url)])
+
+                if not api.ids:
+                    return self.response_404("Record not found. The path or id may not exist.")
+
+                api_model = api.specified_model_id
+                api_fields = api.field_ids
+                model_ids = self.env[api_model.model].search([])
+                data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
+
+                webhook_post = requests.post(webhook_subscription.webhook_url, data=data,
                                   headers={'Content-Type': 'application/json'})
-                print(webhook_post)
             except:
                 _logger.warning("Warning!!!!")
-
-
