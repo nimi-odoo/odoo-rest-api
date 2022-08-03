@@ -15,7 +15,8 @@ class WebhookSubscription(models.Model):
 
     @api.model
     def create(self, vals):
-        vals.update({'subscriber':self.env.uid})
+        if not vals.get('subscriber'):
+            vals.update({'subscriber': self.env.uid})
         rec = super(WebhookSubscription,self).create(vals)
         return rec
 
