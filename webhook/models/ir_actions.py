@@ -40,5 +40,3 @@ class IrActionsServerInherit(models.Model):
             except Exception as e:
                 data = e
                 _logger.warning(e)
-                requests.post(webhook_subscription.webhook_url, data=json.dumps(e, default=str),
-                                             headers={'Content-Type': 'application/json'})

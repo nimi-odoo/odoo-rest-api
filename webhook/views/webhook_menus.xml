@@ -76,7 +76,10 @@
             </field>
         </record>
 
-    <menuitem id="webhook_subscription_menu_root" name="Webhook">
+    <menuitem id="webhook_subscription_menu_root"
+              name="Webhook"
+              web_icon="webhook,static/description/icon.jpg"
+            >
             <!-- Name for third menu is the name of the action by default (Properties)-->
         <menuitem id="webhook_menu_action" action="webhook_action"/>
         <menuitem id="webhook_subscription_menu_action" action="webhook_subscription_action"/>
