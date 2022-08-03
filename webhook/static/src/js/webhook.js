@@ -70,10 +70,11 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
                 buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
                     var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                     var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
+                    var new_description = dialog.el.querySelector('[name="description"]').value;
                     this._rpc({
                         model: 'webhook_subscription',
                         method: 'create',
-                        args: [{"webhook":new_webhook_id,"webhook_url": new_webhook_url}],
+                        args: [{"webhook":new_webhook_id,"webhook_url": new_webhook_url,"description":new_description}],
                     }).then( () => {
                         window.location = window.location;
                     });
@@ -109,6 +110,7 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
         }).then( (webhook_subscription) => {
             const originally_subscribed_webhook_id = webhook_subscription[0].webhook[0];
             const originally_subscribed_url = webhook_subscription[0].webhook_url;
+            const original_description = webhook_subscription[0].description;
             this._rpc({
                 model: 'base.automation',
                 method : 'search_read',
@@ -133,15 +135,21 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
                             webhooks : webhooks,
                             originally_subscribed_webhook : originally_subscribed_webhook,
                             originally_subscribed_url : originally_subscribed_url,
+                            original_description : original_description
                         }
                         ), 
                         buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
                             var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                             var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
+                            var new_description = dialog.el.querySelector('[name="description"]').value;
+                            var vals = {"webhook":new_webhook_id,
+                                        "webhook_url": new_webhook_url,
+                                        "description":new_description
+                                        }
                             this._rpc({
                                 model: 'webhook_subscription',
-                                method: 'edit_subscription',
-                                args: [parseInt(this.target.id), new_webhook_id, new_webhook_url],
+                                method: 'write',
+                                args: [parseInt(this.target.id), vals],
                             }).then( () => {
                                 window.location = window.location;
                             });

@@ -45,7 +45,7 @@
                                 <a href = "#" t-att-id="webhook_subscription.id" role = "button" class = "btn-link o_portal_edit_subscription" t-esc="webhook_subscription.webhook.name"/>
                         </td>
                         <td><span t-field="webhook_subscription.webhook_url"/></td>
-                        <td></td>
+                        <td><span t-field="webhook_subscription.description"/></td>
                         <td class = "text-left w-200"><a t-field="webhook_subscription.create_date"/></td>
                     </tr>
                 </tbody>
