@@ -43,7 +43,8 @@
                     </notebook>
                 </sheet>
                 <footer>
-                    <button name="action_save" type="object" string="Save"/><button string="Cancel" special="cancel"/>
+                    <button name="action_save" type="object" string="Save"/>
+                    <button name="action_close" string="Cancel" data-dismiss="modal"/>
                 </footer>
             </form>
         </field>
