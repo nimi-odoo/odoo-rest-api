@@ -19,7 +19,6 @@ class RestField(models.Model):
 
     @api.depends("children_field_ids")
     def _compute_nested_fields(self):
-        print("\n\nCOMPUTING NESTED FIELDS\n")
         for record in self:
             if not record.children_field_ids.ids:
                 record.nested_fields = False
@@ -34,31 +33,16 @@ class RestField(models.Model):
                         "model_id": model.id,
                         "model_technical_name": model.model
                     }
-                    print(f"Created Lower-Level Rest Field {f.name}")
                     record.nested_fields = [(0,0,vals)]
 
             for field in record.nested_fields:
                 ir_field_ids = [f.name for f in record.children_field_ids]
                 if field.name not in ir_field_ids:
-                    print(f"\nUnlinking lower-rest field: {field.name}")
                     field.unlink()
 
 
     def action_save(self):
-        print("\nSAVING\n")
         for record in self: 
             for f in record.nested_fields:
                 print("saved", f.name, "\t", f.model_technical_name, f"\tModel: {f.model_id.model}")
 
-
-    # def unlink(self):
-    #     """
-    #     When a user deletes a field from children_field_ids (ir.model.fields), delete the associated field in nested_fields (rest.field)
-    #     """
-    #     for rec in self:
-    #         for field in rec.nested_fields:
-    #             if field.name not in [f.name for f in rec.children_field_ids]:
-    #                 print(f"Unlinking Lower-level Rest Field {f.name}")
-    #                 field.unlink()
-
-    #     return super().unlink()
