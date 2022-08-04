@@ -95,7 +95,7 @@ class Webhook(http.Controller):
 
     # Return all available webhook events.
     @http.route('/webhook/events', auth="check_api_key", csrf= False, methods=["GET"])
-    def webhook(self, **kw):
+    def webhook_events(self, **kw):
         headers = [("Content-Type", "application/json"), ("Access-Control-Allow-Methods", "GET")]
         data = request.env['base.automation'].sudo().search([('is_webhook','=',True)]).read(["id","display_name","trigger","model_name","endpoint"])
         return request.make_response(json.dumps(data, default=str), headers)
