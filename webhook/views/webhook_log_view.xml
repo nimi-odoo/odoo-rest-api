@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="webhook_log_form_view" model="ir.ui.view">
+            <field name="name">webhook_log.form</field>
+            <field name="model">webhook_log</field>
+            <field name="arch" type="xml">
+                <form string="Webhook">
+                    <sheet>
+                        <div class="oe_title">
+                            <h3>
+                                Webhook Logs
+                            </h3>
+                        </div>
+                        <group>
+                            <group>
+                                <field name = "webhook"/>
+                                <field name = "subscriber"/>
+                                <field name = "webhook_url"/>
+                                <field name = "status_code"
+                                   decoration-success="status_code == '200'"
+                                   decoration-danger="status_code != '200'"
+                                   widget="badge"
+                                   optional="show"
+                                />
+                                <field name = "create_date" string ="Sent on"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Request">
+                                <group>
+                                    <field name = "request_header"/>
+                                    <field name = "request_body"/>
+                                </group>
+                            </page>
+                            <page string="Response">
+                                <group>
+                                    <field name = "response_header"/>
+                                    <field name = "response_body"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="webhook_log_tree_view" model="ir.ui.view">
+            <field name="name">webhook_log.tree</field>
+            <field name="model">webhook_log</field>
+            <field name="arch" type="xml">
+                <tree string="Webhook Logs">
+                    <field name = "webhook"/>
+                    <field name = "subscriber"/>
+                    <field name = "webhook_url"/>
+                    <field name = "status_code"
+                           decoration-success="status_code == '200'"
+                           decoration-danger="status_code != '200'"
+                           widget="badge"
+                           optional="show"
+                    />
+                    <field name = "create_date" string ="Sent on"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="webhook_log_search_view" model="ir.ui.view">
+            <field name="name">webhook_log.search</field>
+            <field name="model">webhook_log</field>
+            <field name="arch" type="xml">
+                <search string="ModelTitle">
+                    <group expand="1" string="Group By">
+                        <filter string="Subscriber" name="subscriber" domain="[]"
+                                context="{'group_by':'subscriber'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="webhook_log_action" model="ir.actions.act_window">
+            <field name="name">Webhooks</field>
+            <field name="res_model">webhook_log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new ModelTitle.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -12,11 +12,14 @@
                           attrs="{'invisible': [('state', '!=', 'webhook')]}">
                         <field name = "webhook_subscriptions">
                             <tree>
+                                <field name = "webhook"/>
                                 <field name = "subscriber"/>
                                 <field name = "webhook_url"/>
-                                <field name = "webhook"/>
                             </tree>
                         </field>
+                    </page>
+                    <page string="Webhook Logs" attrs="{'invisible': [('state', '!=', 'webhook')]}">
+                        <field name="logs"/>
                     </page>
                 </xpath>
                 <xpath expr="//field[@name='state']" position="after">

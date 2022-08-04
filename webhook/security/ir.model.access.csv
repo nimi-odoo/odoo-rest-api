@@ -12,4 +12,4 @@ webhook.access_webhook_subscription_portal,access_webhook_subscription,webhook.m
 webhook.access_base_automation_portal,access_base_automation,model_base_automation,base.group_portal,1,0,0,0
 webhook.access_actions_server_portal,access_base_automation,model_ir_actions_server,base.group_portal,1,0,0,0
 webhook.access_actions_server_object_lines_portal,access_base_automation_object_lines,base.model_ir_server_object_lines,base.group_portal,1,0,0,0
-webhook.access_webhook_log_portal,access_webhook_log_portal,webhook.model_webhook_log,base.group_user,1,1,1,1
+webhook.access_webhook_log_portal,access_webhook_log_portal,webhook.model_webhook_log,base.group_portal,1,1,1,1

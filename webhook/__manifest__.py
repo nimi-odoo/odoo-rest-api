@@ -19,7 +19,8 @@
         "security/security.xml",
         "views/webhook_menus.xml",
         "views/portal_template.xml",
-        "views/base_automation_view.xml"
+        "views/base_automation_view.xml",
+        "views/webhook_log_view.xml"
     ],
     'assets' : {
         'web.assets_frontend' : [

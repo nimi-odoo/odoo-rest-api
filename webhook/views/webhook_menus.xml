@@ -10,7 +10,7 @@
                     <sheet>
                         <div class="oe_title">
                             <h3>
-                                Create New Subscription
+                                Subscription
                             </h3>
                         </div>
                         <group>
@@ -21,6 +21,11 @@
                                 <field name = "description"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page string="Webhook Logs">
+                                <field name="logs"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -30,12 +35,11 @@
             <field name="name">webhook_subscription.tree</field>
             <field name="model">webhook_subscription</field>
             <field name="arch" type="xml">
-                <tree string="Webhook Subscriptions">
+                <tree string="Webhook Subscription">
                     <field name = "webhook"/>
                     <field name = "subscriber"/>
                     <field name = "webhook_url"/>
                     <field name = "description"/>
-                    <field name = "create_date"/>
                 </tree>
             </field>
         </record>
@@ -46,8 +50,8 @@
             <field name="arch" type="xml">
                 <search string="ModelTitle">
                     <group expand="1" string="Group By">
-                        <filter string="Name" name="name" domain="[]"
-                                context="{'group_by':'name'}"/>
+                        <filter string="event" name="webhook" domain="[]"
+                                context="{'group_by':'webhook'}"/>
                     </group>
                 </search>
             </field>
@@ -59,7 +63,7 @@
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                    There is no examples click here to add new ModelTitle.
+                    There is no examples click here to add new subscription.
                 </p>
             </field>
         </record>
@@ -71,7 +75,18 @@
             <field name="domain">[('is_webhook', '=', True)]</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                    There is no examples click here to add new ModelTitle.
+                    There is no examples click here to add new webhook event.
+                </p>
+            </field>
+        </record>
+
+        <record id="webhook_log_action" model="ir.actions.act_window">
+            <field name="name">Webhook Logs</field>
+            <field name="res_model">webhook_log</field>
+            <field name="view_mode">tree, form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    There is no examples click here to add new webhook log.
                 </p>
             </field>
         </record>
@@ -80,9 +95,9 @@
               name="Webhook"
               web_icon="webhook,static/description/icon.jpg"
             >
-            <!-- Name for third menu is the name of the action by default (Properties)-->
         <menuitem id="webhook_menu_action" action="webhook_action"/>
         <menuitem id="webhook_subscription_menu_action" action="webhook_subscription_action"/>
+        <menuitem id="webhook_log_menu_action" action="webhook_log_action"/>
     </menuitem>
     </data>
 </odoo>
