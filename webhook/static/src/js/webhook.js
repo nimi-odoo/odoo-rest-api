@@ -67,17 +67,25 @@ publicWidget.registry.newSubscription = publicWidget.Widget.extend({
                     originally_subscribed_url : ""
                 }
                 ), 
-                buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
+                buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: false, click: async () => {
                     var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                     var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
                     var new_description = dialog.el.querySelector('[name="description"]').value;
-                    this._rpc({
-                        model: 'webhook_subscription',
-                        method: 'create',
-                        args: [{"webhook":new_webhook_id,"webhook_url": new_webhook_url,"description":new_description}],
-                    }).then( () => {
-                        window.location = window.location;
-                    });
+                    if (!isValidHttpUrl(new_webhook_url)){
+                        dialog.el.querySelector('[name="webhook_url"]').classList.add('is-invalid');
+                        dialog.el.querySelector('[name="webhook_url"]').setCustomValidity(_t("Invalid URL"));
+                        dialog.el.querySelector('[name="webhook_url"]').reportValidity();
+                    } else {
+                        this._rpc({
+                            model: 'webhook_subscription',
+                            method: 'create',
+                            args: [{"webhook":new_webhook_id,"webhook_url": new_webhook_url,"description":new_description}],
+                        }).then( (r) => {
+                            dialog.close();
+                            window.location = window.location;
+
+                        });
+                    }
                 }}, {text: _t('Discard'), close: true}]
             });
             dialog.open();    
@@ -138,21 +146,31 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
                             original_description : original_description
                         }
                         ), 
-                        buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: true, click: async () => {
+                        buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: false, click: async () => {
                             var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                             var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
                             var new_description = dialog.el.querySelector('[name="description"]').value;
-                            var vals = {"webhook":new_webhook_id,
-                                        "webhook_url": new_webhook_url,
-                                        "description":new_description
-                                        }
-                            this._rpc({
-                                model: 'webhook_subscription',
-                                method: 'write',
-                                args: [parseInt(this.target.id), vals],
-                            }).then( () => {
-                                window.location = window.location;
-                            });
+                            if (!isValidHttpUrl(new_webhook_url)){
+                                dialog.el.querySelector('[name="webhook_url"]').classList.add('is-invalid');
+                                dialog.el.querySelector('[name="webhook_url"]').setCustomValidity(_t("Invalid URL"));
+                                dialog.el.querySelector('[name="webhook_url"]').reportValidity();
+                            } else {
+                                var vals =
+                                {
+                                "webhook":new_webhook_id,
+                                "webhook_url": new_webhook_url,
+                                "description":new_description
+                                }
+                                this._rpc({
+                                    model: 'webhook_subscription',
+                                    method: 'write',
+                                    args: [parseInt(this.target.id), vals],
+                                }).then( () => {
+                                    dialog.close();
+                                    window.location = window.location;
+                                });
+                            }
+
                         }}, {text: _t('Discard'), close: true}]
                     });
                     dialog.open();    
@@ -164,32 +182,19 @@ publicWidget.registry.editSubscription = publicWidget.Widget.extend({
     }
 });
 
-publicWidget.registry.webhookSettings = publicWidget.Widget.extend({
-    selector: '.o_portal_webhook_settings',
-    events: {
-        'click': '_onClick',
-    },
-    async _onClick(e){
-        e.preventDefault();
-        await ajax.loadXML('/webhook/static/src/xml/webhook.xml', qweb);
-        //TODO
-        // API KEY Select
-        // one2one?????
-        const dialog = new Dialog(self, {
-            title : _t('Webhook Settings'),
-            $content: qweb.render('webhook.webhook_settings',
-            {
-                webhooks : "ASD"
-            }
-            )
-        });
-        // dialog.opened(() => {
-            
-        // })
-        dialog.open();    
 
-    }
-});
+function isValidHttpUrl(string) {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === "http:" || url.protocol === "https:";
+}
+
 
 // end of webhook.js
 });

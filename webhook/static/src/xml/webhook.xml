@@ -1,7 +1,7 @@
 <templates xml:space="preserve">
     <t t-name="webhook.edit_subscription">
         <form string = "Edit Subscription">
-            <table class = "table o_main_table">
+            <table class = "table">
                 <thead>
                     <tr>
                         <th></th>
