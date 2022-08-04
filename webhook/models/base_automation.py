@@ -7,6 +7,7 @@ class BaseAutomationInherit(models.Model):
     is_webhook = fields.Boolean(default=False, compute="_compute_is_webhook", store = True)
     webhook_subscriptions = fields.One2many(comodel_name="webhook_subscription", inverse_name="webhook", string="", required=False, )
     endpoint = fields.Many2one(comodel_name="rest.endpoint", string="Endpoint to fetch data from", required=False)
+    logs = fields.One2many(comodel_name="webhook_log", inverse_name="webhook", string="Webhook log", required=False)
 
     @api.depends("state")
     def _compute_is_webhook(self):

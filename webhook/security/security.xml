@@ -19,5 +19,24 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
         </record>
+            <record id="webhook_subscription_access_portal" model="ir.rule">
+            <field name="name">Users can read, write, create, delete own webhook subscription</field>
+            <field name="model_id" ref="webhook.model_webhook_log"/>
+            <field name="domain_force">[('webhook_subscription.subscriber', '=', user.id)]</field>
+            <field name="groups" eval="[
+                Command.link(ref('base.group_portal')),
+                Command.link(ref('base.group_user')),
+            ]"/>
+        </record>
+        <record id="webhook_subscription_access_admin" model="ir.rule">
+            <field name="name">Admin Record Rule for webhook subscriptions</field>
+            <field name="model_id" ref="webhook.model_webhook_log"/>
+            <field name="groups" eval="[(4, ref('base.group_erp_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
     </data>
 </odoo>
+

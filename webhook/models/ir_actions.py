@@ -8,7 +8,8 @@ from odoo.addons.rest.controllers.main import RestController
 
 _logger = logging.getLogger(__name__)
 
-
+#TODO:
+#Exception handling for different exceptions..
 class IrActionsServerInherit(models.Model):
     _inherit = "ir.actions.server"
     _description = 'Server Actions'
@@ -25,7 +26,6 @@ class IrActionsServerInherit(models.Model):
 
         for webhook_subscription in webhook_subscriptions:
             try :
-
                 api = self.env["rest.endpoint"].search([("model_path_url", "=", webhook_endpoint_path_url)])
 
                 if not api.ids:
@@ -35,8 +35,30 @@ class IrActionsServerInherit(models.Model):
                 model_ids = self.env[api_model.model].search([])
                 data = RestController.compute_response_data(RestController, model_ids, api.field_ids, api.rest_field_ids)
 
-                requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
+                response = requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
                                   headers={'Content-Type': 'application/json'})
+
+                webhook_log_response_header = response.headers
+                webhook_log_response_body = response.content
+                webhook_log_request_header = response.request.headers
+                webhook_log_request_body = response.request.body
+                webhook_log_status_code = response.status_code
             except Exception as e:
-                data = e
-                _logger.warning(e)
+                webhook_log_response_header = ""
+                webhook_log_response_body = e
+                webhook_log_request_header = e.request.headers
+                webhook_log_request_body = e.request.body
+                webhook_log_status_code = "400"
+
+
+            webhook_log_webhook_subscription = webhook_subscription.id
+
+            webhook_log_vals = {
+                "webhook_subscription": webhook_log_webhook_subscription,
+                "response_header": webhook_log_response_header,
+                "response_body": webhook_log_response_body,
+                "request_header": webhook_log_request_header,
+                "request_body": webhook_log_request_body,
+                "status_code" : webhook_log_status_code
+            }
+            self.env['webhook_log'].sudo().create(webhook_log_vals)
