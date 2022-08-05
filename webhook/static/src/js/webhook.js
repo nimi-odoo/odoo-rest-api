@@ -29,7 +29,7 @@ odoo.define('portal.portal_webhook', function (require) {
             var dialog = new Dialog(self, {
                 title : _t('View logs'),
                 $content: qweb.render('webhook.view_logs',{webhook_subscription_logs : webhook_subscription_logs}) ,
-                buttons: [{text: _t('Discard'), close: true}]});
+                buttons: [{text: _t('Close'), close: true}]});
             const this_ptr = this;
             dialog.opened(async function () {
                 var detail_buttons = $(".o_portal_webhook_view_log");
@@ -49,7 +49,7 @@ odoo.define('portal.portal_webhook', function (require) {
                             title : _t('View log'),
                             modal : true,
                             $content: qweb.render('webhook.view_log',{webhook_subscription_log : webhook_subscription_log[0]}) ,
-                            buttons: [{text: _t('Discard'), close: true}]
+                            buttons: [{text: _t('Close'), close: true}]
                         });
 
                         log_detail_dialog.opened(function () {

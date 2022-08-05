@@ -31,7 +31,7 @@
                             <page string="Request">
                                 <group col="1">
                                     <group string ="Request Header">
-                                        <pre><code class='ml-4'><field name = "request_header"/></code></pre>
+                                        <code class='ml-4'><field name = "request_header"/></code>
                                     </group>
                                     <group string ="Request Body">
                                         <pre><code class='ml-4'><field name = "request_body"/></code></pre>
@@ -41,10 +41,10 @@
                             <page string="Response">
                                 <group col="1">
                                     <group string ="Response Header">
-                                        <pre><code><field name = "response_header"/></code></pre>
+                                        <code><field name = "response_header"/></code>
                                     </group>
                                     <group string ="Response Body">
-                                        <pre><code><field name = "response_body"/></code></pre>
+                                        <code><field name = "response_body"/></code>
                                     </group>
                                 </group>
                             </page>
