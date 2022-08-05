@@ -23,7 +23,8 @@
                     </page>
                 </xpath>
                 <xpath expr="//field[@name='state']" position="after">
-                    <field name = "endpoint" string = "Endpoint" attrs="{'invisible': [('state', '!=', 'webhook')]}"/>
+                    <field name = "endpoint" string = "Endpoint"
+                           attrs="{'invisible': [('state', '!=', 'webhook')], 'required' : [('state','=','webhook')]}"/>
                 </xpath>
             </field>
         </record>
