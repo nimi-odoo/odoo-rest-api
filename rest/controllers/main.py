@@ -112,14 +112,11 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        # api_fields = api.field_ids
         api_fields = api.rest_field_ids
         model_ids = http.request.env[api_model.model].search(search_domain)
 
-        # data = self.process_children(model_ids, api_fields)
         data = self.compute_response_data(model_ids, api.field_ids, api.rest_field_ids)
         
-        # data = json.dumps(model_ids.read([field.name for field in api_fields]), default=str)
         return request.make_response(json.dumps(data, default=str), headers)
 
 
@@ -155,7 +152,8 @@ class RestController(http.Controller):
             data = record.read([f.name for f in normal_fields])[0]
         if m2x_fields:
             for f in m2x_fields:
-                data[f.name] = self.process_child(f.model_id, f.children_field_ids, f.nested_fields)
+                record_id = http.request.env[f.model_id.model].search([("id", "=", record[f.name].id)])
+                data[f.name] = self.process_child(record_id, f.children_field_ids, f.nested_fields)
 
         return data
 

@@ -28,10 +28,10 @@ class RestField(models.Model):
                 if f.ttype in ("many2one", "many2many") and f.name not in nested_field_names and not isinstance(record.id, models.NewId):
                     model = self.env["ir.model"].search([('model', '=', f.relation)])
                     vals = {
-                        "name": f.name,
                         "ir_field_id": f.id,
+                        "name": f.name,
                         "model_id": model.id,
-                        "model_technical_name": model.model
+                        "model_technical_name": f.relation
                     }
                     record.nested_fields = [(0,0,vals)]
 
