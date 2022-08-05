@@ -29,15 +29,23 @@
                         </group>
                         <notebook>
                             <page string="Request">
-                                <group>
-                                    <field name = "request_header"/>
-                                    <field name = "request_body"/>
+                                <group col="1">
+                                    <group string ="Request Header">
+                                        <pre><code class='ml-4'><field name = "request_header"/></code></pre>
+                                    </group>
+                                    <group string ="Request Body">
+                                        <pre><code class='ml-4'><field name = "request_body"/></code></pre>
+                                    </group>
                                 </group>
                             </page>
                             <page string="Response">
-                                <group>
-                                    <field name = "response_header"/>
-                                    <field name = "response_body"/>
+                                <group col="1">
+                                    <group string ="Response Header">
+                                        <pre><code><field name = "response_header"/></code></pre>
+                                    </group>
+                                    <group string ="Response Body">
+                                        <pre><code><field name = "response_body"/></code></pre>
+                                    </group>
                                 </group>
                             </page>
                         </notebook>

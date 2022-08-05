@@ -41,13 +41,13 @@ class IrActionsServerInherit(models.Model):
                 webhook_log_response_header = response.headers
                 webhook_log_response_body = response.content
                 webhook_log_request_header = response.request.headers
-                webhook_log_request_body = response.request.body
+                webhook_log_request_body = json.dumps(json.loads(response.request.body), indent=2,sort_keys=True)
                 webhook_log_status_code = response.status_code
             except Exception as e:
                 webhook_log_response_header = ""
                 webhook_log_response_body = e
                 webhook_log_request_header = e.request.headers
-                webhook_log_request_body = e.request.body
+                webhook_log_request_body = json.dumps(json.loads(e.request.body), indent=2,sort_keys=True)
                 webhook_log_status_code = "400"
 
 

@@ -93,7 +93,7 @@
 
     <menuitem id="webhook_subscription_menu_root"
               name="Webhook"
-              web_icon="webhook,static/description/icon.jpg"
+              web_icon="webhook,static/description/icon.png"
             >
         <menuitem id="webhook_menu_action" action="webhook_action"/>
         <menuitem id="webhook_subscription_menu_action" action="webhook_subscription_action"/>

@@ -2,42 +2,114 @@
     <t t-name="webhook.edit_subscription">
         <form string = "Edit Subscription">
             <table class = "table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Webhook:</td>
-                        <td>
-                            <select class ="form-control md" name = "webhook_id" >
-                                <t t-if = "originally_subscribed_webhook">
-                                    <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
-                                </t>
-                                <t t-foreach = "webhooks" t-as="webhook">
-                                    <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
-                                </t>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>URL:</td>
-                        <td>
-                            <input type="text" class="form-control md" t-att-value = "originally_subscribed_url" name="webhook_url" id = "webhook_url" required="required"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Description:</td>
-                        <td>
-                            <input type="text" class="form-control md" name="description" id = "description" t-att-value = "original_description" required="required"/>
-                        </td>
-                    </tr>
-                </tbody>
+                <tr><td>Webhook:</td>
+                    <td>
+                        <select class ="form-control md" name = "webhook_id" >
+                            <t t-if = "originally_subscribed_webhook">
+                                <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
+                            </t>
+                            <t t-foreach = "webhooks" t-as="webhook">
+                                <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
+                            </t>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>URL:</td>
+                    <td>
+                        <input type="text" class="form-control md" t-att-value = "originally_subscribed_url" name="webhook_url" id = "webhook_url" required="required"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td>
+                        <input type="text" class="form-control md" name="description" id = "description" t-att-value = "original_description" required="required"/>
+                    </td>
+                </tr>
             </table>
         </form>
     </t>
 
+    <t t-name="webhook.view_logs">
+        <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+            <thead>
+                <tr class="active">
+                    <th>Event</th>
+                    <th>Callback URL</th>
+                    <th>Status Code</th>
+                    <th>Sent on</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-if = "webhook_subscription_logs != []">
+                    <tr t-foreach = "webhook_subscription_logs" t-as = "webhook_subscription_log">
+                        <td><span t-esc="webhook_subscription_log.webhook[1]"/></td>
+                        <td><span t-esc="webhook_subscription_log.webhook_url"/></td>
+                        <t t-if = "webhook_subscription_log.status_code == '200'">
+                            <td><span class="badge badge-pill badge-primary" t-esc="webhook_subscription_log.status_code"/></td>
+                        </t>
+                        <t t-if = "webhook_subscription_log.status_code != '200'">
+                            <td><span class="badge badge-pill badge-danger" t-esc="webhook_subscription_log.status_code"/></td>
+                        </t>
+                        <td><span t-esc="webhook_subscription_log.create_date"/></td>
+                        <td><a class="btn-link o_portal_webhook_view_log" role = "button" href="#" t-att-id="webhook_subscription_log.id">Detail</a></td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </t>
 
-    
+    <t t-name="webhook.view_log">
+        <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+            <t t-out="0"/>
+            <t t-if = "webhook_subscription_log">
+                <tr>
+                    <td>Event</td><td><span t-esc="webhook_subscription_log.webhook[1]"/></td>
+                    <td>Status Code</td>
+                    <td>
+                        <t t-if = "webhook_subscription_log.status_code == '200'">
+                            <span class="badge badge-pill badge-primary" t-esc="webhook_subscription_log.status_code"/>
+                        </t>
+                        <t t-if = "webhook_subscription_log.status_code != '200'">
+                            <span class="badge badge-pill badge-danger" t-esc="webhook_subscription_log.status_code"/>
+                        </t>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Subscriber</td><td><span t-esc="webhook_subscription_log.subscriber"/></td>
+                    <td>Callback URL</td><td><span t-esc="webhook_subscription_log.webhook_url"/></td>
+                </tr>
+                <tr>
+                    <td>Sent on</td><td><span t-esc="webhook_subscription_log.create_date"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul class = "list-group list-group-horizontal mb-20" id = "list-tab" role = "tablist">
+                            <a class="list-group-item text-center text-black list-group-item-action active" data-toggle="list" href = "#request" role="tab">Request</a>
+                            <a class="list-group-item text-center text-black list-group-item-action" data-toggle="list" href = "#response" role="tab">Response</a>
+                        </ul>
+                    </td>
+                </tr>
+            </t>
+        </table>
+
+
+        <div class = "tab-content mt-10 pt-0 pb-0">
+            <div class = "tab-pane active" id = "request" role = "tabpanel">
+                <h4>Header</h4>
+                <pre><code><span t-esc="webhook_subscription_log.request_header"/></code></pre>
+                <h4>Body</h4>
+                <pre><code><span t-esc="webhook_subscription_log.request_body"/></code></pre>
+            </div>
+            <div class = "tab-pane" id = "response" role = "tabpanel">
+                <h4>Header</h4>
+                <pre><code><span t-esc="webhook_subscription_log.response_header"/></code></pre>
+                <h4>Body</h4>
+                <pre><code><span t-esc="webhook_subscription_log.response_body"/></code></pre>
+            </div>
+        </div>
+    </t>
+
 </templates>

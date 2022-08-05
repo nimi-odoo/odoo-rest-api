@@ -37,7 +37,6 @@ class WebhookLog(models.Model):
     @api.model
     def create(self, vals):
         rec = super(WebhookLog,self).create(vals)
-        print(rec)
         return rec
 
 
