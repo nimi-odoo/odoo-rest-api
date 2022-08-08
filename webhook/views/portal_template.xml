@@ -14,8 +14,8 @@
     <template id = "portal_my_webhook">
         <t t-call = "portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
             <t t-call="portal.portal_searchbar">
-                <t t-set="title">Webhooks</t>
                 <ul class="nav">
                     <a class="nav-item ">
                         <a class="nav-link active o_portal_new_subscription" href="#">Add</a>
@@ -26,7 +26,7 @@
                 </ul>
             </t>
 
-        <div t-attf-class="table-responsive border rounded border-top-0 #{classes if classes else ''}">
+        <div t-attf-class="table-responsive border rounded border-top-0">
             <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
                 <t t-out="0"/>
                 <thead>

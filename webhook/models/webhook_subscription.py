@@ -5,6 +5,7 @@ from odoo import api, fields, models
 class WebhookSubscription(models.Model):
     _name = "webhook_subscription"
     _description = "webhook_subscription"
+    _order = 'create_date desc'
     name = fields.Char(string="Subscription name", required=False, )
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", required = True)
     subscriber_name = fields.Char(string = "Subscriber's name", compute = "_compute_subscriber_name", readonly = True, store = True)

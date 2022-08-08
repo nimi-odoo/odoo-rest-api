@@ -84,32 +84,78 @@
                 <tr>
                     <td>Sent on</td><td><span t-esc="webhook_subscription_log.create_date"/></td>
                 </tr>
-                <tr>
-                    <td>
-                        <ul class = "list-group list-group-horizontal mb-20" id = "list-tab" role = "tablist">
-                            <a class="list-group-item text-center text-black list-group-item-action active" data-toggle="list" href = "#request" role="tab">Request</a>
-                            <a class="list-group-item text-center text-black list-group-item-action" data-toggle="list" href = "#response" role="tab">Response</a>
-                        </ul>
-                    </td>
-                </tr>
             </t>
         </table>
-
-
-        <div class = "tab-content mt-10 pt-0 pb-0">
+        <div class = "container" style="overflow-y: hidden;">
+            <ul class = "list-group list-group-horizontal p-1" id = "list-tab" role = "tablist">
+                <a class="list-group-item p-0 text-center text-black list-group-item-action active" data-toggle="list" href = "#request" role="tab">Request</a>
+                <a class="list-group-item p-0 text-center text-black list-group-item-action" data-toggle="list" href = "#response" role="tab">Response</a>
+            </ul>
+        </div>
+        <div class = "tab-content p-0" id = "list-tabContent">
+            <div class = "tab-pane fade show active" id = "request" role = "tabpanel">
+                <div class = "container d-flex-inline mb-30" style="overflow-y: hidden;">
+                    <div class = "col-md-12">
+                        <div class = "card">
+                            <div class = "card-body">
+                                <div class = "row">
+                                    <div class = "col-md-12">
+                                        <div class = "form-group">
+                                            <label for = "request_header">Request Header</label>
+                                            <textarea class = "form-control" id = "request_body" rows = "3" readonly="readonly" t-esc="webhook_subscription_log.request_header"/>
+                                        </div>
+                                    </div>
+                                    <div class = "col-md-12">
+                                        <div class = "form-group">
+                                            <label for = "request_body">Request Body</label>
+                                            <textarea class = "form-control" id = "request_body" rows = "10" readonly="readonly" t-esc="webhook_subscription_log.request_body"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class = "tab-pane fade" id = "response" role = "tabpanel">
+                <div class = "container d-flex-inline mb-30" style="overflow-y: hidden;">
+                    <div class = "col-md-12">
+                        <div class = "card">
+                            <div class = "card-body">
+                                <div class = "row">
+                                    <div class = "col-md-12">
+                                        <div class = "form-group">
+                                            <label for = "response_header">Response Header</label>
+                                            <textarea class = "form-control" id = "response_header" rows = "3" readonly="readonly" t-esc="webhook_subscription_log.response_header" />
+                                        </div>
+                                    </div>
+                                    <div class = "col-md-12">
+                                        <div class = "form-group">
+                                            <label for = "response_body">Response Body</label>
+                                            <textarea class = "form-control" id = "response_body" rows = "10" readonly="readonly" t-esc="webhook_subscription_log.response_body"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class = "tab-content">
             <div class = "tab-pane active" id = "request" role = "tabpanel">
                 <h4>Header</h4>
-                <pre><code><span t-esc="webhook_subscription_log.request_header"/></code></pre>
+                <code><span t-esc="webhook_subscription_log.request_header"/></code>
                 <h4>Body</h4>
                 <pre><code><span t-esc="webhook_subscription_log.request_body"/></code></pre>
             </div>
             <div class = "tab-pane" id = "response" role = "tabpanel">
                 <h4>Header</h4>
-                <pre><code><span t-esc="webhook_subscription_log.response_header"/></code></pre>
+                <code><span t-esc="webhook_subscription_log.response_header"/></code>
                 <h4>Body</h4>
-                <pre><code><span t-esc="webhook_subscription_log.response_body"/></code></pre>
+                <code><span t-esc="webhook_subscription_log.response_body"/></code>
             </div>
-        </div>
+        </div> -->
     </t>
 
 </templates>
