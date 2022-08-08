@@ -118,10 +118,14 @@ class RestController(http.Controller):
         return request.make_response(json.dumps(data, default=str), headers)
 
 
-    def compute_response_data(self, records, normal_fields, m2x_fields):
+    def compute_response_data(self, records, all_fields, m2x_fields):
         output = []
+        normal_fields = [f for f in all_fields if f.ttype not in ("many2one", "many2many")]
+
         for record in records:
-            data = record.read([f.name for f in normal_fields if f.ttype not in ("many2one", "many2many")])[0] # Read non-m2x fields from a single record
+            data = {}
+            if normal_fields:
+                data = record.read([f.name for f in normal_fields])[0] # Read non-m2x fields from a single record
 
             for field in m2x_fields:
                 record_id = http.request.env[field.model_id.model].search([("id", "=", record[field.name].id)]) # Get the record that the relation is pointing to
