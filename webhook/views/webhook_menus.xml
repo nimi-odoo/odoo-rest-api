@@ -48,10 +48,13 @@
             <field name="name">webhook_subscription.search</field>
             <field name="model">webhook_subscription</field>
             <field name="arch" type="xml">
-                <search string="ModelTitle">
-                    <group expand="1" string="Group By">
-                        <filter string="event" name="webhook" domain="[]"
-                                context="{'group_by':'webhook'}"/>
+                <search>
+                    <field name = "webhook"/>
+                    <field name = "subscriber"/>
+                    <field name = "webhook_url"/>
+                    <group expand="0" string="Group by">
+                        <filter string = "Event" name = "webhook" context = "{'group_by':'webhook'}"/>
+                        <filter string = "Subscriber" name = "subscriber" context = "{'group_by':'subscriber'}"/>
                     </group>
                 </search>
             </field>

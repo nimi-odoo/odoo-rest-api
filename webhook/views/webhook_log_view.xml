@@ -77,10 +77,15 @@
             <field name="name">webhook_log.search</field>
             <field name="model">webhook_log</field>
             <field name="arch" type="xml">
-                <search string="ModelTitle">
-                    <group expand="1" string="Group By">
-                        <filter string="Subscriber" name="subscriber" domain="[]"
-                                context="{'group_by':'subscriber'}"/>
+                <search>
+                    <field name = "webhook"/>
+                    <field name = "subscriber"/>
+                    <field name = "webhook_url"/>
+                    <field name = "status_code"/>
+                    <group expand="0" string="Group by">
+                        <filter string = "Status Code" name = "status_code" context = "{'group_by':'status_code'}"/>
+                        <filter string = "Event" name = "webhook" context = "{'group_by':'webhook'}"/>
+                        <filter string = "Subscriber" name = "subscriber" context = "{'group_by':'subscriber'}"/>
                     </group>
                 </search>
             </field>
@@ -88,7 +93,7 @@
 
 
         <record id="webhook_log_action" model="ir.actions.act_window">
-            <field name="name">Webhooks</field>
+            <field name="name">Webhook Logs</field>
             <field name="res_model">webhook_log</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">

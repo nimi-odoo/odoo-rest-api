@@ -5,6 +5,7 @@ from datetime import datetime
 class WebhookLog(models.Model):
     _name = 'webhook_log'
     _description = "Webhook Log"
+    _order = 'create_date desc'
 
     webhook_subscription = fields.Many2one(comodel_name="webhook_subscription", string="Webhook subscription", required = True, readonly = True)
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", store = "True", compute = "_compute_subscriber", readonly = True)

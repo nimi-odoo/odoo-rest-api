@@ -43,6 +43,12 @@ class IrActionsServerInherit(models.Model):
                 webhook_log_request_header = response.request.headers
                 webhook_log_request_body = json.dumps(json.loads(response.request.body), indent=2,sort_keys=True)
                 webhook_log_status_code = response.status_code
+            except TypeError as e :
+                webhook_log_response_header = "Internal Error"
+                webhook_log_response_body = "Internal Error"
+                webhook_log_request_header = "Internal Error"
+                webhook_log_request_body = "Internal Error"
+                webhook_log_status_code = "400"
             except Exception as e:
                 webhook_log_response_header = ""
                 webhook_log_response_body = e

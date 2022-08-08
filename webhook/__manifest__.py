@@ -25,6 +25,10 @@
     'assets' : {
         'web.assets_frontend' : [
             'webhook/static/src/js/webhook.js'
-        ]
+        ],
+        'web.assets_qweb': [
+            'webhook/static/src/xml/webhook.xml',
+            "static/src/xml/*.xml",
+        ],
     }
 }
