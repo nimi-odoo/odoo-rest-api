@@ -114,7 +114,7 @@ class RestController(http.Controller):
         model_ids = http.request.env[api_model.model].search(search_domain)
 
         data = self.compute_response_data(model_ids, api.field_ids, api.rest_field_ids)
-
+        
         return request.make_response(json.dumps(data, default=str), headers)
 
 
@@ -150,7 +150,8 @@ class RestController(http.Controller):
             data = record.read([f.name for f in normal_fields])[0]
         if m2x_fields:
             for f in m2x_fields:
-                data[f.name] = self.process_child(f.model_id, f.children_field_ids, f.nested_fields)
+                record_id = http.request.env[f.model_id.model].search([("id", "=", record[f.name].id)])
+                data[f.name] = self.process_child(record_id, f.children_field_ids, f.nested_fields)
 
         return data
 
