@@ -43,11 +43,9 @@
                             <field name="required_field_ids"/>
                         </page>
                         <page string="Schema">
-                            <!-- <div> -->
                             <code>
                                 <field name="schema"/>
                             </code>
-                            <!-- </div> -->
                         </page>
                         <page string="Rest Fields">
                             <field name="rest_field_ids"/>

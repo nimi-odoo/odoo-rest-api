@@ -15,7 +15,6 @@
                 <field name="name"/>
                 <field name="ir_field_id"/>
                 <field name="model_technical_name"/>
-                <!-- <field name="children_field_ids"/> -->
             </tree>
         </field>
     </record>
