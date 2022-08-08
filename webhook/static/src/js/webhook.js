@@ -28,6 +28,11 @@ odoo.define('portal.portal_webhook', function (require) {
         
             var dialog = new Dialog(self, {
                 title : _t('View logs'),
+                width: 'auto',
+                maxWidth: 600,
+                autoOpen : false,
+                resizable : false,
+                modal : true,
                 $content: qweb.render('webhook.view_logs',{webhook_subscription_logs : webhook_subscription_logs}) ,
                 buttons: [{text: _t('Close'), close: true}]});
             const this_ptr = this;
