@@ -97,13 +97,9 @@ class RestController(http.Controller):
         url_path = kw["str"]
         search_domain = []
         params = self.convert_dict_to_domain(http.request.params, **kw)
-        search_type = "="
 
         for p in params:
-            if p[0] == "search_type":
-                search_type = p[2]
-            else:
-                search_domain.append(p)
+            search_domain.append(p)
 
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])
 
