@@ -21,15 +21,33 @@ class Rest(models.Model):
     schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
     search_type = fields.Char(string="Search Type", default="=ilike", help="Criteria for which records are returned on a search")
 
+    _sql_constraints = [
+        ("model_path_url", "UNIQUE(model_path_url)", "URL paths must be unique")
+    ]
+
 
     @api.onchange("specified_model_id")
     def field_filter(self):
         for record in self:
             record.field_ids = [(5,0,0)] # Empty the field_ids Many2many field
             record.required_field_ids = [(5,0,0)]
+
             if record.specified_model_id and not record.model_path_url: # Set the Model Path to the model's name if none is already specified
-                record.model_path_url = record.specified_model_id.name
-                record.model_path_url = "".join(s.lower() for s in record.model_path_url.split(" ")) # Remove whitespace and make lowercase
+                default_name = "".join(s.lower() for s in record.specified_model_id.name.split(" ")) # Take the model's name, remove whitespace and make lowercase
+                path_name = default_name
+                endpoint_ids = self.env["rest.endpoint"].search([])
+                endpoint_urls = [endpoint.model_path_url for endpoint in endpoint_ids]
+                while path_name in endpoint_urls:
+                    if len(path_name) == len(default_name):
+                        path_name = f"{path_name}1"
+                    else:
+                        try:
+                            number = int(path_name[len(default_name)::])
+                            path_name = f"{path_name[:len(default_name):]}{number+1}"
+                        except:
+                            print("\n\nsomething bad happened while generating the model_path_url\n\n")
+                            break
+                record.model_path_url = path_name
 
 
     @api.onchange("base_url")
