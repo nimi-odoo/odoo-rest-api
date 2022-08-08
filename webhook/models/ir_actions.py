@@ -32,8 +32,10 @@ class IrActionsServerInherit(models.Model):
                     return self.response_404("Record not found. The path or id may not exist.")
 
                 api_model = api.specified_model_id
+                api_fields = api.rest_field_ids
                 model_ids = self.env[api_model.model].search([])
-                data = RestController.compute_response_data(RestController, model_ids, api.field_ids, api.rest_field_ids)
+                restController = RestController()
+                data = restController.compute_response_data( model_ids, api.field_ids, api.rest_field_ids)
 
                 response = requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
                                   headers={'Content-Type': 'application/json'})
@@ -47,8 +49,8 @@ class IrActionsServerInherit(models.Model):
                 webhook_log_response_header = "Internal Error"
                 webhook_log_response_body = "Internal Error"
                 webhook_log_request_header = "Internal Error"
-                webhook_log_request_body = "Internal Error"
-                webhook_log_status_code = "400"
+                webhook_log_request_body = e
+                webhook_log_status_code = "500"
             except Exception as e:
                 webhook_log_response_header = ""
                 webhook_log_response_body = e
