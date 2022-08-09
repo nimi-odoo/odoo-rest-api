@@ -25,7 +25,9 @@ class Rest(models.Model):
         ("model_path_url", "UNIQUE(model_path_url)", "URL paths must be unique")
     ]
 
-
+    # Domain
+    filter_domain = fields.Char(string='Domain applied on',
+                                help="If present, only those records satisfying the domain will be returned.")
 
     @api.onchange("specified_model_id")
     def field_filter(self):

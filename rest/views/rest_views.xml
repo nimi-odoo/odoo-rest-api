@@ -28,9 +28,15 @@
                         <field name="base_url"/>
                     </group>
                     <group>
-                        <field name="specified_model_id"/>
-                        <field name="model_path_url"/>
-                        <field name="specified_model_technical_name"/>
+                        <group>
+                            <field name="specified_model_id"/>
+                            <field name="model_path_url"/>
+                            <field name="specified_model_technical_name"/>
+                        </group>
+                        <group>
+                            <field name="filter_domain" widget="domain" options="{'model': 'specified_model_technical_name', 'in_dialog': True}"/>
+                        </group>
+
                     </group>
                     <group>
                         <field name="final_url"/>
