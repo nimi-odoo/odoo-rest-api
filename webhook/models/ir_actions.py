@@ -16,12 +16,14 @@ class IrActionsServerInherit(models.Model):
         ('webhook', 'Webhook'),
     ], ondelete={'webhook': 'cascade'})
 
+    # Webhook server action
     def _run_action_webhook(self, eval_context = None):
         webhook = self.env['base.automation'].search([('action_server_id', '=', self.id)])
         webhook_subscriptions = webhook.webhook_subscriptions
         webhook_endpoint_path_url = webhook.endpoint.model_path_url
-        webhook_endpoint_url = f'{self.env["ir.config_parameter"].sudo().get_param("web.base.url")}/api/{webhook_endpoint_path_url}'
 
+        # Send data to webhook subscriptions that are subscribed to this webhook event.
+        # And Generate logs.
         for webhook_subscription in webhook_subscriptions:
             try :
                 api = self.env["rest.endpoint"].search([("model_path_url", "=", webhook_endpoint_path_url)])
@@ -38,11 +40,13 @@ class IrActionsServerInherit(models.Model):
                 response = requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
                                   headers={'Content-Type': 'application/json'})
                 response.raise_for_status()
+
                 webhook_log_response_header = response.headers
                 webhook_log_response_body = response.content
                 webhook_log_request_header = response.request.headers
                 webhook_log_request_body = json.dumps(json.loads(response.request.body), indent=2,sort_keys=True)
                 webhook_log_status_code = response.status_code
+
             except requests.exceptions.ConnectionError as e:
                 webhook_log_response_header = "502 Bad Gateway"
                 webhook_log_response_body = e

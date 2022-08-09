@@ -7,7 +7,7 @@ odoo.define('portal.portal_webhook', function (require) {
     const ajax = require('web.ajax');
     const session = require('web.session');
 
-
+    // Open a dialog that contains logs for a subscription
     publicWidget.registry.viewLogs = publicWidget.Widget.extend({
         selector: '.o_portal_webhook_view_logs',
         events: {
@@ -38,7 +38,8 @@ odoo.define('portal.portal_webhook', function (require) {
             const this_ptr = this;
             dialog.opened(async function () {
                 var detail_buttons = $(".o_portal_webhook_view_log");
-                
+
+                // Open a dialog that contains details for selected log
                 detail_buttons.click(async (e) => {
                     const webhook_subscription_log_id = parseInt(e.target.id);
                     await this_ptr._rpc({
@@ -57,6 +58,7 @@ odoo.define('portal.portal_webhook', function (require) {
                             buttons: [{text: _t('Close'), close: true}]
                         });
 
+                        // Active, deactivate list-group-items
                         log_detail_dialog.opened(function () {
                             $(".list-group-item-action").click(function(e) {
                                 e.preventDefault()
@@ -77,7 +79,7 @@ odoo.define('portal.portal_webhook', function (require) {
         }
     });
 
-
+    // Select All functionality for webhook subscription table
     publicWidget.registry.selectAll = publicWidget.Widget.extend({
         selector: '.o_portal_webhook_select_all',
         events: {
@@ -180,6 +182,8 @@ odoo.define('portal.portal_webhook', function (require) {
                     ['id','=',parseInt(this.target.id)]
                 ]
             }).then( (webhook_subscription) => {
+                // Since we're editing an existing record,
+                // We initially want to display existing field values for the record.
                 const originally_subscribed_webhook_id = webhook_subscription[0].webhook[0];
                 const originally_subscribed_url = webhook_subscription[0].webhook_url;
                 const original_description = webhook_subscription[0].description;
@@ -214,6 +218,8 @@ odoo.define('portal.portal_webhook', function (require) {
                                 var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                                 var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
                                 var new_description = dialog.el.querySelector('[name="description"]').value;
+
+                                // Check if webhook callback url that user provided is valid or not.
                                 if (!isValidHttpUrl(new_webhook_url)){
                                     dialog.el.querySelector('[name="webhook_url"]').classList.add('is-invalid');
                                     dialog.el.querySelector('[name="webhook_url"]').setCustomValidity(_t("Invalid URL"));
@@ -246,15 +252,14 @@ odoo.define('portal.portal_webhook', function (require) {
         }
     });
 
-
     function isValidHttpUrl(string) {
-    let url;
+        let url;
 
-    try {
-        url = new URL(string);
-    } catch (_) {
-        return false;
-    }
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;
+        }
 
     return url.protocol === "http:" || url.protocol === "https:";
     }

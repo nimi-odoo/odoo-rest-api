@@ -13,10 +13,13 @@ from json.decoder import JSONDecodeError
 
 class Webhook(http.Controller):
 
+    # Controller for webhook portal view
     @http.route('/my/webhook/', type='http', auth="user", website=True)
     def my_webhook(self, **post):
         return request.render("webhook.portal_my_webhook")
 
+
+    # Controllers for Webhook Subscription API
     @http.route('/webhook', auth="check_api_key", csrf= False, methods=["GET", "POST"])
     def webhook(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']

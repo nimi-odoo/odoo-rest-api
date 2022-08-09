@@ -98,7 +98,7 @@
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                    There is no examples click here to add new ModelTitle.
+                    There is no examples click here to add new Webhook log.
                 </p>
             </field>
         </record>
