@@ -8,8 +8,6 @@ from odoo.addons.rest.controllers.main import RestController
 
 _logger = logging.getLogger(__name__)
 
-#TODO:
-#Exception handling for different exceptions..
 class IrActionsServerInherit(models.Model):
     _inherit = "ir.actions.server"
     _description = 'Server Actions'
@@ -39,16 +37,28 @@ class IrActionsServerInherit(models.Model):
 
                 response = requests.post(webhook_subscription.webhook_url, data=json.dumps(data, default=str),
                                   headers={'Content-Type': 'application/json'})
-
+                response.raise_for_status()
                 webhook_log_response_header = response.headers
                 webhook_log_response_body = response.content
                 webhook_log_request_header = response.request.headers
                 webhook_log_request_body = json.dumps(json.loads(response.request.body), indent=2,sort_keys=True)
                 webhook_log_status_code = response.status_code
+            except requests.exceptions.ConnectionError as e:
+                webhook_log_response_header = "502 Bad Gateway"
+                webhook_log_response_body = e
+                webhook_log_request_header = e.request.headers
+                webhook_log_request_body = json.dumps(json.loads(e.request.body), indent=2, sort_keys=True)
+                webhook_log_status_code = "502"
+            except requests.exceptions.HTTPError as e:
+                webhook_log_response_header = str(e.response.headers)
+                webhook_log_response_body = e
+                webhook_log_request_header = e.request.headers
+                webhook_log_request_body = json.dumps(json.loads(e.request.body), indent=2, sort_keys=True)
+                webhook_log_status_code = str(e.response.status_code)
             except TypeError as e :
                 webhook_log_response_header = "Internal Error"
                 webhook_log_response_body = "Internal Error"
-                webhook_log_request_header = "Internal Error"
+                webhook_log_request_header = "Internal Error,\nContact the administrator"
                 webhook_log_request_body = e
                 webhook_log_status_code = "500"
             except Exception as e:
