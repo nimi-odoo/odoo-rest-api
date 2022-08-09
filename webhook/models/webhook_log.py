@@ -7,10 +7,10 @@ class WebhookLog(models.Model):
     _description = "Webhook Log"
     _order = 'create_date desc'
 
-    webhook_subscription = fields.Many2one(comodel_name="webhook_subscription", string="Webhook subscription", required = True, readonly = True)
-    subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", store = "True", compute = "_compute_subscriber", readonly = True)
+    webhook_subscription = fields.Many2one(comodel_name="webhook_subscription", string="Webhook subscription", required = True, readonly = True,ondelete='cascade')
+    subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", store = "True", compute = "_compute_subscriber", readonly = True,ondelete='cascade')
 
-    webhook = fields.Many2one(comodel_name="base.automation", string="Webhook event", required=False, compute = "_compute_webhook", store = "True",readonly = True)
+    webhook = fields.Many2one(comodel_name="base.automation", string="Webhook event", required=False, compute = "_compute_webhook", store = "True",readonly = True,ondelete='cascade')
 
     webhook_url = fields.Char(string="Webhook callback URL", required=False, compute = "_compute_webhook_url", store = "True",readonly = True)
 

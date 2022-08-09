@@ -12,7 +12,7 @@ class WebhookSubscription(models.Model):
     webhook = fields.Many2one(comodel_name="base.automation", string="Event", required=True)
     webhook_url = fields.Char( string="Webhook URL", required = True)
     description = fields.Char( string="Description", default = "", required = False)
-    logs = fields.One2many(comodel_name="webhook_log", inverse_name="webhook_subscription", string="Logs", required=False, readonly=True)
+    logs = fields.One2many(comodel_name="webhook_log", inverse_name="webhook_subscription", string="Logs", required=False, readonly=True )
 
     @api.model
     def create(self, vals):
