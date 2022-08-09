@@ -4,6 +4,7 @@ from odoo import http
 from odoo.http import request, Response
 
 import json
+import ast
 from json.decoder import JSONDecodeError
 from odoo.exceptions import ValidationError, UserError, AccessError
 
@@ -111,7 +112,11 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        model_ids = http.request.env[api_model.model].search(search_domain)
+
+        if api.filter_domain == False or api.filter_domain == "":
+            model_ids = http.request.env[api_model.model].search(search_domain)
+        else:
+            model_ids = http.request.env[api_model.model].search(ast.literal_eval(api.filter_domain) + search_domain)
 
         data = self.compute_response_data(model_ids, api.field_ids, api.rest_field_ids)
         
