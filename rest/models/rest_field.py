@@ -25,7 +25,7 @@ class RestField(models.Model):
 
             for f in record.children_field_ids:
                 nested_field_names = [nf.name for nf in record.nested_fields]
-                if f.ttype in ("many2one", "many2many") and f.name not in nested_field_names and not isinstance(record.id, models.NewId):
+                if f.ttype in ("many2one", "many2many", "one2many") and f.name not in nested_field_names and not isinstance(record.id, models.NewId):
                     model = self.env["ir.model"].search([('model', '=', f.relation)])
                     vals = {
                         "ir_field_id": f.id,
