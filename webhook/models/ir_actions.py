@@ -4,6 +4,8 @@ import requests
 import json
 import logging
 
+import ast
+
 from odoo.addons.rest.controllers.main import RestController
 
 _logger = logging.getLogger(__name__)
@@ -33,7 +35,8 @@ class IrActionsServerInherit(models.Model):
 
                 api_model = api.specified_model_id
                 api_fields = api.rest_field_ids
-                model_ids = self.env[api_model.model].search([])
+                model_ids = self.env[api_model.model].search(ast.literal_eval(api.filter_domain))
+
                 restController = RestController()
                 data = restController.compute_response_data( model_ids, api.field_ids, api.rest_field_ids)
 
