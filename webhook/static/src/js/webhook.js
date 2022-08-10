@@ -61,9 +61,16 @@ odoo.define('portal.portal_webhook', function (require) {
                         // Active, deactivate list-group-items
                         log_detail_dialog.opened(function () {
                             $(".list-group-item-action").click(function(e) {
+                                console.log(e);
                                 e.preventDefault()
+                                $(".list-group-item-action").removeClass("text-white");
+                                $(".list-group-item-action").addClass("text-primary");
                                 $(".list-group-item-action").removeClass("active");
+
+                                $(e.target).removeClass("text-primary");
+                                $(e.target).addClass("text-white");
                                 $(e.target).addClass("active");
+
                                 $(".tab-pane").removeClass("active");
                                 $($(e.target)[0].hash).tab('show');
                              });

@@ -61,12 +61,18 @@
     </t>
 
     <t t-name="webhook.view_log">
-        <table class="table rounded mb-0 bg-white o_portal_my_doc_table">
+        <table class="table table-responsive-sm rounded mb-0 bg-white o_portal_my_doc_table">
             <t t-out="0"/>
             <t t-if = "webhook_subscription_log">
                 <tr>
-                    <td>Event</td><td><span t-esc="webhook_subscription_log.webhook[1]"/></td>
-                    <td>Status Code</td>
+                    <td class = "font-weight-bold" style = "font-size:14px;">Event</td><td><span t-esc="webhook_subscription_log.webhook[1]"/></td>
+                    <td class = "font-weight-bold" style = "font-size:14px;">Sent on</td><td><span t-esc="webhook_subscription_log.create_date"/></td>
+
+                </tr>
+
+                <tr>
+                    <td class = "font-weight-bold" style = "font-size:14px;">Subscriber</td><td><span t-esc="webhook_subscription_log.subscriber"/></td>
+                    <td class = "font-weight-bold" style = "font-size:14px;">Status Code</td>
                     <td>
                         <t t-if = "webhook_subscription_log.status_code == '200'">
                             <span class="badge badge-pill badge-primary" style="font-size:1.03em;" t-esc="webhook_subscription_log.status_code"/>
@@ -75,29 +81,28 @@
                             <span class="badge badge-pill badge-danger" style="font-size:1.03em;" t-esc="webhook_subscription_log.status_code"/>
                         </t>
                     </td>
-                </tr>
 
-                <tr>
-                    <td>Subscriber</td><td><span t-esc="webhook_subscription_log.subscriber"/></td>
-                    <td>Callback URL</td><td><span t-esc="webhook_subscription_log.webhook_url"/></td>
                 </tr>
                 <tr>
-                    <td>Sent on</td><td><span t-esc="webhook_subscription_log.create_date"/></td>
+                    <td class = "font-weight-bold" style = "font-size:14px;">Callback URL</td><td><span t-esc="webhook_subscription_log.webhook_url"/></td>
+                    <td></td><td></td>
                 </tr>
             </t>
         </table>
+
         <div class = "container" style="overflow-y: hidden;">
-            <ul class = "list-group list-group-horizontal p-1" id = "list-tab" role = "tablist">
-                <a class="list-group-item p-1 text-center text-black list-group-item-action active" data-toggle="list" href = "#request" role="tab">Request</a>
-                <a class="list-group-item p-1 text-center text-black list-group-item-action" data-toggle="list" href = "#response" role="tab">Response</a>
+            <ul class = "list-group list-group-horizontal" id = "list-tab" role = "tablist">
+                <a class="list-group-item p-1 text-center text-white list-group-item-action active" data-toggle="list" href = "#request" role="tab">Request</a>
+                <a class="list-group-item p-1 text-center list-group-item-action" data-toggle="list" href = "#response" role="tab">Response</a>
             </ul>
         </div>
+
         <div class = "tab-content p-0" id = "list-tabContent">
             <div class = "tab-pane fade show active" id = "request" role = "tabpanel">
                 <div class = "container d-flex-inline mb-30" style="overflow-y: hidden;">
                     <div class = "col-md-12">
-                        <div class = "card">
-                            <div class = "card-body">
+                        <div class = "p-0">
+                            <div class = "card-body p-0">
                                 <div class = "row">
                                     <div class = "col-md-12">
                                         <div class = "form-group">
@@ -120,8 +125,8 @@
             <div class = "tab-pane fade" id = "response" role = "tabpanel">
                 <div class = "container d-flex-inline mb-30" style="overflow-y: hidden;">
                     <div class = "col-md-12">
-                        <div class = "card">
-                            <div class = "card-body">
+                        <div class = "p-0">
+                            <div class = "card-body p-0">
                                 <div class = "row">
                                     <div class = "col-md-12">
                                         <div class = "form-group">

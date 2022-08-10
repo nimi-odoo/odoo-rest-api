@@ -14,7 +14,6 @@
     <template id = "portal_my_webhook">
         <t t-call = "portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
-
             <t t-call="portal.portal_searchbar">
                 <ul class="nav">
                     <a class="nav-item ">
