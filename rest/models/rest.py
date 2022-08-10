@@ -95,7 +95,8 @@ class Rest(models.Model):
 
             for f in record.field_ids:
                 nested_field_names = [nf.name for nf in record.rest_field_ids]
-                if f.ttype in ("many2one", "many2many") and f.name not in nested_field_names and not isinstance(record.id, models.NewId):
+                if f.ttype in ("many2one", "many2many", "one2many") and f.name not in nested_field_names and not isinstance(record.id, models.NewId):
+                    if f.ttype == "one2many": print(f"one2many relation: {f.relation}")
                     model = self.env["ir.model"].search([('model', '=', f.relation)])
                     vals = {
                         "ir_field_id": f.id,

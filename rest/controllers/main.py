@@ -114,23 +114,29 @@ class RestController(http.Controller):
         return request.make_response(json.dumps(data, default=str), headers)
 
 
-    def compute_response_data(self, records, all_fields, m2x_fields):
+    def compute_response_data(self, records, all_ir_fields, nested_fields):
         output = []
-        normal_fields = [f for f in all_fields if f.ttype not in ("many2one", "many2many")]
+        normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many")]
 
         for record in records:
             data = {}
             if normal_fields:
                 data = record.read([f.name for f in normal_fields])[0] # Read non-m2x fields from a single record
 
-            for field in m2x_fields:
-                record_id = http.request.env[field.model_id.model].search([("id", "=", record[field.name].id)]) # Get the record that the relation is pointing to
-                data[field.name] = self.process_child(record_id, field.children_field_ids, field.nested_fields) # Begin obtaining data recursively
+            for field in nested_fields:
+                if field.ir_field_id.ttype in ("many2one", "many2many"):
+                    record_id = http.request.env[field.model_id.model].search([("id", "=", record[field.name].id)]) # Get the record that the relation is pointing to
+                    data[field.name] = self.process_child(record_id, field.children_field_ids, field.nested_fields) # Begin obtaining data recursively
+                elif field.ir_field_id.ttype == "one2many":
+                    record_ids = http.request.env[field.ir_field_id.relation].search([("id", "in", record[field.name].ids)])
+                    o2m_data = self.compute_response_data(record_ids, field.children_field_ids, field.nested_fields)
+                    data[field.name] = o2m_data
 
             if data:
                 output.append(data)
 
         return output
+
 
     def process_child(self, record, children_field_ids, nested_fields):
         """
@@ -142,8 +148,8 @@ class RestController(http.Controller):
         """
         if not record: return {}
 
-        normal_fields = [f for f in children_field_ids if f.ttype not in ("many2one", "many2many")]
-        m2x_fields = [f for f in nested_fields]
+        normal_fields = [f for f in children_field_ids if f.ttype not in ("many2one", "many2many", "one2many")]
+        m2x_fields = [f for f in nested_fields if f.ir_field_id.ttype in ("many2one", "many2many")]
 
         data = {}
         if normal_fields:
