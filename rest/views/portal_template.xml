@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id = "rest_swagger">
+        <div>
+            <tr t-foreach = "endpoints" t-as = "endpoint">
+                <a t-esc="endpoint.model_path_url"/>
+            </tr>
+        </div>
+    </template>
+</odoo>

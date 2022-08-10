@@ -10,6 +10,13 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 
 class RestController(http.Controller):
+
+    @http.route('/api/swagger', type="http", auth="public", csrf=False, cors="*")
+    def swagger(self, **kw):
+        endpoints = http.request.env["rest.endpoint"].sudo().search([])
+        values = {"endpoints" : endpoints}
+        return request.render("rest.rest_swagger", values)
+
     @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")
     def index(self, **kw):
         request_method = http.request.httprequest.headers.environ['REQUEST_METHOD']
