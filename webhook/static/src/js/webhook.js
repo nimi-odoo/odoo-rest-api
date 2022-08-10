@@ -149,7 +149,7 @@ odoo.define('portal.portal_webhook', function (require) {
                     buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: false, click: async () => {
                         var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                         var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
-                        var new_description = dialog.el.querySelector('[name="description"]').value;
+                        var new_description = dialog.el.querySelector('[id="description"]').value;
                         if (!isValidHttpUrl(new_webhook_url)){
                             dialog.el.querySelector('[name="webhook_url"]').classList.add('is-invalid');
                             dialog.el.querySelector('[name="webhook_url"]').setCustomValidity(_t("Invalid URL"));
@@ -224,7 +224,7 @@ odoo.define('portal.portal_webhook', function (require) {
                             buttons: [{text: _t('Confirm'), classes: 'btn-primary', close: false, click: async () => {
                                 var new_webhook_id = dialog.el.querySelector('[name="webhook_id"]').value;
                                 var new_webhook_url = dialog.el.querySelector('[name="webhook_url"]').value;
-                                var new_description = dialog.el.querySelector('[name="description"]').value;
+                                var new_description = dialog.el.querySelector('[id="description"]').value;
 
                                 // Check if webhook callback url that user provided is valid or not.
                                 if (!isValidHttpUrl(new_webhook_url)){

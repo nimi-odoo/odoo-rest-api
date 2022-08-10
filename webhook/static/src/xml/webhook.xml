@@ -1,37 +1,51 @@
 <templates xml:space="preserve">
     <t t-name="webhook.edit_subscription">
-        <form string = "Edit Subscription">
-            <table class = "table">
-                <tr><td>Webhook:</td>
-                    <td>
-                        <select class ="form-control md" name = "webhook_id" >
-                            <t t-if = "originally_subscribed_webhook">
-                                <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
-                            </t>
-                            <t t-foreach = "webhooks" t-as="webhook">
-                                <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
-                            </t>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>URL:</td>
-                    <td>
-                        <input type="text" class="form-control md" t-att-value = "originally_subscribed_url" name="webhook_url" id = "webhook_url" required="required"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Description:</td>
-                    <td>
-                        <input type="text" class="form-control md" name="description" id = "description" t-att-value = "original_description" required="required"/>
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <div class = "table-responsive">
+            <form string = "Edit Subscription">
+                <table class = "table table-responsive-sm">
+                    <tr>
+                        <td >Webhook:</td>
+                        <td >
+                            <select class ="form-control md" name = "webhook_id" >
+                                <t t-if = "originally_subscribed_webhook">
+                                    <option t-att-value="originally_subscribed_webhook.id" t-esc="originally_subscribed_webhook.name" t-field = "originally_subscribed_webhook.name"/>
+                                </t>
+                                <t t-foreach = "webhooks" t-as="webhook">
+                                    <option t-att-value="webhook.id" t-esc="webhook.name" t-field = "webhook.name"/>
+                                </t>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>URL:</td>
+                        <td>
+                            <input type="text" class="form-control md" t-att-value = "originally_subscribed_url" name="webhook_url" id = "webhook_url" required="required"/>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td>Description:</td>
+                        <td >
+                            <textarea id = "description" rows = "5" cols = "20" t-esc = "original_description"
+                                style = "padding: 6px 12px;
+                                        font-size: 14px;
+                                        line-height: 1.5;
+                                        border: 1px solid #d4d5d7;
+                                        color: #555;
+                                        background-color: #fff;
+                                        border-radius: 0;
+                                        width : 100%;
+                                        display : block;
+                                        "
+                            />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
     </t>
 
     <t t-name="webhook.view_logs">
-        <div class = "table table-responsive p-0">
+        <div class = "table table-responsive">
             <table class="table rounded m-0 pt-0 bg-white" style="overflow:scroll;">
             <thead  >
                 <tr class="active" >
