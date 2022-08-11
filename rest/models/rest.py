@@ -83,7 +83,6 @@ class Rest(models.Model):
                 o2m_data = []
                 for nf in field.nested_fields:
                     o2m_data.append(self.build_text(nf.children_field_ids, nf.nested_fields))
-                print(o2m_data)
                 data[field.name] = o2m_data
         
         normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many", "one2many")]
