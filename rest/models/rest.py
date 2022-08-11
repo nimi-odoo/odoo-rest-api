@@ -2,6 +2,8 @@
 
 from odoo import api, fields, models
 
+import json
+
 
 class Rest(models.Model):
     _name = "rest.endpoint"
@@ -76,18 +78,32 @@ class Rest(models.Model):
             record.required_field_ids = all_field_ids.filtered(lambda f: f["required"])
     
 
-    @api.depends("required_field_ids", "field_ids")
+    @api.depends("field_ids", "rest_field_ids")
     def _compute_schema(self):
         for record in self:
-            build = "{\n"
-            # for required in record.required_field_ids:
-            #     build += f'\t"{required.name}" : "Your_{required.ttype}_Data",\n'
-            # for field in record.field_ids:
-            #     build +=f'\t"{field.name}" : "Your_{field.ttype}_Data",\n'
-            # build = build[:-2:] # Remove the last comma and newline
-            build += "\n}"
-            record.schema = build
+            data = self.build_text(record.field_ids, record.rest_field_ids)
+            record.schema = json.dumps(data, indent=4)
 
+
+    def build_text(self, all_ir_fields, nested_fields):
+        data = {}
+        for field in nested_fields:
+            if field.ir_field_id.ttype in ("many2many", "many2one"):
+                data[field.name] = self.build_text(field.children_field_ids, field.nested_fields)
+
+            elif field.ir_field_id.ttype == "one2many":
+                o2m_data = []
+                for nf in field.nested_fields:
+                    o2m_data.append(self.build_text(nf.children_field_ids, nf.nested_fields))
+                print(o2m_data)
+                data[field.name] = o2m_data
+        
+        normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many", "one2many")]
+        for field in normal_fields:
+            data[field.name] = f"Your_{field.ttype}_data"
+            
+        return data
+            
 
     @api.depends("field_ids")
     def _compute_rest_fields(self):
@@ -112,5 +128,3 @@ class Rest(models.Model):
                 ir_field_ids = [f.name for f in record.field_ids]
                 if field.name not in ir_field_ids:
                     field.unlink()
-
-

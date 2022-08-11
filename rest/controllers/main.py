@@ -128,7 +128,7 @@ class RestController(http.Controller):
 
     def compute_response_data(self, records, all_ir_fields, nested_fields):
         output = []
-        normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many")]
+        normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many", "one2many")]
 
         for record in records:
             data = {}
