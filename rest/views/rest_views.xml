@@ -23,10 +23,8 @@
         <field name="arch" type="xml">
             <form string="APIs">
                 <sheet>
+                    <label for="name" string="Endpoint Name" class="oe_edit_only"/>
                     <h1><field name="name"/></h1>
-                    <group>
-                        <field name="base_url"/>
-                    </group>
                     <group>
                         <group>
                             <field name="specified_model_id"/>
@@ -39,22 +37,22 @@
 
                     </group>
                     <group>
-                        <field name="final_url"/>
+                        <field name="endpoint_url"/>
                     </group>
                     <notebook>
-                        <page string="Optional Fields">
+                        <page string="Specified Fields">
                             <field name="field_ids"/>
+                        </page>
+                        <page string="Nested Fields">
+                            <field name="rest_field_ids"/>
                         </page>
                         <page string="Required Fields">
                             <field name="required_field_ids"/>
                         </page>
                         <page string="Schema">
                             <code>
-                                <field name="schema"/>
+                                <field name="schema" style="background-color:#E5E5E5;box-sizing:border-box;padding:2rem;padding-left:4rem;border-radius:1rem;color:#714b67;font-weight:600;line-height:1.6;"/>
                             </code>
-                        </page>
-                        <page string="Rest Fields">
-                            <field name="rest_field_ids"/>
                         </page>
                     </notebook>
                 </sheet>

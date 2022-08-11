@@ -2,13 +2,14 @@
 
 from odoo import api, fields, models
 
+import json
+
 
 class Rest(models.Model):
     _name = "rest.endpoint"
     _description = "Odoo Rest API"
 
     name = fields.Char(string="API Name")
-    base_url = fields.Char(string="Endpoint URL")
     specified_model_id = fields.Many2one(comodel_name="ir.model")
     model_path_url = fields.Char(string="Model Path", help="The models id in the URL")
     specified_model_technical_name = fields.Char(related="specified_model_id.model", help="Technical name of the model")
@@ -17,7 +18,7 @@ class Rest(models.Model):
     rest_field_ids = fields.Many2many(comodel_name="rest.field", compute="_compute_rest_fields", store=True)
 
     required_field_ids = fields.Many2many(comodel_name="ir.model.fields", compute="_compute_required_fields", help="Fields required for creation of this model")
-    final_url = fields.Char(string="Final URL", compute="_compute_final_url", help="Computed final URL using the base URL and model path")
+    endpoint_url = fields.Char(string="Endpoint URL", compute="_compute_endpoint_url", help="Computed endpoint URL using the model path name")
     schema = fields.Text(string="Schema", compute="_compute_schema", help="Record schema")
     search_type = fields.Char(string="Search Type", default="=ilike", help="Criteria for which records are returned on a search")
 
@@ -52,21 +53,10 @@ class Rest(models.Model):
                 record.model_path_url = path_name
 
 
-    @api.onchange("base_url")
-    def append_forward_slash(self):
+    @api.depends("model_path_url")
+    def _compute_endpoint_url(self):
         for record in self:
-            if record.base_url:
-                if record.base_url[-1] != "/":
-                    record.base_url += "/"
-
-
-    @api.depends("base_url", "model_path_url")
-    def _compute_final_url(self):
-        for record in self:
-            if record.base_url and record.model_path_url:
-                record.final_url = record.base_url + record.model_path_url
-            else:
-                record.final_url = ""
+            record.endpoint_url = f"/api/{record.model_path_url}"
 
 
     @api.depends("specified_model_id")
@@ -76,18 +66,29 @@ class Rest(models.Model):
             record.required_field_ids = all_field_ids.filtered(lambda f: f["required"])
     
 
-    @api.depends("required_field_ids", "field_ids")
+    @api.depends("field_ids", "rest_field_ids")
     def _compute_schema(self):
         for record in self:
-            build = "{\n"
-            # for required in record.required_field_ids:
-            #     build += f'\t"{required.name}" : "Your_{required.ttype}_Data",\n'
-            # for field in record.field_ids:
-            #     build +=f'\t"{field.name}" : "Your_{field.ttype}_Data",\n'
-            # build = build[:-2:] # Remove the last comma and newline
-            build += "\n}"
-            record.schema = build
+            data = self.build_text(record.field_ids, record.rest_field_ids)
+            record.schema = json.dumps(data, indent=4)
 
+
+    def build_text(self, all_ir_fields, nested_fields):
+        data = {}
+        for field in nested_fields:
+            if field.ir_field_id.ttype in ("many2many", "many2one"):
+                data[field.name] = self.build_text(field.children_field_ids, field.nested_fields)
+
+            elif field.ir_field_id.ttype == "one2many":
+                data[field.name] = [(self.build_text(field.children_field_ids, field.nested_fields))]
+
+        
+        normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many", "one2many")]
+        for field in normal_fields:
+            data[field.name] = f"Your_{field.ttype}_data"
+            
+        return data
+            
 
     @api.depends("field_ids")
     def _compute_rest_fields(self):
@@ -112,5 +113,3 @@ class Rest(models.Model):
                 ir_field_ids = [f.name for f in record.field_ids]
                 if field.name not in ir_field_ids:
                     field.unlink()
-
-
