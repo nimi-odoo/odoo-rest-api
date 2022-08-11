@@ -80,10 +80,8 @@ class Rest(models.Model):
                 data[field.name] = self.build_text(field.children_field_ids, field.nested_fields)
 
             elif field.ir_field_id.ttype == "one2many":
-                o2m_data = []
-                for nf in field.nested_fields:
-                    o2m_data.append(self.build_text(nf.children_field_ids, nf.nested_fields))
-                data[field.name] = o2m_data
+                data[field.name] = [(self.build_text(field.children_field_ids, field.nested_fields))]
+
         
         normal_fields = [f for f in all_ir_fields if f.ttype not in ("many2one", "many2many", "one2many")]
         for field in normal_fields:
