@@ -25,9 +25,6 @@
                 <sheet>
                     <h1><field name="name"/></h1>
                     <group>
-                        <field name="base_url"/>
-                    </group>
-                    <group>
                         <group>
                             <field name="specified_model_id"/>
                             <field name="model_path_url"/>
@@ -39,7 +36,7 @@
 
                     </group>
                     <group>
-                        <field name="final_url"/>
+                        <field name="endpoint_url"/>
                     </group>
                     <notebook>
                         <page string="Optional Fields">
