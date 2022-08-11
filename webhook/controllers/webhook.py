@@ -18,6 +18,11 @@ class Webhook(http.Controller):
     def my_webhook(self, **post):
         return request.render("webhook.portal_my_webhook")
 
+    @http.route('/webhook/documentation', type="http", auth="public", csrf=False, cors="*", website = True)
+    def documentation(self, **kw):
+        webhooks = http.request.env["base.automation"].sudo().search([('is_webhook', '=', True)])
+        values = {"webhooks": webhooks}
+        return request.render("webhook.webhook_documentation", values)
 
     # Controllers for Webhook Subscription API
     @http.route('/webhook', auth="check_api_key", csrf= False, methods=["GET", "POST"])

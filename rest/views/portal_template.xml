@@ -5,10 +5,10 @@
             <div class = "d-flex justify-content-center align-items-center" id = "container" style = "flex-direction: column; height: auto; padding: 2rem ">
                 <div class = "mb-5 text-left" id = "header" style = "flex-direction: column; width:60%;height:auto;">
                     <h2 class = "display-4">API Documentation</h2>
-                    <h6>To use our APIs, please provide your api key inside your header.</h6>
+                    <h6>To use our APIs, please provide your api key inside header of your request.</h6>
                     <h5>Example: </h5>
                     <pre class = "mb-0"><code>{"Authorization" : your-api-key}</code></pre>
-                    <a style = "font-size:12px">If you don't have an api key, you can generate api key <a href="/my/security?debug=1" target = "_blank" style = "font-size:12px">here</a></a>
+                    <a style = "font-size:12px">If you don't have an <a href="/my/security?debug=1" target = "_blank" style = "font-size:12px">api key</a>, you can generate api key </a>
                 </div>
                 <div id = "body"  class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
                     <tr t-foreach = "endpoints" t-as = "endpoint">
