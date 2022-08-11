@@ -11,11 +11,11 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 class RestController(http.Controller):
 
-    @http.route('/api/swagger', type="http", auth="public", csrf=False, cors="*")
-    def swagger(self, **kw):
+    @http.route('/api/documentation', type="http", auth="public", csrf=False, cors="*", website = True)
+    def documentation(self, **kw):
         endpoints = http.request.env["rest.endpoint"].sudo().search([])
         values = {"endpoints" : endpoints}
-        return request.render("rest.rest_swagger", values)
+        return request.render("rest.rest_documentation", values)
 
     @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")
     def index(self, **kw):
@@ -176,7 +176,7 @@ class RestController(http.Controller):
 
     def post(self, **kw):
         headers = [("Content-Type", "application/json")]
-        data = json.loads(http.request.httprequest.data)
+        data = json.loads(http.request.data)
 
         url_path = kw["str"]
         api = http.request.env["rest.endpoint"].search([("model_path_url", "=", url_path)])

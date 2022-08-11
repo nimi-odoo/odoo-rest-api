@@ -13,7 +13,7 @@
     'application': True,
     'category': 'Sales',
     'version': '0.1',
-    'depends': ['base'],
+    'depends': ['base','website'],
     'data': [
         "security/ir.model.access.csv",
         "views/rest_views.xml",

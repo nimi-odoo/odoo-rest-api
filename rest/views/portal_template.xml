@@ -1,10 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id = "rest_swagger">
-        <div>
-            <tr t-foreach = "endpoints" t-as = "endpoint">
-                <a t-esc="endpoint.model_path_url"/>
-            </tr>
-        </div>
+    <template id = "rest_documentation" name = "Documentation">
+        <t t-call = "website.layout">
+            <div id = "container" style = "display:flex-row;padding:5%; height: auto;">
+                <div class = "mb-5" id = "header">
+                    <h2>API Documentation</h2>
+                    <h5>To use our APIs, please provide your api key inside your header.</h5>
+                    <h6>Example: </h6>
+                    <pre class = "mb-0"><code>{"Authorization" : your-api-key}</code></pre>
+                    <a style = "font-size:10px">If you don't have an api key, you can generate api key <a href="/my/security?debug=1" target = "_blank" style = "font-size:10px">here</a></a>
+                </div>
+                <div id = "body" style = "width:100%;height:auto;">
+                    <tr t-foreach = "endpoints" t-as = "endpoint">
+                        <div>
+                            <button class ="btn bg-primary p-0 mb-2 text-center " style = "width:200px; height : 40px;"
+                               type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}"
+                               aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}">
+                                <span t-field = "endpoint.name"/>
+                            </button>
+                        </div>
+                        <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}" style = "width:60%; height : auto">
+                            <div class = "card card-body mb-2">
+                                <div>
+                                    <button class ="btn btn-outline-success mb-2 text-left" style = "width:100%; height : 50px; "
+                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GET"
+                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
+                                        <span class="badge badge-pill badge-primary" >GET</span>
+                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/>
+                                    </button>
+                                     <div class = "collapse mb-2" t-attf-id = "{{endpoint.model_path_url}}GET" style = "width:100%; height : auto">
+                                         <div class = "card card-body" >
+                                             <div>
+                                                 Responses
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Code</td>
+                                                             <td stlye = "width:90%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>200</td>
+                                                             <td>
+                                                                 <span>Successful operation</span>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+                                <div>
+                                    <button class ="btn btn-outline-success mb-2 text-left" style = "width:100%; height : 50px; "
+                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GETONE"
+                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GETONE">
+                                        <span class="badge badge-pill badge-primary" >GET</span>
+                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/><span>/{id}</span>
+                                    </button>
+                                     <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}GETONE" style = "width:100%; height : auto">
+                                         <div class = "card card-body" >
+                                             <div>
+                                                 Parameters
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Name</td>
+                                                             <td style = "width:10%">Type</td>
+                                                             <td stlye = "width:80%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>
+                                                                 <span class = "mb-0 font-weight-bold">id</span><span class = "ml-1 text-danger" style="font-size:10px">*required</span>
+
+                                                             </td>
+                                                             <td><span>integer</span></td>
+                                                             <td>
+                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                                 Responses
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Code</td>
+                                                             <td stlye = "width:90%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>200</td>
+                                                             <td>
+                                                                 <span>Successful operation</span>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+                                <div>
+                                    <button class ="btn btn-outline-info mb-2 text-left" style = "width:100%; height : 50px; "
+                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}POST"
+                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}POST">
+                                        <span class="badge badge-pill badge-info" >POST</span>
+                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/>
+                                    </button>
+                                     <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}POST" style = "width:100%; height : auto">
+                                         <div class = "card card-body" >
+                                             <div>
+                                                 Parameters
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Name</td>
+                                                             <td style = "width:10%">Type</td>
+                                                             <td stlye = "width:80%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>
+                                                                 <span class = "mb-0 font-weight-bold">body</span><span class = "ml-1 text-danger" style="font-size:10px">*required</span>
+
+                                                             </td>
+                                                             <td><span>object</span></td>
+                                                             <td>
+                                                                 <span>Values to generate a record of </span><span t-esc="endpoint.specified_model_technical_name"/>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                                 Responses
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Code</td>
+                                                             <td stlye = "width:90%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>200</td>
+                                                             <td>
+                                                                 <span>Successful operation</span>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+
+                                <div>
+                                    <button class ="btn btn-outline-danger mb-2 text-left" style = "width:100%; height : 50px; "
+                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}DEL"
+                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}DEL">
+                                        <span class="badge badge-pill badge-danger" >DEL</span>
+                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/><span>/{id}</span>
+                                    </button>
+                                     <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}DEL" style = "width:100%; height : auto">
+                                         <div class = "card card-body" >
+                                             <div>
+                                                 Parameters
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Name</td>
+                                                             <td style = "width:10%">Type</td>
+                                                             <td stlye = "width:80%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>
+                                                                 <span class = "mb-0 font-weight-bold">id</span><span class = "ml-1 text-danger" style="font-size:10px">*required</span>
+
+                                                             </td>
+                                                             <td><span>integer</span></td>
+                                                             <td>
+                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                                 Responses
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Code</td>
+                                                             <td stlye = "width:90%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>200</td>
+                                                             <td>
+                                                                 <span>Successful operation</span>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+
+                                <div>
+                                    <button class ="btn btn-outline-secondary mb-2 text-left" style = "width:100%; height : 50px; "
+                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}UPDATE"
+                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}UPDATE">
+                                        <span class="badge badge-pill badge-secondary" >PUT</span>
+                                        <span class="badge badge-pill badge-secondary" >PATCH</span>
+                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/><span>/{id}</span>
+                                    </button>
+                                     <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}UPDATE" style = "width:100%; height : auto">
+                                         <div class = "card card-body" >
+                                             <div>
+                                                 Parameters
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Name</td>
+                                                             <td style = "width:10%">Type</td>
+                                                             <td stlye = "width:80%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>
+                                                                 <span class = "mb-0 font-weight-bold">id</span><span class = "ml-1 text-danger" style="font-size:10px">*required</span>
+
+                                                             </td>
+                                                             <td><span>integer</span></td>
+                                                             <td>
+                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
+                                                             </td>
+                                                         </tr>
+                                                         <tr>
+                                                             <td>
+                                                                 <span class = "mb-0 font-weight-bold">body</span><span class = "ml-1 text-danger" style="font-size:10px">*required</span>
+
+                                                             </td>
+                                                             <td><span>object</span></td>
+                                                             <td>
+                                                                 <span>Values to update a record of </span><span t-esc="endpoint.specified_model_technical_name"/>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                                 Responses
+                                                 <table class = "table table-responsive" >
+                                                     <thead>
+                                                         <tr>
+                                                             <td style = "width:10%">Code</td>
+                                                             <td stlye = "width:90%">Description</td>
+                                                         </tr>
+                                                     </thead>
+                                                     <tbody>
+                                                         <tr>
+                                                             <td>200</td>
+                                                             <td>
+                                                                 <span>Successful operation</span>
+                                                                 <div class = "p-3" style = "width:100%;background-color:black;border-radius:5px;">
+                                                                     <pre class = "text-white"><code><span t-esc="endpoint.schema"/></code></pre>
+                                                                 </div>
+                                                             </td>
+                                                         </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                </div>
+
+            </div>
+        </t>
     </template>
 </odoo>
