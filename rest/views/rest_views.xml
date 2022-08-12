@@ -9,7 +9,7 @@
 
     <record id="rest_endpoint_documentation_action" model="ir.actions.act_url" >
         <field name="name">Open documentation</field>
-        <field name="url">#/api/documentation</field>
+        <field name="url">/api/documentation</field>
         <field name="target">new</field>
     </record>
 
