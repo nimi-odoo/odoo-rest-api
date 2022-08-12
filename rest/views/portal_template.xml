@@ -23,7 +23,7 @@
                             </button>
                         </div>
                         <div
-                             t-attf-class = "{{'collapse show' if (endpoint_id is int(endpoint.id)) else 'collapse sa'}} "
+                             t-attf-class = "{{'collapse show' if (endpoint_id is int(endpoint.id)) else 'collapse'}} "
                              t-attf-id = "{{endpoint.model_path_url}}" style = "width:60%; height : auto ; ">
 
                             <div class = "card card-body mb-2" style = "min-width:400px;">
@@ -34,7 +34,7 @@
                                         <span class="badge badge-pill badge-primary" >GET</span>
                                         <span>/api/</span><span t-field = "endpoint.model_path_url"/>
                                     </button>
-                                     <div class = "collapse mb-2" t-attf-id = "{{endpoint.model_path_url}}GET" style = "width:100%; height : auto">
+                                     <div t-attf-class = "{{'collapse show mb-2' if (endpoint_id is int(endpoint.id)) else 'collapse mb-2'}}" t-attf-id = "{{endpoint.model_path_url}}GET" style = "width:100%; height : auto">
                                          <div class = "card card-body" >
                                              <div>
                                                  Responses

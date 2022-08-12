@@ -66,9 +66,66 @@
                 <div style = "flex-direction: column; width:60%;height:auto;">
                     <section id = "webhook_events">
                         <h2>Webhook Events</h2>
+                        <tr t-foreach="request.env['base.automation'].sudo().search([('is_webhook','=',True)])" t-as="webhook">
+                            <div t-attf-id = "collapse{{webhook.id}}" class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
+                                <button class ="btn bg-primary pl-3 mb-2 text-left" style = "width:100%; height : 50px;"
+                                   type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}collapse-body-{{webhook.id}}"
+                                    t-attf-aria-controls = "collapse-body-{{webhook.id}}"
+                                        aria-expanded = "false">
+                                    <span t-field = "webhook.name"/>
+                                </button>
+                            </div>
+                            <div class = "collapse" t-attf-id = "collapse-body-{{webhook.id}}" style = "width:100%; height : auto ; ">
+                                <div class = "card card-body mb-2" >
+                                    <div>
+                                        <table class = "table table-responsive">
+                                            <tbody>
+                                                <tr>
+                                                    <td>ID</td>
+                                                    <td><span t-esc="webhook.id"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Model</td>
+                                                    <td><span t-esc="webhook.model_id.name"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Endpoint</td>
+                                                    <td><a t-attf-href="/api/documentation?endpoint_id={{webhook.endpoint.id}}#collapse{{webhook.endpoint.id}}" target = "_blank"><t t-esc="webhook.endpoint.name"></t></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trigger</td>
+                                                    <td><span t-esc="webhook.trigger"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trigger Fields</td>
+                                                    <td>
+                                                        <t t-foreach="webhook.trigger_field_ids" t-as = "trigger_field_id">
+                                                            <a t-esc="trigger_field_id.name"/>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Before update domain</td>
+                                                    <td><t t-esc="webhook.filter_pre_domain"></t></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Domain Filter</td>
+                                                    <td><t t-esc="webhook.filter_domain"></t></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
                     </section>
                     <div id = "webhook_subscription">
                         <h2>Subscribe to a webhook event</h2>
+                        <span>There are two possible ways to subscribe to a webhook event.</span>
+                        <ul>
+                            <li>1. Subscribe via UI</li>
+                            <li>2. Subscribe via API</li>
+                        </ul>
                     </div>
                 </div>
             </div>
