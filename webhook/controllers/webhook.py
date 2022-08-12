@@ -40,7 +40,7 @@ class Webhook(http.Controller):
         uid = http.request.uid
         user = http.request.env['res.users'].search([('id', '=', uid)])
         user_webhook_subscriptions = user.webhook_subscriptions
-        data = user_webhook_subscriptions.read(['id', 'webhook', 'webhook_url'])
+        data = user_webhook_subscriptions.read(['id','subscriber',  'webhook', 'webhook_url','description'])
         return data
 
     # Retrieve details of a client's existing webhook.

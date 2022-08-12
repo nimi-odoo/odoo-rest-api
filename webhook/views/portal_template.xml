@@ -123,9 +123,45 @@
                         <h2>Subscribe to a webhook event</h2>
                         <span>There are two possible ways to subscribe to a webhook event.</span>
                         <ul>
-                            <li>1. Subscribe via UI</li>
-                            <li>2. Subscribe via API</li>
+                            <li>Subscribe via UI</li>
+                            <ul>
+                                <li ><a href = "/my/webhook" target = "_blank">Subscribe to a webhook</a></li>
+                            </ul>
+                            <li>Subscribe via API</li>
+                            <div class = "card card-body">
+                                Notice that you are required to provide an api key within your header <br/>
+                                For example : "Authorization" : your-api-key.
+                            </div>
+                            To subscribe to a webhook event via API, request POST to your-url.com/webhook endpoint
+                            with body :
+                            <div class = "align-items-left">
+                                <code style = "width:100%">
+                                {
+                                    'webhook_url' : 'your-callback-url',
+                                    'webhook' : webhook_id
+                                }
+                                </code>
+                            </div>
+                            <br/>
+                            You can see your webhook subscription lists <a href = "/my/webhook" target = "_blank">on the website</a> or <a href = "/webhook" target = "_blank">here.</a>
                         </ul>
+                    </div>
+                    <div id = "webhook_logs">
+                        <h2>Logs</h2>
+                        <span>
+                            Every time a webhook action is triggered, a log will be generated for each
+                            subscription that is subscribed to the webhook<br/>
+                        </span>
+                        <span>
+                            Each log contains :
+                            <ul>
+                                <li>Information about the subscription ( Subscriber, Callback URL )</li>
+                                <li>The date and time when the log was generated</li>
+                                <li>Status code, which indicates whether the webhook action was successful</li>
+                                <li>Request header / body</li>
+                                <li>Response header / body</li>
+                            </ul>
+                        </span>
                     </div>
                 </div>
             </div>
