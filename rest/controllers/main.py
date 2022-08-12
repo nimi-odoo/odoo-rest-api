@@ -14,7 +14,7 @@ class RestController(http.Controller):
     @http.route('/api/documentation', type="http", auth="public", csrf=False, cors="*", website = True)
     def documentation(self, **kw):
         endpoints = http.request.env["rest.endpoint"].sudo().search([])
-        values = {"endpoints" : endpoints}
+        values = {"endpoints" : endpoints, 'endpoint_id' : int(http.request.params.get('endpoint_id', 0))}
         return request.render("rest.rest_documentation", values)
 
     @http.route('/api/<string:str>/', auth="check_api_key", csrf=False, cors="*")

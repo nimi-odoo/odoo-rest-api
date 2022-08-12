@@ -6,5 +6,7 @@
             <menuitem id="rest_endpoint_menu_action" action="rest_endpoint_action"/>
         </menuitem>
 
+        <menuitem name = "Documentation" id="rest_endpoint_documentation_menu_action" action="rest_endpoint_documentation_action"/>
+
     </menuitem>
 </odoo>

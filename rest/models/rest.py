@@ -29,6 +29,13 @@ class Rest(models.Model):
     filter_domain = fields.Char(string='Domain applied on',
                                 help="If present, only those records satisfying the domain will be returned.")
 
+    def direct_to_documentation(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/api/documentation?endpoint_id={self.id}#collapse{self.id}',
+            'target': '_blank'
+        }
+
     @api.onchange("specified_model_id")
     def field_filter(self):
         for record in self:

@@ -2,6 +2,7 @@
 <odoo>
     <template id = "rest_documentation" name = "Documentation">
         <t t-call = "website.layout">
+
             <div class = "d-flex justify-content-center align-items-center" id = "container" style = "flex-direction: column; height: auto; padding: 2rem ">
                 <div class = "mb-5 text-left" id = "header" style = "flex-direction: column; width:60%;height:auto;">
                     <h2 class = "display-4">API Documentation</h2>
@@ -12,14 +13,19 @@
                 </div>
                 <div id = "body"  class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
                     <tr t-foreach = "endpoints" t-as = "endpoint">
-                        <div class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
+                        <div t-attf-id = "collapse{{endpoint.id}}" class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
                             <button class ="btn bg-primary pl-3 mb-2 text-left" style = "width:60%; height : 50px;"
                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}"
-                               aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}">
+                                t-attf-aria-controls="{{endpoint.model_path_url}}"
+                                    aria-expanded = "false"
+                            >
                                 <span t-field = "endpoint.name"/>
                             </button>
                         </div>
-                        <div class = "collapse" t-attf-id = "{{endpoint.model_path_url}}" style = "width:60%; height : auto ; ">
+                        <div
+                             t-attf-class = "{{'collapse show' if (endpoint_id is int(endpoint.id)) else 'collapse sa'}} "
+                             t-attf-id = "{{endpoint.model_path_url}}" style = "width:60%; height : auto ; ">
+
                             <div class = "card card-body mb-2" style = "min-width:400px;">
                                 <div>
                                     <button class ="btn btn-outline-success mb-2 text-left" style = "width:100%; height : 50px; "

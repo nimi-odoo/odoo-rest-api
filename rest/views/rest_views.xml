@@ -7,6 +7,12 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <record id="rest_endpoint_documentation_action" model="ir.actions.act_url" >
+        <field name="name">Open documentation</field>
+        <field name="url">#/api/documentation</field>
+        <field name="target">new</field>
+    </record>
+
     <record id="rest_endpoint_view_tree" model="ir.ui.view">
         <field name="name">rest.endpoint.tree</field>
         <field name="model">rest.endpoint</field>
@@ -33,6 +39,8 @@
                         </group>
                         <group>
                             <field name="filter_domain" widget="domain" options="{'model': 'specified_model_technical_name', 'in_dialog': True}"/>
+                            <field name="id" attrs = "{'invisible':True}" ref = "endpoint_id"/>
+                            <button class = "btn btn-info" name = "direct_to_documentation" type = "object" context = "{'endpoint_id': id}">Documentation</button>
                         </group>
 
                     </group>
