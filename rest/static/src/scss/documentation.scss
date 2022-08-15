@@ -1,0 +1,82 @@
+:root {
+    --odoo-purple: #714b67;
+    --odoo-purple-dark: #623e58;
+    --odoo-purple-darker: #503047;
+    --odoo-teal: #017e84;
+    --odoo-teal-dark: #014e51;
+}
+
+.page-wrapper {
+    width: 100%;
+    margin-top: 3rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.documentation-container {
+    height: auto;
+    width: 60%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.documentation-header {
+    height: auto;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 3rem;
+
+    background-color: azure;
+}
+
+.endpoints-container {
+    height: auto;
+    width: 100%;
+    gap: .6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.endpoint-header {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.endpoint-dropdown-button {
+    text-align: left;
+    height: 3rem;
+    width: 100%;
+}
+
+.requests-container {
+    width: 100%;
+    height: auto;
+}
+
+.request-card {
+    width: 100%;
+}
+
+.response-container {
+    width: 100%;
+    height: auto;
+}
+
+
+
+
+
