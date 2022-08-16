@@ -1,0 +1,121 @@
+@charset "UTF-8";
+/*
+ * basic.css
+ * ~~~~~~~~~
+ *
+ * Sphinx stylesheet -- basic theme.
+ *
+ * :copyright: Copyright 2007-2021 by the Sphinx team, see AUTHORS.
+ * :license: BSD, see LICENSE for details.
+ *
+ */
+/* -- main layout ----------------------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+h1 {
+    color : #7A436B;
+}
+
+h2 {
+font-family: "Roboto Slab", Georgia, "Times New Roman", Times, serif;
+    color: #282F33;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+h3 {
+    margin-top: 2rem !important;
+    font-weight: 700 !important;
+    font-size: 1.226rem !important;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+}
+
+.alert-warning > .alert-title { 
+    color: #db8c1b;
+}
+
+.alert-title { 
+    line-height: 1em;
+    margin: 0 0 10px 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.highlight { 
+    padding : 0px;
+    background: #F8F8F8;
+}
+
+pre { 
+    white-space: pre;
+    margin: 0px 0px 0px 0px !important;
+    padding: 1rem;
+    display: block;
+    overflow: auto;
+}
+
+span { 
+    margin-right: 0;
+    margin-left: 0;
+    padding: 0;
+}
+
+.table-stub {
+    font-weight: 700;
+}
+
+.alert-warning {
+    border-color: #db8c1b !important;
+    background-color: #fcf8e3;
+}
+.alert-note {
+    border-color: #098da8 !important;
+    background-color: #F9F9F9;
+    color: #065b6c;
+}
+
+.alert { 
+    position: relative;
+    display: inline-block;
+    border-radius: 0 !important;
+    border-width: 0 0 0 3px !important;
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+img  {
+    border: 1px solid #F2F2F2;
+    background: #fff;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+img.align-center { 
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.headerlink {
+    content: "\a0";
+}

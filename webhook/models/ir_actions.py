@@ -1,12 +1,13 @@
 from odoo import fields, models, api
 
+from odoo.addons.rest.controllers.main import RestController
+
 import requests
 import json
 import logging
-
 import ast
 
-from odoo.addons.rest.controllers.main import RestController
+
 
 _logger = logging.getLogger(__name__)
 

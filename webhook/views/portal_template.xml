@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+
+
     <template id = "portal_layout_inherit"
               inherit_id = "portal.portal_layout">
         <xpath expr="//div[@class='o_portal_my_security mt-3']" position="after">
@@ -56,16 +59,21 @@
     </template>
 
     <template id = "webhook.webhook_documentation">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/webhook/static/src/css/style.css" />
+        </xpath>
         <t t-call = "website.layout">
-            <div class = "container-fluid d-flex justify-content-center align-items-center" id = "container" style = "flex-direction: column; height: auto; padding: 2rem ">
-                <div class = "mb-3 text-left" id = "header" style = "flex-direction: column; width:60%;height:auto;">
-                    <h1 class = "display-4 text-weight-bold" style = "color:#7A436B">Webhook Overview</h1>
-                    <a>Webhooks are “user-defined HTTP callbacks.” They are usually triggered by some event, such as pushing code to a repository or a comment posted to a blog. When that event occurs, the source site makes an HTTP request to the URL configured for the webhook. Users can configure them to cause events on one site to invoke behavior on another. ( according to  wikipedia )</a>
-                    <a style = "font-size:12px">See available <a href="/webhook/events" target = "_blank" style = "font-size:12px">webhook events</a></a>
+            <div class = "container-fluid d-flex justify-content-center align-items-center" id = "container" style = "flex-direction: column; height: auto; padding: 2rem; max-width:1250px">
+                <div class = "doc-header mb-3 text-left" id = "header" style = "flex-direction: column; width:70%;height:auto; ">
+                    <h1>Webhook</h1>
+                    <p>Webhook is a Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </p>
                 </div>
-                <div style = "flex-direction: column; width:60%;height:auto;">
-                    <section id = "webhook_events">
-                        <h2>Webhook Events</h2>
+                <div class = "doc-body" style = "flex-direction: column; width:70%;height:auto;">
+                    <section id = "subscription">
+                        <h2>Subscription</h2>
+                        <h3 id = "webhook_events">Webhook Events</h3>
+                        <p>Find a webhook event you'd like to subscribe below:</p>
                         <tr t-foreach="request.env['base.automation'].sudo().search([('is_webhook','=',True)])" t-as="webhook">
                             <div t-attf-id = "collapse{{webhook.id}}" class = "d-flex justify-content-center align-items-center" style = "flex-direction: column; width:100%;height:auto;">
                                 <button class ="btn bg-primary pl-3 mb-2 text-left" style = "width:100%; height : 50px;"
@@ -78,26 +86,26 @@
                             <div class = "collapse" t-attf-id = "collapse-body-{{webhook.id}}" style = "width:100%; height : auto ; ">
                                 <div class = "card card-body mb-2" >
                                     <div>
-                                        <table class = "table table-responsive">
+                                        <table class = "table">
                                             <tbody>
                                                 <tr>
-                                                    <td>ID</td>
-                                                    <td><span t-esc="webhook.id"/></td>
+                                                    <td class = "table-stub" style = "width: 30%">Webhook Event id</td>
+                                                    <td style = "width: 70%"><span t-esc="webhook.id"/></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Model</td>
+                                                    <td class = "table-stub">Model</td>
                                                     <td><span t-esc="webhook.model_id.name"/></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Endpoint</td>
+                                                    <td class = "table-stub">Endpoint</td>
                                                     <td><a t-attf-href="/api/documentation?endpoint_id={{webhook.endpoint.id}}#collapse{{webhook.endpoint.id}}" target = "_blank"><t t-esc="webhook.endpoint.name"></t></a></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Trigger</td>
+                                                    <td class = "table-stub">Trigger</td>
                                                     <td><span t-esc="webhook.trigger"/></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Trigger Fields</td>
+                                                    <td class = "table-stub">Trigger Fields</td>
                                                     <td>
                                                         <t t-foreach="webhook.trigger_field_ids" t-as = "trigger_field_id">
                                                             <a t-esc="trigger_field_id.name"/>
@@ -105,11 +113,11 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Before update domain</td>
+                                                    <td class = "table-stub">Before update domain</td>
                                                     <td><t t-esc="webhook.filter_pre_domain"></t></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Domain Filter</td>
+                                                    <td class = "table-stub">Domain Filter</td>
                                                     <td><t t-esc="webhook.filter_domain"></t></td>
                                                 </tr>
                                             </tbody>
@@ -118,51 +126,128 @@
                                 </div>
                             </div>
                         </tr>
-                    </section>
-                    <div id = "webhook_subscription">
-                        <h2>Subscribe to a webhook event</h2>
-                        <span>There are two possible ways to subscribe to a webhook event.</span>
+                        <a style = "font-size:12px">See json formatted <a href="/webhook/events" target = "_blank" style = "font-size:12px">webhook events</a></a>
+                        <h3 id = "subscribe">Subscribe to a webhook event</h3>
+                        <p>After you chose a webhook event, there are two possible ways to subscribe to the webhook event.</p>
                         <ul>
-                            <li>Subscribe via UI</li>
-                            <ul>
-                                <li ><a href = "/my/webhook" target = "_blank">Subscribe to a webhook</a></li>
-                            </ul>
-                            <li>Subscribe via API</li>
-                            <div class = "card card-body">
-                                Notice that you are required to provide an api key within your header <br/>
-                                For example : "Authorization" : your-api-key.
+                            <li >Subscribe to a webhook via UI</li>
+                            <div class = "alert alert-note">
+                                <p class = "alert-title">
+                                    Steps</p>
+                                    <p>1. Login to the website and click "My Account"</p>
+                                    <img alt = "Homepage" class = "align-center img-fluid" src = "/webhook/static/img/my-account.png"/>
+                                    <p>2. Click "Manage Webhooks" in the side bar</p>
+                                    <img alt = "Manage Webhook" class = "align-center img-fluid" src = "/webhook/static/img/manage-webhook.png"/>
+                                    <p><a class = "link" href = "/my/webhook" target = "_blank">Or, you can simply click here</a></p>
+                                    <p>3. This is your webhook dashboard</p>
+                                    <img alt = "my/webhook" class = "align-center img-fluid" src = "/webhook/static/img/root.png"/>
+                                    <p>4. Click Add button to subscribe to a webhook event</p>
+                                    <img alt = "Add Button" class = "align-center img-fluid" src = "/webhook/static/img/add.png"/>
+                                    <p>5. Choose a webhook event, fill up your callback url and description, and confirm!</p>
+                                    <img alt = "Dialog" class = "align-center img-fluid" src = "/webhook/static/img/dialog.png"/>
+                                    
+
                             </div>
-                            To subscribe to a webhook event via API, request POST to your-url.com/webhook endpoint
-                            with body :
-                            <div class = "align-items-left">
-                                <code style = "width:100%">
-                                {
-                                    'webhook_url' : 'your-callback-url',
-                                    'webhook' : webhook_id
-                                }
-                                </code>
+                            <li>Subscribe via webhook subscription API</li>
+
+                            <div class = "alert alert-warning">
+                                <p class="alert-title"> Important</p>
+                                Notice that you are required to provide an api key in the header of your request.<br/>
+                                In case you do not have an api key, you can generate one <a href="/my/security?debug=1" target = "_blank">here</a>
                             </div>
-                            <br/>
+
+                            <div class="highlight-python notranslate">
+                                <div class = "highlight">
+                                    <pre>
+import requests
+url = "your-domain.com/webhook"
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': your-api-key
+}
+body = {
+    "webhook": webhook_event_id,
+    "webhook_url": your-callback-url,
+    "description": "description" 
+}
+requests.post(url, headers = headers, data = body)
+                                    </pre>
+                                </div>
+                            </div>
+                            
                             You can see your webhook subscription lists <a href = "/my/webhook" target = "_blank">on the website</a> or <a href = "/webhook" target = "_blank">here.</a>
                         </ul>
-                    </div>
-                    <div id = "webhook_logs">
+                        
+                    </section>
+
+                    <section id = "logs">
                         <h2>Logs</h2>
-                        <span>
+                        <p>
                             Every time a webhook action is triggered, a log will be generated for each
                             subscription that is subscribed to the webhook<br/>
-                        </span>
-                        <span>
+                        </p>
+                        <p>
                             Each log contains :
                             <ul>
                                 <li>Information about the subscription ( Subscriber, Callback URL )</li>
                                 <li>The date and time when the log was generated</li>
                                 <li>Status code, which indicates whether the webhook action was successful</li>
+                                <ul> <li><a href =  "https://www.rfc-editor.org/rfc/rfc7231#section-6" target="_blank">Refer here for more information about response status code</a></li></ul>
+                                   
                                 <li>Request header / body</li>
                                 <li>Response header / body</li>
                             </ul>
-                        </span>
-                    </div>
+                        </p>
+                        <h3>Access to your webhook log</h3>
+                        <div class = "alert alert-note">
+                            <p class = "alert-title">
+                                Steps
+                                <a class="headerlink" target = "_blank" href="/my/webhook" style = "color:#FF6347;"><p>1. Go to "Manage Webhook" page</p></a>
+                                <img alt = "Manage Webhook" class = "align-center img-fluid" src = "/webhook/static/img/root-log.png"/>
+                                <p>2. Click "View logs" and a dialog will pop up.</p>
+                                <img alt = "View Logs" class = "align-center img-fluid" src = "/webhook/static/img/dialog-log.png"/>
+                                <p>3. If you want to see detailed context of each log, click "Detail"</p>
+                                <img alt = "View Log Detail" class = "align-center img-fluid" src = "/webhook/static/img/dialog-detail-log.png"/>
+                            </p>
+                        </div>
+                        <h3>Access to logs (Internal)</h3>
+                        <p>Every log is linked to a webhook event, a webhook subscription, and a user. You can see all logs of a webhook event, of a webhook subscription, and of yours.</p>
+                        <div class = "alert alert-note">
+                            <p class = "alert-title">
+                                Logs
+                                <p>1. To see all logs of a webhook event, click "webhook logs" page inside the event's form view.</p>
+                                <img alt = "webhook-form-view-logs" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view-logs.png"/>
+                                <p>2. Click "Webhook Subscriptions" in the menu items of webhook module.</p>
+                                <img alt = "webhook-tree-view-menus" class = "align-center img-fluid" src = "/webhook/static/img/webhook-tree-view-menus.png"/>
+                                <img alt = "webhook-subscription-form-view-logs" class = "align-center img-fluid" src = "/webhook/static/img/webhook-subscription-form-view-logs.png"/>
+                                <p>3. Click "Webhook Logs in the menu items of webhook module.</p>
+                                <p>Admins can see all users' logs</p>
+                                <img alt = "webhook-tree-view-menus" class = "align-center img-fluid" src = "/webhook/static/img/webhook-tree-view-menus.png"/>
+                                <img alt = "webhook-log-form-view" class = "align-center img-fluid" src = "/webhook/static/img/webhook-log-form-view.png"/>
+
+                            </p>
+                        </div>
+                        <p></p>
+                    </section>
+                    <section id = "create_webhook_event">
+                        <h2>Create a webhook event (Internal)</h2>
+                        <p>Admins or any users with access rights can create a webhook event.</p>
+                        <div class = "alert alert-note">
+                                <p class = "alert-title">Steps</p>
+                                    <p>1. Click "Webhook" module in main menu</p>
+                                    <img alt = "webhook-icon-main-menu" class = "align-center img-fluid" src = "/webhook/static/img/webhook-icon-main-menu.png"/>
+                                    <p>2. A tree view will be displayed. Click "Create" button by the upper left.</p>
+                                    <img alt = "webhook-tree-view" class = "align-center img-fluid" src = "/webhook/static/img/webhook-tree-view.png"/>
+                                    <img alt = "webhook-tree-view-webhooks-create-button" class = "align-center img-fluid" src = "/webhook/static/img/webhook-tree-view-webhooks-create-button.png"/>
+                                    <p>3. Inside the form view, set "Action to do" value to "Webhook"</p>
+                                    <img alt = "webhook-form-view" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view.png"/>
+                                    <img alt = "webhook-form-view-action-to-do" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view-action-to-do.png"/>
+                                    <p>4. Configure your webhook event's settings</p>
+                                    <img alt = "webhook-form-view-after" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view-after.png"/>
+                                    <span style = "padding-left:1rem;">Endpoint : An endpoint made by REST API module. The webhook will get data from the endpoint and send it to each subscriber's callback url<br/></span>
+                                    <a href = "https://www.odoo.com/documentation/15.0/applications/productivity/studio/automated_actions.html#model" target = "_blank" style = "padding-left:1rem;"><u>Refer here to see other elements' descriptions</u></a>
+                            </div>
+                    </section>
                 </div>
             </div>
         </t>

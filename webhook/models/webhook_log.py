@@ -12,7 +12,7 @@ class WebhookLog(models.Model):
 
     webhook = fields.Many2one(comodel_name="base.automation", string="Webhook event", required=False, compute = "_compute_webhook", store = "True",readonly = True,ondelete='cascade')
 
-    webhook_url = fields.Char(string="Webhook callback URL", required=False, compute = "_compute_webhook_url", store = "True",readonly = True)
+    webhook_url = fields.Char(string="Webhook callback URL", required=False, compute = "_compute_webhook_url", store = "True", readonly = True)
 
     request_header = fields.Char(string="Request header", required=False,readonly = True)
     request_body = fields.Char(string="Request body ( Sent data )", required=False,readonly = True)

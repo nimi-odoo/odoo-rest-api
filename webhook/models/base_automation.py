@@ -5,7 +5,7 @@ class BaseAutomationInherit(models.Model):
     _inherit = 'base.automation'
     _description = 'Automated Action'
     is_webhook = fields.Boolean(default=False, compute="_compute_is_webhook", store = True)
-    webhook_subscriptions = fields.One2many(comodel_name="webhook_subscription", inverse_name="webhook", string="", required=False, )
+    webhook_subscriptions = fields.One2many(comodel_name="webhook_subscription", inverse_name="webhook", string="Subscriptions", required=False, )
     endpoint = fields.Many2one(comodel_name="rest.endpoint", string="Endpoint to fetch data from", required=False)
     logs = fields.One2many(comodel_name="webhook_log", inverse_name="webhook", string="Webhook log", required=False, readonly=True)
 
