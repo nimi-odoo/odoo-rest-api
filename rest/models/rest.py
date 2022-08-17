@@ -27,7 +27,8 @@ class Rest(models.Model):
     ]
 
     filter_domain = fields.Char(string='Domain applied on',
-                                help="If present, only those records satisfying the domain will be returned.")
+                                help="If present, only those records satisfying the domain will be returned.",
+                                default = "[]")
 
     def direct_to_documentation(self):
         return {

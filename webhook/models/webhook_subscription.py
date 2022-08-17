@@ -9,7 +9,7 @@ class WebhookSubscription(models.Model):
     name = fields.Char(string="Subscription name", required=False, )
     subscriber = fields.Many2one(comodel_name="res.users", string="Subscriber", required = True)
     subscriber_name = fields.Char(string = "Subscriber's name", compute = "_compute_subscriber_name", readonly = True, store = True)
-    webhook = fields.Many2one(comodel_name="base.automation", string="Event", required=True)
+    webhook = fields.Many2one(comodel_name="base.automation", string="Event", required=True, domain = "[('is_webhook','=',True)]")
     webhook_url = fields.Char( string="Webhook URL", required = True)
     description = fields.Char( string="Description", default = "", required = False)
     logs = fields.One2many(comodel_name="webhook_log", inverse_name="webhook_subscription", string="Logs", required=False, readonly=True )
