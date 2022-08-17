@@ -50,7 +50,7 @@ odoo.define('portal.portal_webhook', function (require) {
                             ['subscriber','=',session.user_id]
                         ]
                     }).then( (webhook_subscription_log) => {
-                        console.log(webhook_subscription_log);
+
                         var log_detail_dialog = new Dialog(self, {
                             title : _t('View log'),
                             modal : true,
@@ -58,8 +58,9 @@ odoo.define('portal.portal_webhook', function (require) {
                             buttons: [{text: _t('Close'), close: true}]
                         });
 
-                        // Activate, deactivate list-group-items
+                        
                         log_detail_dialog.opened(function () {
+                            // Activate, deactivate list-group-items
                             $(".list-group-item-action").click(function(e) {
                                 console.log(e);
                                 e.preventDefault()

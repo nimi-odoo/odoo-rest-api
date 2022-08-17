@@ -94,6 +94,12 @@
             </field>
         </record>
 
+        <record id="webhook_documentation_action" model="ir.actions.act_url" >
+            <field name="name">Open documentation</field>
+            <field name="url">/webhook/documentation</field>
+            <field name="target">new</field>
+        </record>
+
     <menuitem id="webhook_subscription_menu_root"
               name="Webhook"
               web_icon="webhook,static/description/icon.png"
@@ -101,6 +107,7 @@
         <menuitem id="webhook_menu_action" action="webhook_action"/>
         <menuitem id="webhook_subscription_menu_action" action="webhook_subscription_action"/>
         <menuitem id="webhook_log_menu_action" action="webhook_log_action"/>
+        <menuitem name = "Documentation" id="webhook_documentation_menu_action" action="webhook_documentation_action"/>
     </menuitem>
     </data>
 </odoo>

@@ -1,4 +1,6 @@
+<!-- Templates for webhook in portal -->
 <templates xml:space="preserve">
+    <!-- A dialog used by edit_subscription and new_subscription -->
     <t t-name="webhook.edit_subscription">
         <div class = "table-responsive">
             <form string = "Edit Subscription">
@@ -43,7 +45,7 @@
             </form>
         </div>
     </t>
-
+    <!-- A dialog containing logs -->
     <t t-name="webhook.view_logs">
         <div class = "table table-responsive">
             <table class="table rounded m-0 pt-0 bg-white" style="overflow:scroll;">
@@ -74,6 +76,7 @@
         </div>
     </t>
 
+    <!-- A dialog containing detailed context of a log -->
     <t t-name="webhook.view_log">
         <table class="table table-responsive-sm rounded mb-0 bg-white o_portal_my_doc_table">
             <t t-out="0"/>
@@ -161,20 +164,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class = "tab-content">
-            <div class = "tab-pane active" id = "request" role = "tabpanel">
-                <h4>Header</h4>
-                <code><span t-esc="webhook_subscription_log.request_header"/></code>
-                <h4>Body</h4>
-                <pre><code><span t-esc="webhook_subscription_log.request_body"/></code></pre>
-            </div>
-            <div class = "tab-pane" id = "response" role = "tabpanel">
-                <h4>Header</h4>
-                <code><span t-esc="webhook_subscription_log.response_header"/></code>
-                <h4>Body</h4>
-                <code><span t-esc="webhook_subscription_log.response_body"/></code>
-            </div>
-        </div> -->
+
     </t>
 
 </templates>

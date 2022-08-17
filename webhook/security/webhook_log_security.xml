@@ -9,10 +9,6 @@
                 Command.link(ref('base.group_portal')),
                 Command.link(ref('base.group_user')),
             ]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="True"/>
         </record>
         <record id="webhook_log_access_admin" model="ir.rule">
             <field name="name">Admin Record Rule for webhook subscriptions</field>
