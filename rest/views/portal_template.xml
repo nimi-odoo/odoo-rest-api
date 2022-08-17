@@ -16,282 +16,306 @@
                             <button class="btn bg-primary endpoint-dropdown-button"
                                 type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}"
                                 aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}">
-                                <span t-field="endpoint.name"/>
+                                <h2 class="endpoint-dropdown-button-text" t-field="endpoint.name"/>
                             </button>
                         </div>
                         <div class="collapse requests-container" t-attf-id="{{endpoint.model_path_url}}">
                             <div class="card card-body request-card">
-                                <div>
-                                    <button class ="btn btn-outline-success mb-2 text-left endpoint-dropdown-button" style="width:100%;"
-                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GET"
-                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
-                                        <span class="badge badge-pill badge-primary" >GET</span>
-                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/>
-                                    </button>
-                                     <div class="collapse mb-2 response-container" t-attf-id="{{endpoint.model_path_url}}GET" style="width:100%; height : auto">
-                                         <div class="card card-body">
-                                             <div>
-                                                 Responses
-                                                 <table class="table table-responsive">
-                                                     <thead>
-                                                         <tr>
-                                                             <td style="width:20%">Code</td>
-                                                             <td stlye="width:80%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>200</td>
-                                                             <td>
-                                                                 <span>Successful operation</span>
-                                                                 <div class="p-3" style="width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                             </div>
-                                         </div>
-                                     </div>
+                                <button class ="btn btn-outline-success endpoint-dropdown-button"
+                                       type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GET"
+                                       aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
+                                    <div><span class="badge badge-pill badge-primary"><h3 class="badge-text">GET</h3></span>
+                                    /api/<span t-field="endpoint.model_path_url"/></div>
+                                </button>
+                                <div class="collapse response-container" t-attf-id="{{endpoint.model_path_url}}GET">
+                                    <div class="card card-body">
+                                        <h4 class="table-title">Responses</h4>
+                                        <table class="table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <td class="table-column-label">Code</td>
+                                                    <td class="table-column-content">Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="centered-text">200</td>
+                                                    <td>
+                                                        <p>Successful operation</p>
+                                                        <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                            type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_GET"
+                                                            aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
+                                                            Response Body
+                                                        </button>
+                                                        <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_GET">
+                                                            <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button class="btn btn-outline-success mb-2 text-left" style="width:100%; height : 50px; "
-                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GETONE"
-                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GETONE">
-                                        <span class="badge badge-pill badge-primary">GET</span>
-                                        <span>/api/</span><span t-field="endpoint.model_path_url"/><span>/{id}</span>
-                                    </button>
-                                     <div class="collapse" t-attf-id="{{endpoint.model_path_url}}GETONE" style = "width:100%; height : auto">
-                                         <div class="card mb-2 card-body">
-                                             <div>
-                                                 Parameters
-                                                 <table class="table table-responsive">
-                                                     <thead>
-                                                         <tr>
-                                                             <td style="width:10%">Name</td>
-                                                             <td style="width:10%">Type</td>
-                                                             <td stlye="width:80%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>
-                                                                 <span class="mb-0 font-weight-bold">id</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
-                                                             </td>
-                                                             <td><span>integer</span></td>
-                                                             <td>
-                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                                 Responses
-                                                 <table class = "table table-responsive" >
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Code</td>
-                                                             <td stlye = "width:90%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>200</td>
-                                                             <td>
-                                                                 <span>Successful operation</span>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                             </div>
-                                         </div>
-                                     </div>
+                                <button class="btn btn-outline-success endpoint-dropdown-button"
+                                       type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}GETONE"
+                                       aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GETONE">
+                                    <div><span class="badge badge-pill badge-primary"><h3 class="badge-text">GET</h3></span>
+                                    /api/<span t-field="endpoint.model_path_url"/>/{id}</div>
+                                </button>
+                                <div class="collapse response-container" t-attf-id="{{endpoint.model_path_url}}GETONE">
+                                    <div class="card card-body">
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Parameters</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Name</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">id</td>
+                                                        <td>
+                                                            The id for a specific record of <span t-esc="endpoint.specified_model_technical_name"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Responses</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Code</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">200</td>
+                                                        <td>
+                                                            <p>Successful operation</p>
+                                                            <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_GETONE"
+                                                                aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GETONE">
+                                                                Response Body
+                                                            </button>
+                                                            <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_GETONE">
+                                                                <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <button class="btn btn-outline-info mb-2 text-left" style = "width:100%; height : 50px; "
-                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}POST"
-                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}POST">
-                                        <span class="badge badge-pill badge-info" >POST</span>
-                                        <span>/api/</span><span t-field="endpoint.model_path_url"/>
-                                    </button>
-                                     <div class="collapse" t-attf-id="{{endpoint.model_path_url}}POST" style = "width:100%; height : auto">
-                                         <div class="card mb-2 card-body" >
-                                             <div>
-                                                 Parameters
-                                                 <table class = "table table-responsive" >
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Name</td>
-                                                             <td style = "width:10%">Type</td>
-                                                             <td stlye = "width:80%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>
-                                                                 <span class="mb-0 font-weight-bold">body</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
-                                                             </td>
-                                                             <td><span>object</span></td>
-                                                             <td>
-                                                                 <span>Values to generate a record of </span><span t-esc="endpoint.specified_model_technical_name"/>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                                 Responses
-                                                 <table class="table table-responsive" >
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Code</td>
-                                                             <td stlye = "width:90%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>200</td>
-                                                             <td>
-                                                                 <span>Successful operation</span>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                             </div>
-                                         </div>
-                                     </div>
+                                <button class="btn btn-outline-info endpoint-dropdown-button"
+                                       type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}POST"
+                                       aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}POST">
+                                    <div><span class="badge badge-pill badge-info"><h3 class="badge-text">POST</h3></span>
+                                    /api/<span t-field="endpoint.model_path_url"/></div>
+                                </button>
+                                <div class="collapse response-container" t-attf-id="{{endpoint.model_path_url}}POST">
+                                    <div class="card card-body endpoint-card-container">
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Parameters</h4>
+                                            <hr class="table-separator"/>
+                                            <p>No parameters</p>
+                                        </div>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Request Body</h4>
+                                            <table class="table table-responsive" >
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Name</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            Body <span class="ml-1 text-danger" style="font-size:10px">*required</span>
+                                                        </td>
+                                                        <td>
+                                                            <p>Values to generate a record of <span t-esc="endpoint.specified_model_technical_name"/></p>
+                                                            <pre class="schema" t-esc="endpoint.schema"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Responses</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Code</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">200</td>
+                                                        <td>
+                                                            <p>Successful operation</p>
+                                                            <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_POST"
+                                                                aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}POST">
+                                                                Response Body
+                                                            </button>
+                                                            <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_POST">
+                                                                <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div>
-                                    <button class="btn btn-outline-danger mb-2 text-left" style = "width:100%; height : 50px; "
-                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}DEL"
-                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}DEL">
-                                        <span class="badge badge-pill badge-danger">DEL</span>
-                                        <span>/api/</span><span t-field="endpoint.model_path_url"/><span>/{id}</span>
-                                    </button>
-                                     <div class="collapse" t-attf-id="{{endpoint.model_path_url}}DEL" style = "width:100%; height : auto">
-                                         <div class="card mb-2 card-body" >
-                                             <div>
-                                                 Parameters
-                                                 <table class="table table-responsive" >
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Name</td>
-                                                             <td style = "width:10%">Type</td>
-                                                             <td stlye = "width:80%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>
-                                                                 <span class="mb-0 font-weight-bold">id</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
-                                                             </td>
-                                                             <td><span>integer</span></td>
-                                                             <td>
-                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                                 Responses
-                                                 <table class="table table-responsive">
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Code</td>
-                                                             <td stlye = "width:90%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>200</td>
-                                                             <td>
-                                                                 <span>Successful operation</span>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                             </div>
-                                         </div>
-                                     </div>
+<!-- DELETE -->
+                                <button class="btn btn-outline-danger endpoint-dropdown-button"
+                                       type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}DEL"
+                                       aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}DEL">
+                                    <div><span class="badge badge-pill badge-danger"><h3 class="badge-text">DELETE</h3></span>
+                                    /api/<span t-field="endpoint.model_path_url"/>/{id}</div>
+                                </button>
+                                <div class="collapse response-container" t-attf-id="{{endpoint.model_path_url}}DEL">
+                                    <div class="card mb-2 card-body">
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Parameters</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Name</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="centered-text">id</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
+                                                        </td>
+                                                        <td>
+                                                            The id for a specific record of <span t-esc="endpoint.specified_model_technical_name"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                       </div>
+                                       <div class="endpoint-card-section">
+                                            <h4 class="table-title">Responses</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Code</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">200</td>
+                                                        <td>
+                                                            <p>Successful operation</p>
+                                                            <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_DEL"
+                                                                aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}DEL">
+                                                                Response Body
+                                                            </button>
+                                                            <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_DEL">
+                                                                <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div>
-                                    <button class="btn btn-outline-secondary mb-2 text-left" style = "width:100%; height : 50px; "
-                                           type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}UPDATE"
-                                           aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}UPDATE">
-                                        <span class="badge badge-pill badge-secondary" >PUT</span>
-                                        <span class="badge badge-pill badge-secondary" >PATCH</span>
-                                        <span>/api/</span><span t-field = "endpoint.model_path_url"/><span>/{id}</span>
-                                    </button>
-                                     <div class="collapse" t-attf-id = "{{endpoint.model_path_url}}UPDATE" style = "width:100%; height : auto">
-                                         <div class="card card-body" >
-                                             <div>
-                                                 Parameters
-                                                 <table class="table table-responsive">
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Name</td>
-                                                             <td style = "width:10%">Type</td>
-                                                             <td stlye = "width:80%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>
-                                                                 <span class="mb-0 font-weight-bold">id</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
-                                                             </td>
-                                                             <td><span>integer</span></td>
-                                                             <td>
-                                                                 <span>The id for a specific record of </span><span t-esc="endpoint.specified_model_technical_name"/>
-                                                             </td>
-                                                         </tr>
-                                                         <tr>
-                                                             <td>
-                                                                 <span class="mb-0 font-weight-bold">body</span><span class="ml-1 text-danger" style="font-size:10px">*required</span>
-                                                             </td>
-                                                             <td><span>object</span></td>
-                                                             <td>
-                                                                 <span>Values to update a record of </span><span t-esc="endpoint.specified_model_technical_name"/>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                                 Responses
-                                                 <table class = "table table-responsive" >
-                                                     <thead>
-                                                         <tr>
-                                                             <td style = "width:10%">Code</td>
-                                                             <td stlye = "width:90%">Description</td>
-                                                         </tr>
-                                                     </thead>
-                                                     <tbody>
-                                                         <tr>
-                                                             <td>200</td>
-                                                             <td>
-                                                                 <span>Successful operation</span>
-                                                                 <div class="p-3" style = "width:100%;background-color:black;border-radius:5px;">
-                                                                     <pre class="text-white"><code><span t-esc="endpoint.schema"/></code></pre>
-                                                                 </div>
-                                                             </td>
-                                                         </tr>
-                                                     </tbody>
-                                                 </table>
-                                             </div>
-                                         </div>
-                                     </div>
+<!-- PUT / PATCH -->
+                                <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                       type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}UPDATE"
+                                       aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}UPDATE">
+                                    <span class="badge badge-pill badge-secondary"><h3 class="badge-text">PUT</h3></span>
+                                    <span class="badge badge-pill badge-secondary">PATCH</span>
+                                    <span>/api/</span><span t-field = "endpoint.model_path_url"/><span>/{id}</span>
+                                </button>
+                                <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}UPDATE">
+                                    <div class="card card-body endpoint-card-container">
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Parameters</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Name</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            id <span class="ml-1 text-danger" style="font-size:10px">*required</span>
+                                                        </td>
+                                                        <td>
+                                                            The id for a specific record of <span t-esc="endpoint.specified_model_technical_name"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Request Body</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Name</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            Body <span class="ml-1 text-danger" style="font-size:10px">*required</span>
+                                                        </td>
+                                                        <td>
+                                                            <p>Values to generate a record of <span t-esc="endpoint.specified_model_technical_name"/></p>
+                                                            <pre class="schema" t-esc="endpoint.schema"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Responses</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Code</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">200</td>
+                                                        <td>
+                                                            <p>Successful operation</p>
+                                                            <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_UPDATE"
+                                                                aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}UPDATE">
+                                                                Response Body
+                                                            </button>
+                                                            <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_UPDATE">
+                                                                <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
