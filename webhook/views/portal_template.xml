@@ -66,7 +66,7 @@
             <div class = "container-fluid d-flex justify-content-center align-items-center" id = "container" style = "flex-direction: column; height: auto; padding: 2rem; max-width:1250px">
                 <div class = "doc-header mb-3 text-left" id = "header" style = "flex-direction: column; width:70%;height:auto; ">
                     <h1>Webhook</h1>
-                    <p>Webhook is a Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    <p>A webhook in web development is a method of augmenting or altering the behavior of a web page or web application with custom callbacks. These callbacks may be maintained, modified, and managed by third-party users and developers who may not necessarily be affiliated with the originating website or application. The term "webhook" was coined by Jeff Lindsay in 2007 from the computer programming term hook.[1] The format is usually JSON. The request is done as a HTTP POST request.
                     </p>
                 </div>
                 <div class = "doc-body" style = "flex-direction: column; width:70%;height:auto;">
