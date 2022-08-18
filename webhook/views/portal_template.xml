@@ -244,8 +244,40 @@ requests.post(url, headers = headers, data = body)
                                     <img alt = "webhook-form-view-action-to-do" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view-action-to-do.png"/>
                                     <p>4. Configure your webhook event's settings</p>
                                     <img alt = "webhook-form-view-after" class = "align-center img-fluid" src = "/webhook/static/img/webhook-form-view-after.png"/>
-                                    <span style = "padding-left:1rem;">Endpoint : An endpoint made by REST API module. The webhook will get data from the endpoint and send it to each subscriber's callback url<br/></span>
-                                    <a href = "https://www.odoo.com/documentation/15.0/applications/productivity/studio/automated_actions.html#model" target = "_blank" style = "padding-left:1rem;"><u>Refer here to see other elements' descriptions</u></a>
+                                    <div class = "card card-body" >
+                                        <table id = "table-webhook-elements" class = "table table-responsive">
+                                            <thead>
+                                                <tr>
+                                                    <td>Element</td>
+                                                    <td>Description</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Model</td>
+                                                    <td>A model where triggers will be applied</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trigger</td>
+                                                    <td>Define when the webhook action should be triggered</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trigger fields</td>
+                                                    <td>Define which field the trigger should be applied</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Apply on</td>
+                                                    <td>Set a filter to records of the model.</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Endpoint</td>
+                                                    <td>An endpoint made by REST API module. The webhook will get data from the endpoint and send it to each subscriber's callback url</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <a class = "mt-0 text-right" href = "https://www.odoo.com/documentation/15.0/applications/productivity/studio/automated_actions.html#model" target = "_blank" style = "padding-left:1rem;"><u>Refer here to see details</u></a>
+                                    </div>
+
                             </div>
                     </section>
                 </div>

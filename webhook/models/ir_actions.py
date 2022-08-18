@@ -7,8 +7,6 @@ import json
 import logging
 import ast
 
-
-
 _logger = logging.getLogger(__name__)
 
 class IrActionsServerInherit(models.Model):
