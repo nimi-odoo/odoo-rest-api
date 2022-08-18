@@ -1,0 +1,164 @@
+:root {
+    --odoo-purple: #714b67;
+    --odoo-purple-dark: #623e58;
+    --odoo-purple-darker: #503047;
+    --odoo-teal: #017e84;
+    --odoo-teal-dark: #014e51;
+}
+
+.page-wrapper {
+    width: auto;
+    margin-top: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.documentation-container {
+    height: auto;
+    width: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.documentation-header {
+    height: auto;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 3rem;
+}
+
+.endpoints-container {
+    height: auto;
+    width: 100%;
+    gap: .6rem;
+    margin-bottom: .6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.endpoint-header {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.endpoint-dropdown-button {
+    text-align: left;
+    height: 3rem;
+    width: 100%;
+    flex-shrink: 0;
+
+    &-text {
+        font-size: 1rem;
+        margin:0;
+    }
+}
+
+.badge-text {
+    font-size: 100%;
+    font-weight: 700;
+    margin: 0;
+}
+
+.requests-container {
+    width: 100%;
+    height: auto;
+}
+
+.request-card {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.response-container {
+    max-width: calc(100%);
+    min-width: calc(60% - 2rem);
+    width: 100%;
+    height: auto;
+    margin-bottom: .6rem;
+    overflow: auto;
+}
+
+.endpoint-card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.endpoint-card-section {
+    width: 100%;
+    flex-shrink: 0;
+    display: block;
+}
+
+.schema {
+    background-color: rgba(44, 29, 40, .05);
+    padding: 1rem 0rem 1rem 2rem;
+    margin: 0;
+    border-radius: 1rem;
+    color: #714b67;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: left;
+    width: 100%;
+    overflow: auto;
+    word-wrap: break;
+
+    &-dropdown {
+        border-radius: 0 0 1rem 1rem;
+    }
+}
+
+.table-title {
+    font-size: 1.5rem;
+    margin-bottom: .5rem;
+}
+
+.table-separator {
+    margin-top: 0rem;
+    margin-bottom:1rem;
+}
+
+.table-column-label {
+    min-width: 4rem;
+    background-color: var(--odoo-purple);
+    color: white;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.table-column-content {
+    width: 100%;
+}
+
+
+// @media only screen and (max-width: 750px) {
+//     .schema {
+//         font-size:
+//     }
+//   }
