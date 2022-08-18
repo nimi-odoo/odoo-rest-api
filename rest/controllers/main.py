@@ -11,7 +11,7 @@ from odoo.exceptions import ValidationError, UserError, AccessError
 
 class RestController(http.Controller):
 
-    @http.route('/api/documentation', type="http", auth="public", csrf=False, cors="*", website = True)
+    @http.route('/api/documentation', type="http", auth="public", csrf=False, cors="*", website=True)
     def documentation(self, **kw):
         endpoints = http.request.env["rest.endpoint"].sudo().search([])
         values = {"endpoints" : endpoints}
@@ -185,7 +185,6 @@ class RestController(http.Controller):
             return self.response_404("Record not found. The path or id may not exist.")
 
         api_model = api.specified_model_id
-        api_fields = api.field_ids
         post_fields = data.keys()
 
         all_field_ids = http.request.env["ir.model.fields"].search([('model', '=', api_model.model)])

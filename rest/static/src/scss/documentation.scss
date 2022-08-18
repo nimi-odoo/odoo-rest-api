@@ -7,8 +7,10 @@
 }
 
 .page-wrapper {
-    width: 100%;
+    width: auto;
     margin-top: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 
     display: flex;
     flex-direction: column;
@@ -18,7 +20,7 @@
 
 .documentation-container {
     height: auto;
-    width: 60%;
+    width: auto;
 
     display: flex;
     flex-direction: column;
@@ -83,7 +85,6 @@
 
     display: flex;
     flex-direction: column;
-    
     gap: .6rem;
     justify-content: center;
     align-items: center;
@@ -91,9 +92,12 @@
 }
 
 .response-container {
-    min-width: 100%;
+    max-width: calc(100%);
+    min-width: calc(60% - 2rem);
+    width: 100%;
     height: auto;
     margin-bottom: .6rem;
+    overflow: auto;
 }
 
 .endpoint-card-container {
@@ -112,13 +116,16 @@
 
 .schema {
     background-color: rgba(44, 29, 40, .05);
-    // box-sizing:border-box;
-    padding: 2rem;
+    padding: 1rem 0rem 1rem 2rem;
     margin: 0;
     border-radius: 1rem;
     color: #714b67;
     font-weight: 600;
     line-height: 1.6;
+    text-align: left;
+    width: 100%;
+    overflow: auto;
+    word-wrap: break;
 
     &-dropdown {
         border-radius: 0 0 1rem 1rem;
@@ -148,3 +155,10 @@
 .table-column-content {
     width: 100%;
 }
+
+
+// @media only screen and (max-width: 750px) {
+//     .schema {
+//         font-size:
+//     }
+//   }

@@ -29,31 +29,51 @@
                                 </button>
                                 <div class="collapse response-container" t-attf-id="{{endpoint.model_path_url}}GET">
                                     <div class="card card-body">
-                                        <h4 class="table-title">Responses</h4>
-                                        <table class="table table-responsive">
-                                            <thead>
-                                                <tr>
-                                                    <td class="table-column-label">Code</td>
-                                                    <td class="table-column-content">Description</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td class="centered-text">200</td>
-                                                    <td>
-                                                        <p>Successful operation</p>
-                                                        <button class="btn btn-outline-secondary endpoint-dropdown-button"
-                                                            type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_GET"
-                                                            aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
-                                                            Response Body
-                                                        </button>
-                                                        <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_GET">
-                                                            <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="endpoint-card-section">
+                                            <h4 class="table-title">Responses</h4>
+                                            <table class="table table-responsive">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="table-column-label">Code</td>
+                                                        <td class="table-column-content">Description</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="centered-text">200</td>
+                                                        <td>
+                                                            <p>Successful operation</p>
+                                                            <button class="btn btn-outline-secondary endpoint-dropdown-button"
+                                                                type="button" data-toggle="collapse" t-attf-data-target="{{'#'}}{{endpoint.model_path_url}}RESPONSE_GET"
+                                                                aria-expanded="false" t-attf-aria-controls="{{endpoint.model_path_url}}GET">
+                                                                Response Body
+                                                            </button>
+                                                            <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_GET">
+                                                                <pre class="schema schema-dropdown">[<span t-esc="endpoint.schema"/>,]</pre>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                        <tr>
+                                                            <td class="centered-text">400</td>
+                                                            <td>
+                                                                <p>Bad request</p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="centered-text">403</td>
+                                                            <td>
+                                                                <p>Insufficient access rights</p>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td class="centered-text">404</td>
+                                                            <td>
+                                                                <p>No records found</p>
+                                                            </td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                                 <button class="btn btn-outline-success endpoint-dropdown-button"
@@ -107,6 +127,24 @@
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td class="centered-text">400</td>
+                                                        <td>
+                                                            <p>Bad request</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">403</td>
+                                                        <td>
+                                                            <p>Insufficient access rights</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">404</td>
+                                                        <td>
+                                                            <p>Record not found</p>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -140,7 +178,7 @@
                                                             Body <span class="ml-1 text-danger" style="font-size:10px">*required</span>
                                                         </td>
                                                         <td>
-                                                            <p>Values to generate a record of <span t-esc="endpoint.specified_model_technical_name"/></p>
+                                                            <p>Values to generate a record of <div t-esc="endpoint.specified_model_technical_name"/></p>
                                                             <pre class="schema" t-esc="endpoint.schema"/>
                                                         </td>
                                                     </tr>
@@ -169,6 +207,24 @@
                                                             <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_POST">
                                                                 <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
                                                             </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">400</td>
+                                                        <td>
+                                                            <p>Bad request</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">403</td>
+                                                        <td>
+                                                            <p>Insufficient access rights</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">404</td>
+                                                        <td>
+                                                            <p>Endpoint not found</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -228,6 +284,30 @@
                                                             <div class="collapse response-container" t-attf-id = "{{endpoint.model_path_url}}RESPONSE_DEL">
                                                                 <pre class="schema schema-dropdown" t-esc="endpoint.schema"/>
                                                             </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">204</td>
+                                                        <td>
+                                                            <p>Successful operation, but record did not exist</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">400</td>
+                                                        <td>
+                                                            <p>Bad request, a required field may be missing</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">403</td>
+                                                        <td>
+                                                            <p>Insufficient access rights</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">404</td>
+                                                        <td>
+                                                            <p>Record not found</p>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -312,6 +392,24 @@
                                                             </div>
                                                         </td>
                                                     </tr>
+                                                    <tr>
+                                                        <td class="centered-text">400</td>
+                                                        <td>
+                                                            <p>Bad request, a field may not be editable</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">403</td>
+                                                        <td>
+                                                            <p>Insufficient access rights</p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="centered-text">404</td>
+                                                        <td>
+                                                            <p>Record not found</p>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -321,7 +419,7 @@
                         </div>
                     </tr>
                 </div>
-</div>
+            </div>
             </div>
         </t>
     </template>
